@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 데코레이터 기본 폴더 -->
+
+<decorators defaultdir="/WEB-INF/jsp/layout">
+
+
+ <!-- 예외 URL 패턴 -->
+ <excludes>
+     <pattern>*login*</pattern>
+ </excludes>
+
+ 
+
+ <decorators>
+    <decorator name="defaultHeader" page="menu.jsp"/>
+    <decorator name="defaultFooter" page="footer.jsp"/>
+
+    <decorator name="default" page="main.jsp">
+        <pattern>/*</pattern>
+    </decorator>
+</decorators>
+
+
+</decorators> 

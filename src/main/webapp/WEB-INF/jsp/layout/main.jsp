@@ -1,0 +1,21 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>    
+<%@ taglib uri="http://www.opensymphony.com/sitemesh/page" prefix="page" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+</head>
+<body>
+<page:applyDecorator name="defaultHeader"/>
+<br>
+
+<decorator:body/> 
+<br>
+<page:applyDecorator name="defaultFooter"/>
+
+</body>
+</html>

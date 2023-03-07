@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<!-- 셋팅하는 순서가 중요하다 
+	properties?,settings?,typeAliases?,typeHandlers?,objectFactory?,
+	objectWrapperFactory?,plugins?,environments?,databaseIdProvider?,
+	mappers? 순으로 정렬되어야한다 .
+	mapUnderscoreToCamelCase - db와 java 객체사이의 _를 자동변환시켜줌
+	callSettersOnNulls =  null일경우 NULL객체 형태로리턴// 칼럼이에 빈값이 들어가지않도로 ""를 넣어줌
+	jdbcTypeForNull - 널값자체가 날아갈때 jdbc에서 널을 넣어줌 // 파라미터값이 널일때 EXECP날려줌
+ -->
+<configuration>
+
+    <settings>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		<setting name="callSettersOnNulls" value="true"/>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
+   
+    <typeAliases>
+		<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+    </typeAliases>
+    
+    <typeHandlers>
+		<typeHandler handler="egovframework.rte.psl.dataaccess.typehandler.CalendarMapperTypeHandler" />
+	</typeHandlers>
+    
+    
+</configuration>

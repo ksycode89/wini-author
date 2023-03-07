@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+    	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+<!-- 트랜잭션 메니저가 관리할 데이터 name -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+<!--모든 메서드에서 Exception이 일어나면 롤백 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="*" rollback-for="Exception"/>
+		</tx:attributes>
+	</tx:advice>
+<!-- 트랜잭션 처리 impl페키지에처리 tx:advice로 범위 나 롤백 규칙을 정의한다고한다 좀더 공부해볼것.. -->
+	<aop:config>
+		<aop:pointcut id="requiredTx" expression="execution(* egovframework.wini..impl.*Impl.*(..))"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="requiredTx" />
+	</aop:config>
+
+</beans>
+
+<!-- 	이런식으로 사용가능
+<tx:method name="insert*" timeout="600" rollback-for="Exception" /> service의 메서드명으로 롤백설정
+		<tx:method name="update*" timeout="600" rollback-for="Exception" />
+		<tx:method name="delete*" timeout="600" rollback-for="Exception" />
+		<tx:method name="*" read-only="true" /> : 나머진 읽기만가능 -->
+		
