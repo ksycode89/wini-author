@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-index
+indexs
 <%-- <jsp:forward page="/.do"/>; --%>
 </body>
 </html>
