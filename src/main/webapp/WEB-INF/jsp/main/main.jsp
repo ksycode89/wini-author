@@ -7,6 +7,6 @@
 <title>welcome to KJP</title>
 </head>
 <body>
-<h1>메인입니다</h1>
+<h1>메인입니다2</h1>
 </body>
 </html>
