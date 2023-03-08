@@ -19,6 +19,8 @@
 	<properties>
 	    <spring.maven.artifact.version>4.3.25.RELEASE</spring.maven.artifact.version>
 		<egovframework.rte.version>3.10.0</egovframework.rte.version>
+		<!-- spring security -->
+		<security.version>4.2.3.RELEASE</security.version>
 	</properties>
 
 	<repositories>
