@@ -69,7 +69,7 @@
             <li><a href="./">메인</a></li>
             <li> <a href="">시스템관리</a>
                 <ul>
-                    <li><a href="">사용자관리</a></li>
+                    <li><a href="<c:out value="${pageContext.request.contextPath }"/>/userMgmt.do">>사용자관리</a></li>
                     <li><a href="">메뉴관리</a></li>
                     <li><a href="">사원관리</a></li>
                 </ul>

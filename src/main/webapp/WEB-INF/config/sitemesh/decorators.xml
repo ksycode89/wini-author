@@ -15,6 +15,8 @@
  <decorators>
     <decorator name="defaultHeader" page="menu.jsp"/>
     <decorator name="defaultFooter" page="footer.jsp"/>
+    
+    <decorator name="common" page="common.jsp"/>
 
     <decorator name="default" page="main.jsp">
         <pattern>/*</pattern>
