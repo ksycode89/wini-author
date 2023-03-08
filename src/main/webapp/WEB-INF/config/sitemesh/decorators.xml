@@ -7,9 +7,9 @@
 
  <!-- 예외 URL 패턴 -->
  <excludes>
-     <pattern>*login*</pattern>
+     <pattern>*Login*</pattern>
+     <pattern>*Join*</pattern>
  </excludes>
-
  
 
  <decorators>
