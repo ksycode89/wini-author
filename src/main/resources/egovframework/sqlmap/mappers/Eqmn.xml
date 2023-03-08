@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.wini.service.impl.eqmn.EqmnMapper">
+
+	<!-- 장비검색 [이름/코드/vo빈값 = 전체] -->
+	<select id="eqmnList" parameterType="egovframework.wini.service.eqmn.EqmnVO" resultType="egovframework.wini.service.eqmn.EqmnVO">
+			/*장비 구분 테이블*/
+			
+			SELECT	EQPMN_ID,          /*장비구분ID */
+					EQPMN_NM,          /*장비구분명*/
+					UPPER_EQPMN_ID,    /*상위장비구분ID*/
+					FRST_REGIST_DT,    /*최초등록일시*/
+					FRST_REGISTER_SN,  /*최초등록자 일련번호*/
+					UPDT_DT,           /*수정일시*/
+					UPDUSR_SN          /*수정자 일련번호*/
+					
+			FROM	KJP_EQPMN_CODE
+			<where>
+				<if test="eqpmnNm != null and !eqpmnNm.equals('') ">
+	  			   EQPMN_NM LIKE '%' || #{eqpmnNm} || '%' 
+	 			</if>
+	 			<if test="eqpmnId != 0 and !eqpmnId.equals('') ">
+	  			   AND EQPMN_ID = #{eqpmnId}
+	 			</if>
+			</where>  
+	</select>
+
+</mapper>

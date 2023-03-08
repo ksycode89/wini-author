@@ -1,0 +1,61 @@
+@charset "UTF-8";
+
+   body {
+            background: #fafafa;
+            margin: 0;
+        }
+
+	a { text-decoration: none; }
+	
+	
+	
+	.menu_nav { background: #2ba0db; }
+	
+	.menu_nav ul {
+	    margin: 0;
+	    padding: 0;
+	}
+	
+	.menu_nav ul li {
+	    display: inline-block;
+	    position: relative;
+	   
+	}
+	
+	.menu_nav ul li a {
+	    color: #fff;
+	    display: block;
+		 padding: 15px 15px;
+	}
+	
+	.menu_nav ul li:hover { background: #126d9b; }
+	
+	.menu_nav ul li ul {
+	    display: none;
+	    position: absolute;
+	    width: 150px;
+	}
+	
+	.menu_nav ul li ul li {
+	    display: block;
+	}
+	
+	
+	.menu_nav ul li ul li a {
+	    background: #373737;
+	    display: block;
+	    padding: 15px 15px;
+	}
+	
+	.menu_nav ul li ul li a:hover { background: #126d9b; }
+	  
+	/* 물품관리 css */    
+	#bodyContainer{
+		display: flex;
+		justify-content: space-around; 
+	}
+	.divitme{
+	flex-basis: 45%;
+		border: solid;
+	
+	}

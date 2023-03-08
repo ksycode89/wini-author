@@ -12,7 +12,27 @@
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
     </context:component-scan>
-
+    <!--command map 설정  -->
+<!-- 	<context:component-scan base-package="egovframework.wini.comm"></context:component-scan>
+   
+   	<mvc:annotation-driven>
+		<mvc:argument-resolvers>
+			<bean class="egovframework.wini.comm.resolver.CustomMapArgumentResolver"></bean>		
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven> -->
+   
+   <!--  -->
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="customArgumentResolvers">
+            <list>
+                <bean class="egovframework.rte.ptl.mvc.bind.CommandMapArgumentResolver"/>
+            </list>
+        </property>
+    </bean>
+   <!--  <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/> -->
+   <!--  -->
+    
+    
    
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
         <property name="interceptors">
@@ -27,6 +47,12 @@
     <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
         <property name="paramName" value="language" />
     </bean>
+   
+    <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1"
+	    p:viewClass="org.springframework.web.servlet.view.JstlView"
+	    p:prefix="/WEB-INF/jsp/" p:suffix=".jsp"/>
+
+
 <!-- 에러페이지 제작 -->
    <!--  <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
         <property name="defaultErrorView" value="cmmn/egovError"/>
@@ -41,12 +67,6 @@
     </bean> -->
 	<!-- <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/> -->
 <!-- ViewResolver  -->
-   
-    <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1"
-	    p:viewClass="org.springframework.web.servlet.view.JstlView"
-	    p:prefix="/WEB-INF/jsp/" p:suffix=".jsp"/>
-
-
 	<!-- MappingJacksonJsonView 설정 -->
 
 
