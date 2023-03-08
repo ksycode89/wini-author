@@ -1,0 +1,19 @@
+.contentPage {padding:10px 30px;}
+.contentTitle{display:block;border-bottom:2px solid #a9a9a9;margin-bottom:20px;}
+.contentTitle h3{display:block;height:50px;padding-left:20px;line-height:50px;}
+
+.search{position:relative;margin-bottom:20px;padding:0 100px 0 20px;line-height:45px;border:1px #c2c2c2 solid;}
+.search:after{display:block;content:'';clear:both;}
+.search ul{display:block;position:relative;border-bottom:1px #c1c1c1 dotted;clear:both;}
+.search ul:before{display:block;content:'';position:absolute;bottom:-1px;left:0;right:-80px;border-top:1px #c1c1c1 dotted;}
+.search ul:after{display:block;content:'';clear:both;}
+.search ul:last-child,
+.search ul.last{border-bottom:0px none;}
+.search ul:last-child:before,
+.search ul.last:before{display:none;}
+.search ul li{display:block;position:relative;float:left;padding:9px 20px 9px 80px;min-height:30px;line-height:30px;box-sizing:border-box;}
+.search ul li .label{display:block;position:absolute;top:0;left:0;padding:9px 0 9px 10px;min-height:30px;line-height:30px;}
+.search ul.cols2 li{width:50%;}
+.search ul.cols3 li{width:33.3333%;}
+.search ul li *{vertical-align:top;}
+.search .btn_search{display:block;position:absolute;right:20px;bottom:9px;width:80px;height:30px;font-size:12px;font-weight:bold;color:#fff;line-height:30px;background:#577dd0;border:0px none;border-radius:5px;}

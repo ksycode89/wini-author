@@ -8,6 +8,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 
+<page:applyDecorator name="common"/>
+
 </head>
 <body>
 <page:applyDecorator name="defaultHeader"/>
