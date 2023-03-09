@@ -22,5 +22,13 @@ public class EqmnServiceImpl implements EqmnService{
 		
 		return eqMap.eqmnList(vo);
 	}
+	//계층관리
+	@Override
+	public List<EqmnVO> CallEqmnTree() {
+		
+		return eqMap.CallEqmnTree();
+	}
+	
+
 
 }

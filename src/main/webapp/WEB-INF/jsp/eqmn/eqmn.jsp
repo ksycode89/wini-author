@@ -21,6 +21,11 @@ ${eqmnList}
 					<button>검색</button>
 					<button>등록</button>
 				</div>
+				<div>
+					<ul class='eqmnTree'>
+					</ul>
+				
+				</div>
 			</form>
 			<div id='eqmn_table'></div>
 		</div>
@@ -71,13 +76,61 @@ ${eqmnList}
 	function mktrTree(data,table){
 		//delmainT();
 		//mapping시킬 tr이름 가져옴
-		console.log(data)
 		
+		
+		let level = 1;
+		let e = 2;
+		$(data).each((index,val)=>{
+			//console.log($(val)[0]["upperEqpmnId"])
+					if($(val)[0]["level"] == 1){
+						
+						let li = $('<li>');
+						li.prop('class',$(val)[0]["eqpmnId"])
+						li.text($(val)[0]["eqpmnId"]);
+						$('.eqmnTree').append(li);
+					}else{
+						
+						let ul = $('<ul>')
+						ul.on('click',function(){
+							
+						})
+						let li = $('<li>');
+						li.text($(val)[0]["eqpmnId"]);
+						li.prop('class',$(val)[0]["eqpmnId"])
+						ul.append(li);
+						$('.'+$(val)[0]["upperEqpmnId"]).append(ul);
+						
+					}	
+			
+					/* if($(val)[0]["level"] == level){
+						let li = $('<li>');
+						li.prop('class',$(val)[0]["eqpmnId"])
+						li.text($(val)[0]["eqpmnId"]);
+						$('.eqmnTree').append(li);
+						
+					}else if($(val)[0]["level"] == level+1){
+						let ul = $('<ul>')
+						let li = $('<li>');
+						li.text($(val)[0]["eqpmnId"]);
+						li.prop('class',$(val)[0]["eqpmnId"])
+						ul.append(li);
+						$('.'+$(val)[0]["upperEqpmnId"]).append(ul);
+						level=level+1;
+					}
+					else {
+						level = level+1;
+						let ul = $('<ul>')
+						let li = $('<li>');
+						li.text($(val)[0]["eqpmnId"]);
+						li.prop('class',$(val)[0]["eqpmnId"])
+						ul.append(li);
+						$('.'+$(val)[0]["upperEqpmnId"]).append(ul);
+					} */
+		//최상위 data	
+		})
 		
 		
 	}
-	
-	
 	
 	
 	

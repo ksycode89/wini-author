@@ -24,5 +24,15 @@
 	 			</if>
 			</where>  
 	</select>
-
+	
+	<!-- 계층형 공통코드 -->
+	<select id="CallEqmnTree" resultType="egovframework.wini.service.eqmn.EqmnVO">
+		SELECT eqpmn_id,upper_eqpmn_id,EQPMN_NM,LEVEL 
+		FROM KJP_EQPMN_CODE
+		START WITH upper_eqpmn_id IS null
+		CONNECT BY PRIOR eqpmn_id = upper_eqpmn_id
+		ORDER BY level
+	</select>
+	
+	
 </mapper>
