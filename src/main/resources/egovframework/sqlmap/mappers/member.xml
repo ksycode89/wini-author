@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.wini.service.impl.member.memberMapper">
+
+	<select id="test" resultType="egovMap">
+		SELECT USER_SN
+				,USER_ID
+			FROM KJP_USER
+	</select>
+	
+<!-- ID 중복체크 -->
+	<select id="duplicateCheck" parameterType="egovMap" resultType="int">
+	SELECT COUNT(1) FROM KJP_USER
+		WHERE USER_ID = #{userId}
+	</select>
+	
+	<insert id="userInsert" parameterType="egovMap">
+		INSERT INTO KJP_USER 
+			(USER_SN
+			,USER_ID
+			,USER_PW
+			,USER_NM
+			,DT_BRT
+			,USER_GNDR
+			,MOBLPHON_NO
+			,EMAIL_ADRES
+			,FRST_REGISTER_SN)
+		VALUES(
+				(SELECT NVL(MAX(USER_SN) , 0) + 1 FROM KJP_USER)
+				,#{userId}
+				,#{userPw}
+				,#{userNm}
+				,#{userBrt}
+				,#{userGndr}
+				,#{userPhon}
+				,#{userEmail}
+				,1
+				)
+	</insert>
+
+</mapper>
