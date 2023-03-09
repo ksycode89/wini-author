@@ -15,7 +15,7 @@
 	<div class="login">
 	  <div class="login-header">
 <!-- 	    <h1>Login</h1> -->
-	  	<img style = "width:200px;" src = "<c:out value="${pageContext.request.contextPath}/images/wini_logo.gif"/>"/>
+	  	<img style = "width:400px;" src = "<c:out value="${pageContext.request.contextPath}/images/wini_logo.png"/>"/>
 	  </div>
 	  <div class="login-form">
 	    <h3>Username:</h3>
