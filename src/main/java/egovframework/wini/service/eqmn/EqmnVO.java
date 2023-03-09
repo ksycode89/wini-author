@@ -10,6 +10,7 @@ public class EqmnVO {
 	private String frstRegisterSn ="";
 	private Date updtDt;
 	private String updusrSn ="";
+	private String level ="";
 	
 	//기본생성자
 	public EqmnVO() {
@@ -18,7 +19,7 @@ public class EqmnVO {
 	//풀 생성자
 
 	public EqmnVO(String eqpmnId, String eqpmnNm, String upperEqpmnId, Date frstRegistDt, String frstRegisterSn,
-			Date updtDt, String updusrSn) {
+			Date updtDt, String updusrSn, String level) {
 		super();
 		this.eqpmnId = eqpmnId;
 		this.eqpmnNm = eqpmnNm;
@@ -27,6 +28,7 @@ public class EqmnVO {
 		this.frstRegisterSn = frstRegisterSn;
 		this.updtDt = updtDt;
 		this.updusrSn = updusrSn;
+		this.level = level;
 	}
 	//getter setter
 	public String getEqpmnId() {
@@ -84,12 +86,22 @@ public class EqmnVO {
 	public void setUpdusrSn(String updusrSn) {
 		this.updusrSn = updusrSn;
 	}
+	
+	
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
+	}
+
 	//tostring
 	@Override
 	public String toString() {
 		return "EqmnVO [eqpmnId=" + eqpmnId + ", eqpmnNm=" + eqpmnNm + ", upperEqpmnId=" + upperEqpmnId
 				+ ", frstRegistDt=" + frstRegistDt + ", frstRegisterSn=" + frstRegisterSn + ", updtDt=" + updtDt
-				+ ", updusrSn=" + updusrSn + "]";
+				+ ", updusrSn=" + updusrSn + ", level=" + level +"]";
 	}
 	
 	

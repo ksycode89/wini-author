@@ -38,6 +38,23 @@ public class EqmnController {
 		return "eqmn/eqmn";
 	}
 
+	//한글 반환시 produces = "application/text; charset=utf8"로 인코딩 방식을 정해줘서 반환시켜줌
+	@RequestMapping(value="/ajaxEqmnList.do",method=RequestMethod.POST,produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String ajaxEqmnList(EqmnVO vo) {
+		//매개변수로 넣을 Rvo를 만들어줌
+		//CompVO Rvo = new CompVO(); //기본생성자로 인한 객체 생성
+	
+		//조건이 있으면 vo에 값이 담길것이고 where 절에 조건문이 돌아감.
+		List<EqmnVO> list = eqService.CallEqmnTree();  //list의 결과값 (빈값을 넘겨줄시 where절에서 알아서 처리)
+		Gson jList = new Gson();
+		
+		return jList.toJson(list) ;
+	}
+	
+	
+	
+	
 	//commandMap 설정 test
 	@RequestMapping("/test2.do")
 	public String test(@RequestParam Map<String, Object> commandMap ) {
@@ -52,18 +69,5 @@ public class EqmnController {
 		
 		return "eqmn/eqmn";
 	}
-	
-	//한글 반환시 produces = "application/text; charset=utf8"로 인코딩 방식을 정해줘서 반환시켜줌
-	@RequestMapping(value="/ajaxEqmnList.do",method=RequestMethod.POST,produces = "application/text; charset=utf8")
-	@ResponseBody
-	public String ajaxEqmnList(EqmnVO vo) {
-		//매개변수로 넣을 Rvo를 만들어줌
-		//CompVO Rvo = new CompVO(); //기본생성자로 인한 객체 생성
-	
-		//조건이 있으면 vo에 값이 담길것이고 where 절에 조건문이 돌아감.
-		List<EqmnVO> list = eqService.eqmnList(vo);   //list의 결과값 (빈값을 넘겨줄시 where절에서 알아서 처리)
-		Gson jList = new Gson();
-		
-		return jList.toJson(list) ;
-	}
 }
+
