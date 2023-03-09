@@ -89,11 +89,37 @@ body {
 
 .join-input  {
 /*   background-color: orange; */
-  width : 180px;
+  width : 210px;
   border: 0;
   border-bottom:2px solid;
   outline: 0;
   font-size: 1em;
   padding: 8px 1px;
   margin-top: 0.1em;
+}
+
+.join-button {
+  width:30px;
+  height:20px;	
+  
+  padding: 12px 12px;
+
+  cursor: pointer;
+  text-align: center;
+
+  color: white;
+  border: 0 none;
+  border-radius: 20%;
+
+  font-size: 13px;
+  font-weight: 500;
+}
+.join-button:hover {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.join-button-block {
+  display:block;
+  width:100%;
 }
