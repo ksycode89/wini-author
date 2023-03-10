@@ -10,21 +10,24 @@
 	
 <!-- ID 중복체크 -->
 	<select id="duplicateCheck" parameterType="egovMap" resultType="int">
+	/* ID중복체크 SELECT Query */
 	SELECT COUNT(1) FROM KJP_USER
-		WHERE USER_ID = #{userId}
+		WHERE USER_ID = #{userId}	/* User 아이디 */
 	</select>
-	
+
+<!-- 회원가입	 -->
 	<insert id="userInsert" parameterType="egovMap">
+	/* 회원가입 INSERT Query */
 		INSERT INTO KJP_USER 
-			(USER_SN
-			,USER_ID
-			,USER_PW
-			,USER_NM
-			,DT_BRT
-			,USER_GNDR
-			,MOBLPHON_NO
-			,EMAIL_ADRES
-			,FRST_REGISTER_SN)
+			(USER_SN 				/*User 일련번호 */
+			,USER_ID 				/*User 아이디 */
+			,USER_PW 				/*User 패스워드 */
+			,USER_NM 				/*User 이름 */
+			,DT_BRT 				/*User 생년월일 */
+			,USER_GNDR 				/*User 성별 */
+			,MOBLPHON_NO 			/*User 전화번호 */
+			,EMAIL_ADRES 			/*User 이메일주소 */
+			,FRST_REGISTER_SN) 		/*최초 등록자 일련번호(회원가입 시, 본인 User 일련번호) */
 		VALUES(
 				(SELECT NVL(MAX(USER_SN) , 0) + 1 FROM KJP_USER)
 				,#{userId}
@@ -34,8 +37,27 @@
 				,#{userGndr}
 				,#{userPhon}
 				,#{userEmail}
-				,1
+				,(SELECT NVL(MAX(USER_SN) , 0) + 1 FROM KJP_USER)
 				)
 	</insert>
-
+	
+<!-- 로그인 -->
+	<select id="userLogin" parameterType="egovMap" resultType="egovMap">
+		SELECT  
+				USER_ID 		/*User 아이디 */
+				,USER_PW 		/*User 패스워드 */
+			FROM KJP_USER
+			WHERE USER_ID=#{userId}
+	</select>
+	
+<!-- 유저 정보 -->
+<select id="userInfo" parameterType="egovMap" resultType="egovMap">
+	SELECT
+		USER_ID 				/*User 아이디 */
+		,USER_NM 				/*User 이름 */
+		,RGHT 					/*User 권한 */
+	FROM
+		KJP_USER
+	WHERE USER_ID=#{userId}
+</select>
 </mapper>

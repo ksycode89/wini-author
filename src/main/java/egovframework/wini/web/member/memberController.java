@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
@@ -39,12 +41,26 @@ public class memberController {
 	@ResponseBody
 	public int userInsert(@RequestParam Map<String, Object> commandMap) {
 		// 로그인 페이지는 header, footer 없음.
-		
-		String encryptedPw = BCrypt.hashpw((String) commandMap.get("userPw"), BCrypt.gensalt());
-		commandMap.put("userPw", encryptedPw);
-		
 		int insertResult = memberService.userInsert(commandMap);
 		return insertResult;
+	}
+	
+	@RequestMapping("userLogin.do")
+	@ResponseBody
+	public Object userLogin(@RequestParam Map<String, Object> commandMap, HttpSession session) {
+		Map<String, Object> result = memberService.userLogin(commandMap);
+		Map<String, Object> userInfo = (Map<String, Object>) result.get("userInfo");
+		if (result.get("chk").equals("Y")) {
+			session.setAttribute("userId", userInfo.get("userId"));
+			session.setAttribute("userNm", userInfo.get("userNm"));
+			session.setAttribute("rght", userInfo.get("rght"));
+		}
+		return result.get("chk");
+	}
+	@RequestMapping("logout.do")
+	public String logout(HttpServletRequest re) {
+		re.getSession().invalidate();
+		return "redirect: goLogin.do";
 	}
 	
 	
