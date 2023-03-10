@@ -28,6 +28,7 @@ public class EqmnController {
 	@Resource(name="EqmnService")
 	EqmnService eqService;
 	
+	//모델로 list호출
 	@RequestMapping("/goEqment.do")
 	public String goEqment(Model mo ) {
 		System.out.println(123);
@@ -37,6 +38,23 @@ public class EqmnController {
 		mo.addAttribute("eqmnList",list);                //모델에 담아서 전송
 		return "eqmn/eqmn";
 	}
+	//ajax로 단일조회)호출
+	
+	@RequestMapping(value="/callOneEqmnAjax.do",method=RequestMethod.POST,produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String callOneEqmnAjax(String eqpmnId,Model mo ) {
+		EqmnVO vo = new EqmnVO(); //기본생성자로 인한 객체생성
+		//찾을 칼럼의 key 단일조회
+		vo.setEqpmnId(eqpmnId);
+		System.out.println(vo);
+		List<EqmnVO> list = eqService.eqmnList(vo); //list의 결과값 (빈값을 넘겨줄시 where절에서 알아서 처리)
+		System.out.println("eqmn가는 페이지 : "+list);
+		
+		Gson jList = new Gson();
+		
+		return jList.toJson(list) ;
+	}
+	
 
 	//한글 반환시 produces = "application/text; charset=utf8"로 인코딩 방식을 정해줘서 반환시켜줌
 	@RequestMapping(value="/ajaxEqmnList.do",method=RequestMethod.POST,produces = "application/text; charset=utf8")
