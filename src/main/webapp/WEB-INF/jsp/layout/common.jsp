@@ -11,3 +11,8 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common.css"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/menuCss.css"/>
 <%-- <script type="text/javascript" src="${pageContext.request.contextPath}/js/common/common.js"></script> --%>
+
+<!-- for ksy -->
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/icon.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/ksy.css"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />

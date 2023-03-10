@@ -6,20 +6,21 @@
 	<select id="eqmnList" parameterType="egovframework.wini.service.eqmn.EqmnVO" resultType="egovframework.wini.service.eqmn.EqmnVO">
 			/*장비 구분 테이블*/
 			
-			SELECT	EQPMN_ID,          /*장비구분ID */
-					EQPMN_NM,          /*장비구분명*/
-					UPPER_EQPMN_ID,    /*상위장비구분ID*/
-					FRST_REGIST_DT,    /*최초등록일시*/
-					FRST_REGISTER_SN,  /*최초등록자 일련번호*/
-					UPDT_DT,           /*수정일시*/
-					UPDUSR_SN          /*수정자 일련번호*/
+			SELECT	EQPMN_ID           /*장비구분ID */
+					,EQPMN_NM         /*장비구분명*/
+					,UPPER_EQPMN_ID    /*상위장비구분ID*/
+					,FRST_REGIST_DT    /*최초등록일시*/
+					,FRST_REGISTER_SN  /*최초등록자 일련번호*/
+					,UPDT_DT           /*수정일시*/
+					,UPDUSR_SN 		   /*수정자 일련번호*/
+					,EQPMN_OBJ		   /*물품인지 계층인지 구분*/	         
 					
 			FROM	KJP_EQPMN_CODE
 			<where>
 				<if test="eqpmnNm != null and !eqpmnNm.equals('') ">
 	  			   EQPMN_NM LIKE '%' || #{eqpmnNm} || '%' 
 	 			</if>
-	 			<if test="eqpmnId != 0 and !eqpmnId.equals('') ">
+	 			<if test="eqpmnId != null and !eqpmnId.equals('') ">
 	  			   AND EQPMN_ID = #{eqpmnId}
 	 			</if>
 			</where>  
@@ -27,12 +28,14 @@
 	
 	<!-- 계층형 공통코드 -->
 	<select id="CallEqmnTree" resultType="egovframework.wini.service.eqmn.EqmnVO">
-		SELECT eqpmn_id,upper_eqpmn_id,EQPMN_NM,LEVEL 
+		SELECT eqpmn_id,upper_eqpmn_id,EQPMN_NM,LEVEL,eqpmn_obj 
 		FROM KJP_EQPMN_CODE
 		START WITH upper_eqpmn_id IS null
 		CONNECT BY PRIOR eqpmn_id = upper_eqpmn_id
 		ORDER BY level
 	</select>
+	
+	
 	
 	
 </mapper>

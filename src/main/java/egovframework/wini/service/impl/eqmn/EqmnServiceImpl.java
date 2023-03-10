@@ -19,8 +19,10 @@ public class EqmnServiceImpl implements EqmnService{
 	//매개변수로 리스트 뽑기
 	@Override
 	public List<EqmnVO> eqmnList(EqmnVO vo) {
-		
-		return eqMap.eqmnList(vo);
+		System.out.println("임플안");
+		List<EqmnVO> list = eqMap.eqmnList(vo);
+		System.err.println(list);
+		return list;
 	}
 	//계층관리
 	@Override
