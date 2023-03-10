@@ -62,7 +62,7 @@
 			  		<tr>
 			  			<th rowspan="2">비밀번호 확인</th>
 			  			<td>
-			  				<input type="password" id="user_pw2" class="join-input" maxlength="25"/> 
+			  				<input type="password" id="user_pw2" class="join-input" maxlength="25" readonly="readonly"/> 
 			  			</td>
 			  		</tr>
 			  		<tr>
@@ -132,7 +132,6 @@
 
 <script>
 	$(function(){
-		$('#chk_pw2').attr("readonly", true);
 		$('#user_id_retry').hide();
 		for (var count=1940; count<2023; count++){
 			var option = '<option value="'+count+'">'+count+'</option>';
@@ -159,19 +158,21 @@
 			if($('#user_pw').val().length < 4){
 				$("input:checkbox[id='chk_pw']").prop("checked", false);
 				$('#chk_pw_txt').text("*4자리 이상의 비밀번호를 입력하세요.");
-				$('#chk_pw2').attr("readonly", true);
+				$('#user_pw2').attr("readonly", true);
 				$('#chk_pw2_txt').text("*비밀번호를 먼저 입력하세요.");
 			}else{
 				console.log("d");
 				$("input:checkbox[id='chk_pw']").prop("checked", true);
-				$('#chk_pw2').attr("readonly", false);
+				$('#user_pw2').attr("readonly", false);
 				$('#chk_pw_txt').text("*비밀번호를 입력 완료.");
 				$("input:checkbox[id='chk_pw2']").prop("checked", false);
 				$('#chk_pw2_txt').text("*비밀번호가 일치하는지 확인하세요.");
 			}
         });
 		$("#user_pw2").keyup(function (event) {
-			if($('#user_pw').val()==$('#user_pw2').val()){
+			if($('#user_pw2').val().trim().length==0){
+				$('#chk_pw2_txt').text("*비밀번호를 먼저 입력하세요.");
+			}else if($('#user_pw').val()==$('#user_pw2').val()){
 				$("input:checkbox[id='chk_pw2']").prop("checked", true);
 				$('#chk_pw2_txt').text("*비밀번호 일치 확인.");
 			}else{

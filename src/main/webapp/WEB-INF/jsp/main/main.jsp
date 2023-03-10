@@ -8,5 +8,8 @@
 </head>
 <body>
 <h1>메인입니다2</h1>
+${userId}
+${userNm}
+${rght}
 </body>
 </html>

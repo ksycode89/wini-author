@@ -60,6 +60,21 @@ body {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+.login-form input[type="button"]:hover{
+  height:50px;
+  width:120px;
+  font-size:20px;
+  background:#fff;
+  color: #8181F7;
+  border:2px solid #8181F7;
+  border-radius:20px;
+/*   color: slategrey; */
+  text-transform:uppercase;
+  font-family: 'Ubuntu', sans-serif;
+  cursor:pointer;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 
 .sign-up{
   color:purple;
