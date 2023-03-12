@@ -8,6 +8,12 @@ public interface EqmnService {
 	List<EqmnVO> eqmnList(EqmnVO vo);
 	//계층관리
 	List<EqmnVO> CallEqmnTree();
+	//등록
+	int doAddAjax(EqmnVO vo);
+	//수정
+	int eqpmnModiDo(EqmnVO vo);
+	//삭제
+	int eqpmnDelAjax(EqmnVO vo);
 	
 	
 }

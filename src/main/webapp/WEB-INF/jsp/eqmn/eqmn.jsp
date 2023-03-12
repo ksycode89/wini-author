@@ -10,18 +10,14 @@
 </head>
 <body>
 
-	<!-- <style type="text/css">
-	#asdf{
-		background-image: 
-	}
-	#bodyContainer{
-		background-image: url("./images/wini_logo.png");
-		background-color: black;
-	}
-	</style>
 
- -->${eqmnList}
 
+
+	<div class='hiddenInput'>
+		<input type="hidden" id='eqpmnIdHd' name='eqpmnIdHd' ><br>
+		<!--계층체크용  -->
+		<input type="hidden" id='eqmnObjHd' name='eqmnObjHd' ><br>
+	</div>				
 	<div id='bodyContainer'>
 		<!-- 공통코드 테이블 시작 ---------------------------------------------------->
 		<div class='divitme'>
@@ -29,8 +25,11 @@
 				<!-- 공통코드 검색 div ------------------------------------------------------>
 				<div class='eqmn_search'>
 					<input id='eqpmnNmSer' name='eqpmnNm' value="" placeholder="장비구분명" >
-					<button>검색</button>
-					<button>등록</button>
+					<button class= 'eqmnSeaerch' >검색</button>
+					<button type="button" class= 'doAddForm'  onclick="goAddForm()">등록</button>
+					<button type="button" class='doAdd'  onclick="doAdd()" style="display: none;">등록확정</button>
+					<button type="button" class='doAdd' onclick="doAddCancel()" style="display: none;">등록취소</button>
+				
 				</div>
 				<!-- 공통코드 검색 div 끝 ------------------------------------------------------>
 				<!-- 계층구조 공통코드 시작  ------------------------------------------------------>
@@ -43,23 +42,38 @@
 		</div>
 		<!-- 공통코드 테이블 끝------------------------------------------------------>
 		<!-- 공통코드 상세내역 시작- ----------------------------------------------------->
+			
 		<div class='divitme'>
-			<form id='eqmn_commn_frm' action="">
-				<label for="eqpmnId">장비구분ID</label>
-				<input id= 'eqpmnId' name='eqpmnId' readonly="readonly"><br>
-				<label for="eqpmnNm">장비코드이름</label>
-				<input id= 'eqpmnNm' name='eqpmnNm' readonly="readonly"><br>
-				<label for="upperEqpmnId">상위장비구분ID</label>
-				<input id= 'upperEqpmnId' name='upperEqpmnId' readonly="readonly"><br>
-				<label for="frstRegistDt">최초등록일시</label>
-				<input id= 'frstRegistDt' name='frstRegistDt' readonly="readonly"><br>
-				<label for="frstRegisterSn">최초등록자</label>
-				<input id= 'frstRegisterSn' name='frstRegisterSn' readonly="readonly"><br>
-				<label for="updtDt">수정일시</label>
-				<input id= 'updtDt' name='updtDt' readonly="readonly"><br>
-				<label for="updusrSn">수정자</label>
-				<input id= 'updusrSn' name='updusrSn' readonly="readonly"><br>
-			</form>
+			<div style="float: right; display: block;">
+				<button id='eqmnModi' style="display: none" onclick="eqpmnModiForm();">수정</button>
+				<button class='doModi' style="display: none" id='eqmnModiDo' style="display: none" onclick="eqpmnModiDo();">수정확정</button>
+				<button class='doModi' style="display: none"id='eqmnModiCel' style="display: none" onclick="eqpmnModiCel();">수정취소</button>
+				<button id='eqmnDel' style="display: none" onclick="eqpmnDelAjax();">삭제</button>
+			</div><br>
+			<div>
+				<form id='eqmn_commn_frm' action="">
+					<label for="eqpmnId">장비구분ID</label>
+					<input id= 'eqpmnId' name='eqpmnId' readonly="readonly"><br>
+					<label for="eqpmnNm">장비코드이름</label>
+					<input id= 'eqpmnNm' name='eqpmnNm' readonly="readonly"><br>
+					<label for="upperEqpmnId">상위장비구분ID</label>
+					<input id= 'upperEqpmnId' name='upperEqpmnId' readonly="readonly"><br>
+					<div style="display: none" id='dqmnObjDiv'>
+					<label  for="eqpmnObj">[계층N][장비Y]</label>
+					<input  type="radio" id='eqpmnObj' name='eqpmnObj' value="N">N
+					<input  type="radio" id='eqpmnObj' name='eqpmnObj' value="Y">Y
+					</div>
+				</form>
+					<label  class='getday' for="frstRegistDt">최초등록일시</label>
+					<input class='getday' id= 'frstRegistDt' name='frstRegistDt' readonly="readonly"><br>
+					<label  class='getday' for="frstRegisterSn">최초등록자</label>
+					<input  class='getday' id= 'frstRegisterSn' name='frstRegisterSn' readonly="readonly"><br>
+					<label class='getday'  for="updtDt">수정일시</label>
+					<input  class='getday' id= 'updtDt' name='updtDt' readonly="readonly"><br>
+					<label  class='getday' for="updusrSn">수정자</label>
+					<input  class='getday' id= 'updusrSn' name='updusrSn' readonly="readonly"><br>
+					
+			</div>	
 		</div>
 		<!-- 공통코드 상세내역 끝 ------------------------------------------------------>
 	</div>
@@ -238,32 +252,249 @@
 			 ,type: 'post' // http 요청 방식 (default: ‘GET’)
 			 ,dataType : "json"
 			 ,success : function(data){
-				
-					console.log($('#eqpmnNm'))
-				 $('#eqpmnId').val($(data)[0]['eqpmnId'])
+				console.log(data)
+				 //상황용 input hidden에 등록
+				 $('#eqpmnIdHd').val($(data)[0]['eqpmnId'])
+				 $('#eqmnObjHd').val($(data)[0]['eqpmnObj'])
 				 
+				 //input박스에 등록 : 
+				 $('#eqpmnId').val($(data)[0]['eqpmnId'])
 				 $('#eqpmnNm').val($(data)[0]['eqpmnNm'])
 				 $('#upperEqpmnId').val($(data)[0]['upperEqpmnId'])
 				 $('#frstRegistDt').val($(data)[0]['frstRegistDt'])
 				 $('#frstRegisterSn').val($(data)[0]['frstRegisterSn'])
 				 $('#updtDt').val($(data)[0]['updtDt'])
 				 $('#updusrSn').val($(data)[0]['updusrSn'])
-				   
+				  
+				 //수정 삭제버튼 on
+				 $('#eqmnModi').show();
+				 $('#eqmnDel').show();
+				 //등록버튼 숨기기
+				 $('.doAdd').hide();
+				 //등록폼가기 on
+				 $('.doAddForm').show();
+				 //수정폼 닫기
+				  $('.doModi').hide();
+				 
 				  }
 			}) 
+			
 			  
 	}
-	
+	//등록폼이동
+	function goAddForm(){
+		console.log( $('#eqmnObjHd').val())
+		console.log(123)
+		if(  $('#eqpmnIdHd').val() != '' ){
+			if($('#eqmnObjHd').val()=='N') {
+				
+			//Y N 값가져오기
+			$('#dqmnObjDiv').show();
+			//등록 확정/취소버튼 on
+			$('.doAdd').toggle();
+			$('.doAddForm').toggle();
+			//수정 삭제 버튼 숨기기
+			 $('#eqmnModi').hide();
+			 $('#eqmnDel').hide();
+			 //input박스 초기화
+			 resetInput();
+			 //상위 input에 현제 id넣어주기
+			 $('#upperEqpmnId').val( $('#eqpmnIdHd').val());
+			 //ready only off 
+			 inputReadonly();
+			 //날자인풋지우기
+			 $('.getday').hide()
+			}else{
+				alert('최하위 계층 코드입니다.')
+			}
+		}
+		else{
+			alert('등록한 상위 코드를 선택해주세요')
+		}
+	}
+	//등록확정
+	function doAdd(){
+		//등록실행
+		 $.ajax({
+			  url: './doAddAjax.do' // 요청이 전송될 URL 주소
+			 ,data : $('#eqmn_commn_frm').serialize()
+			 ,type: 'post' // http 요청 방식 (default: ‘GET’)
+			 ,success : function(data){
+				 if(data=='succ'){
+					//검색초기화
+				    $('.eqmnSeaerch').val('');
+				    // input hidden에 초기화
+				    $('#eqpmnIdHd').val('');
+					//input box 초기화
+					reset()
+					 $('.getday').show();
+					//obt숨기기
+					$('#dqmnObjDiv').hide();
+					//테이블비우고 다시 읽어오기
+					 $('.eqmnTree').empty();
+					 callEqmnList();
+				 }else{
+					 alert('이미 존재하는 코드입니다.') 
+				 }
+			 }
+		 });
+	 
+	}
+	//등록취소
+	function doAddCancel(){
+		//등록취소
+		resetInput();
+		// input hidden에 초기화
+	    $('#eqpmnIdHd').val('');
+		//등록버튼 on off
+		$('.doAdd').toggle();
+		$('.doAddForm').toggle();
+		//수정삭제버튼 on off
+		 $('#eqmnModi').hide();
+		 $('#eqmnDel').hide();
+		 //
+		 $('.getday').show();
+	}
+	//input box 초기화+hidden
+	function resetInput(){
+		 //input박스에 등록 : 
+		 $('#eqpmnId').val('');
+		 $('#eqpmnNm').val('');
+		 $('#upperEqpmnId').val('');
+		 $('#frstRegistDt').val('');
+		 $('#frstRegisterSn').val('');
+		 $('#updtDt').val('');
+		 $('#updusrSn').val('');
+	}
+	//초기화
+	function reset(){
+		//input box 초기화
+		resetInput();
+		//검색초기화
+	   	$('.eqmnSeaerch').val('');
+		 // input hidden에 초기화
+		 $('#eqpmnIdHd').val('');
+		 //버튼초기화
+		 //등록하기버튼
+		 $('.doAddForm').show();
+		 //등록버튼
+		 $('.doAdd').hide();
+		 //수정삭제버튼
+		//수정 삭제 버튼 숨기기
+		 $('#eqmnModi').hide();
+		 $('#eqmnDel').hide();
+		
+	}
+	function inputReadonly(){
+		 //input박스 read only off : 
+		 $('#eqpmnId').prop('readonly',false);
+		 $('#eqpmnNm').prop('readonly',false);
+		 //$('#upperEqpmnId').prop('readonly',false);
+		 //$('#frstRegistDt').prop('readonly',false);
+		 //$('#frstRegisterSn').prop('readonly',false);
+		 //$('#updtDt').prop('readonly',false); //세션에서 읽어오기
+		 //$('#updusrSn').prop('readonly',false);
+	}
+	//수정폼이동
+	function eqpmnModiForm(){
+		if( $('#eqpmnIdHd').val() != '' ){
+		//intput풀기
+		inputReadonly();
+		//수정폼등장
+		$('.doModi').show()
+		//수정등록폼 숨김
+		$('#eqmnModi').hide()
+		$('#eqmnDel').hide()
+		}
+	}
+	//수정등록
+	function eqpmnModiDo(){
+		//intput풀기
+		inputReadonly();
+		//수정폼등장
+		$('.doModi').show();
+		//수정등록
+		if(true){
+			let eqpmnId = $('#eqpmnId').val();//장비구분id
+			let eqpmnNm =  $('#eqpmnNm').val(); //장비구분 이름
+			
+			//아작스//세션완료휴 가져가기 수정자
+			 $.ajax({
+				  url: './eqpmnModiDo.do' // 요청이 전송될 URL 주소
+				 ,data : {"eqpmnId": eqpmnId,"eqpmnNm":eqpmnNm}
+				 ,type: 'post' // http 요청 방식 (default: ‘GET’)
+				 ,success : function(data){
+					 console.log(data);
+					 $('.eqmnTree').empty();
+					 callEqmnList();
+					 $('.doModi').hide()
+				 }
+			 });
+		}
+		
+	}
+	//수정취소
+	function eqpmnModiCel(){
+		 $('.doModi').hide()
+		 $('#eqmnModi').show();
+		 $('#eqmnDel').show();
+		 //수정전 정보 불러오기
+		 callOneEqmn( $('#eqpmnIdHd').val())
+		 //인풋잠금
+		 $('#eqpmnId').prop('readonly',true);
+		 $('#eqpmnNm').prop('readonly',true);
+		 
+		 
+	}
+	//삭제
+	function eqpmnDelAjax(){
+		//삭제
+		if(true){
+			let eqpmnId = $('#eqpmnId').val();//장비구분id
+		
+			//아작스//세션완료휴 가져가기 수정자
+			 $.ajax({
+				  url: './eqpmnDelAjax.do' // 요청이 전송될 URL 주소
+				 ,data : {"eqpmnId": eqpmnId}
+				 ,type: 'post' // http 요청 방식 (default: ‘GET’)
+				 ,success : function(data){
+					 console.log(data);
+					 if(data == 'succ'){
+					//테이블비우고 다시 읽어오기
+					 $('.eqmnTree').empty();
+					 callEqmnList();
+					 alert(eqpmnId+'삭제성공')
+					 }else if(data=='fail'){
+						 alert(eqpmnId,'삭제실패')
+					 }else if (data=='child'){
+						 alert('하위요소가 존재합니다.')
+					 }else{
+						 alert('error : 관리자에게 문의하세요')
+					 }
+				 }
+			 });
+		}
+		
+	}
 	/* --------------------------------------------------------------------- */
+	
+	
+	
+	
+	
 	function testA(){
-		
-		setTimeout(function(){
-			callOneEqmn()
-		} , 2000);
-		
+		 $('.eqmnTree').empty();
+		 console.log(123)
 	}
 	function asdf(a){
 		console.log(a)
+		 $.ajax({
+			  url: './callOneEqmnAjax.do' // 요청이 전송될 URL 주소
+			 ,data : {"eqpmnId": eqpmnId}
+			 ,type: 'post' // http 요청 방식 (default: ‘GET’)
+			 ,dataType : "json"
+			 ,success : function(data){}
+		 });
 	}
 	
 	/* function 장비계층테이블(){
