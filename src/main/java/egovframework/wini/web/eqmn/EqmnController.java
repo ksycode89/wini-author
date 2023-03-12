@@ -70,6 +70,56 @@ public class EqmnController {
 		return jList.toJson(list) ;
 	}
 	
+	//등록
+	//한글 반환시 produces = "application/text; charset=utf8"로 인코딩 방식을 정해줘서 반환시켜줌
+	@RequestMapping(value="/doAddAjax.do",method=RequestMethod.POST,produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String doAddAjax(EqmnVO vo) {
+		System.out.println(vo);
+		//등록
+		 int result = eqService.doAddAjax(vo);
+		 if(result ==1) {
+			 return "succ";
+		 }
+		
+		return "fail" ;
+	}
+	
+	//수정
+	//한글 반환시 produces = "application/text; charset=utf8"로 인코딩 방식을 정해줘서 반환시켜줌
+	@RequestMapping(value="/eqpmnModiDo.do",method=RequestMethod.POST,produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String eqpmnModiDo(EqmnVO vo) {
+		System.out.println(vo);
+		//수정 : 1이상이면 성공 -1이면 에러(rollback) 0이면 업데이트느 되었으나 0건 
+		int result = eqService.eqpmnModiDo(vo);
+		if(result >0) {
+			return "succ";
+		}else if (result == -1) {
+			return "error";
+		}
+		
+		return "fail" ;
+	}
+	//삭제
+	//한글 반환시 produces = "application/text; charset=utf8"로 인코딩 방식을 정해줘서 반환시켜줌
+	@RequestMapping(value="/eqpmnDelAjax.do",method=RequestMethod.POST,produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String eqpmnDelAjax(EqmnVO vo) {
+		System.out.println(vo);
+		//수정 : 1이상이면 성공 -1이면 에러(rollback) 0이면 업데이트느 되었으나 0건 
+		int result = eqService.eqpmnDelAjax(vo);
+		if(result >0) {
+			return "succ";
+		}else if (result == -1) {
+			return "error";
+		}else if (result ==-2) {
+			return "child";
+		}
+		
+		return "fail" ;
+	}
+	
 	
 	
 	

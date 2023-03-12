@@ -23,6 +23,9 @@
 	 			<if test="eqpmnId != null and !eqpmnId.equals('') ">
 	  			   AND EQPMN_ID = #{eqpmnId}
 	 			</if>
+	 			<if test="upperEqpmnId != null and !upperEqpmnId.equals('') ">
+	  			   AND UPPER_EQPMN_ID = #{upperEqpmnId}
+	 			</if>
 			</where>  
 	</select>
 	
@@ -34,7 +37,48 @@
 		CONNECT BY PRIOR eqpmn_id = upper_eqpmn_id
 		ORDER BY level
 	</select>
+	<!-- 등록 -->
+	<insert id="doAddAjax" parameterType="egovframework.wini.service.eqmn.EqmnVO">
+			INSERT INTO KJP_EQPMN_CODE(
+						 EQPMN_ID           /*장비구분ID */
+						,EQPMN_NM         /*장비구분명*/
+						,UPPER_EQPMN_ID    /*상위장비구분ID*/
+						,FRST_REGIST_DT    /*최초등록일시*/
+						,FRST_REGISTER_SN  /*최초등록자 일련번호*/
+						,EQPMN_OBJ)
+						
+					VALUES(
+						 #{eqpmnId}
+						,#{eqpmnNm}
+						,#{upperEqpmnId}
+						,sysdate
+						,1
+						,#{eqpmnObj}
+					)	
+			
+			
+	</insert>
 	
+	<!-- 수정 -->
+	<update id="eqpmnModiDo"  parameterType="egovframework.wini.service.eqmn.EqmnVO">
+			UPDATE KJP_EQPMN_CODE SET 
+								<if test="eqpmnId != null and !eqpmnId.equals('')">
+									 EQPMN_ID = #{eqpmnId}        /*장비구분ID */
+								</if>
+								<if test="eqpmnNm != null and !eqpmnNm.equals('')">
+									,EQPMN_NM = #{eqpmnNm}       /*장비구분명*/
+								</if>
+								<if test="upperEqpmnId != null and !upperEqpmnId.equals('')">
+									,UPPER_EQPMN_ID = #{upperEqpmnId}   /*상위장비구분ID*/
+								</if>
+								WHERE eqpmn_id = #{eqpmnId}		
+											
+	</update>
+	<!-- 삭제 -->
+	<delete id="eqpmnDelAjax" parameterType="egovframework.wini.service.eqmn.EqmnVO">
+			DELETE FROM KJP_EQPMN_CODE
+				   WHERE eqpmn_id = #{eqpmnId}		
+	</delete>
 	
 	
 	
