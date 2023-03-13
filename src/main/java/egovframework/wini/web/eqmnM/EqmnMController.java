@@ -69,4 +69,30 @@ public class EqmnMController {
 		
 		return "fail" ;
 	}
+	//장비테이블 수정
+	@RequestMapping(value="/eqpmnModiDoAjax.do",method=RequestMethod.POST)
+	@ResponseBody
+	public String eqpmnModiDoAjax(EqmnMVO vo) {
+		System.out.println(vo);
+		int result = eqMService.eqpmnModiDoAjax(vo); //list의 결과값 (빈값을 넘겨줄시 where절에서 알아서 처리)
+		System.out.println("result : "+result);
+		if(result >0) {
+			return "succ";
+		}
+		
+		return "fail" ;
+	}
+	//장비테이블 삭제
+	@RequestMapping(value="/eqpmnDelAjax.do",method=RequestMethod.POST)
+	@ResponseBody
+	public String eqpmnDelAjax(EqmnMVO vo) {
+		System.out.println(vo);
+		int result = eqMService.eqpmnDelAjax(vo); //list의 결과값 (빈값을 넘겨줄시 where절에서 알아서 처리)
+		System.out.println("result : "+result);
+		if(result >0) {
+			return "succ";
+		}
+		
+		return "fail" ;
+	}
 }

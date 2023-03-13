@@ -36,7 +36,7 @@
 		</logger> 
 	
 		<logger name="jdbc.resultset" additivity="false">
-			<level value="OFF" />
+			<level value="DEBUG" />
 			<appender-ref ref="console"/> 
 		</logger>
 	

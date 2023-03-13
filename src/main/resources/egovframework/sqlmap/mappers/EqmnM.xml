@@ -10,7 +10,7 @@
 						,EQPMN_SE_CODE		/*장비 구분코드*/
 						,EQPMN_NM			/*장비 장비명*/	
 						,ORGNZT_ID			/*소속부서ID*/
-						,BUY_DAY			/*구매일자*/
+						,to_char(BUY_DAY,'YYYY-MM-DD') as BUY_DAY			/*구매일자*/
 						,EQPMN_UNIT_PRICE	/*단가*/
 						,EQPMN_MODEL_NAME	/*모델명*/
 						,EQPMN_MAKR			/*제조사*/
@@ -37,34 +37,89 @@
 	</select>
 	<!-- 등록 -->
 	<insert id="insertEqpmnMAjax" parameterType="egovframework.wini.service.eqmnM.EqmnMVO">
-			
+				/*장비  테이블 입력*/
 				INSERT INTO KJP_EQPMN(
-					 EQPMN_SN 
-					 ,EQPMN_SE_CODE
-					 ,EQPMN_NM
-					 ,ORGNZT_ID
-					 ,BUY_DAY
-					 ,EQPMN_UNIT_PRICE
-					 ,EQPMN_MODEL_NAME
-					 ,EQPMN_MAKR
-					 ,EQPMN_PIN
-					 ,EQPMN_CN
-					 ,FRST_REGIST_DT
-					 ,FRST_REGISTER_SN)
+					 EQPMN_SN 						/*장비 일련번호(1부터 생성)*/
+					 ,EQPMN_SE_CODE					/*장비 구분코드*/
+					 ,EQPMN_NM						/*장비 장비명*/	
+					 ,ORGNZT_ID						/*소속부서ID*/
+					 <if test="buyDay != null and !buyDay.equals('') ">
+	  			  	 ,BUY_DAY 						/*구매일자*/
+	 				 </if>
+	 				  <if test="eqpmnUnitPrice != 0 ">
+	  			  	 ,EQPMN_UNIT_PRICE 				/*단가*/	
+	 				 </if>
+	 				  <if test="eqpmnModelName != null and !eqpmnModelName.equals('') ">
+	  			  	 ,EQPMN_MODEL_NAME 				/*모델명*/
+	 				 </if>	
+	 				  <if test="eqpmnMakr != null and !eqpmnMakr.equals('') ">
+	  			  	 ,EQPMN_MAKR 					/*제조사*/	
+	 				 </if>
+					 ,EQPMN_PIN						/*식별번호*/
+					 <if test="eqpmnCn != null and !eqpmnCn.equals('') ">
+	  			  	 ,EQPMN_CN 						/*비고*/
+	 				 </if>
+					 ,FRST_REGIST_DT				/*최초등록일시*/
+					 ,FRST_REGISTER_SN)				/*수정자 일련번호*/
 			values( (SELECT NVL(MAX(EQPMN_SN),0)+1 FROM KJP_EQPMN)
 					,#{eqpmnSeCode}
 					,#{eqpmnNm}
 					,#{orgnztId}
-					,#{buyDay}
-					,#{eqpmnUnitPrice}
-					,#{eqpmnModelName}
-					,#{eqpmnMakr}
+					 <if test="buyDay != null and !buyDay.equals('') ">
+	  			  	 ,to_char(#{buyDay},'YYYY-MM-DD')
+	 				 </if>
+					 <if test="eqpmnUnitPrice">
+	  			  	,#{eqpmnUnitPrice}
+	 				 </if>
+   					<if test="eqpmnModelName != null and !eqpmnModelName.equals('') ">
+	  			  	,#{eqpmnModelName}
+	 				 </if>
+	 				  <if test="eqpmnMakr != null and !eqpmnMakr.equals('') ">
+	  			  	 ,#{eqpmnMakr}
+	 				 </if>
 					,#{eqpmnPin}
-					,#{eqpmnCn}
+					 <if test="eqpmnCn != null and !eqpmnCn.equals('') ">
+	  			  	,#{eqpmnCn}
+	 				 </if>
 					,SYSDATE
 					,1
 			)		 
-	
 	</insert>
+	
+	<update id="eqpmnModiDoAjax" parameterType="egovframework.wini.service.eqmnM.EqmnMVO">
+	/*장비  테이블 수정*/
+		UPDATE KJP_EQPMN 
+						   SET   
+					 		      EQPMN_SE_CODE=#{eqpmnSeCode}				/*장비 구분코드*/
+								 ,EQPMN_NM=#{eqpmnNm}						/*장비 장비명*/	
+								 ,ORGNZT_ID	=#{orgnztId}					/*소속부서ID*/
+								 ,EQPMN_PIN=#{eqpmnPin}						/*식별번호*/
+				 				 ,UPDT_DT=sysdate							/*수정일시/
+								 ,UPDUSR_SN	=1								/*수정자 일련번호*/
+								 <if test="buyDay != null and !buyDay.equals('') ">
+				  			  	 ,BUY_DAY=#{buyDay} 	/*구매일자*/
+				 				 </if>
+				 				  <if test="eqpmnUnitPrice != 0 ">
+				  			  	 ,EQPMN_UNIT_PRICE=#{eqpmnUnitPrice} 		/*단가*/	
+				 				 </if>
+				 				  <if test="eqpmnModelName != null and !eqpmnModelName.equals('') ">
+				  			  	 ,EQPMN_MODEL_NAME=#{eqpmnModelName} 		/*모델명*/
+				 				 </if>	
+				 				  <if test="eqpmnMakr != null and !eqpmnMakr.equals('') ">
+				  			  	 ,EQPMN_MAKR=#{eqpmnMakr} 					/*제조사*/	
+				 				 </if>
+								 <if test="eqpmnCn != null and !eqpmnCn.equals('') ">
+				  			  	 ,EQPMN_CN=#{eqpmnCn} 						/*비고*/
+				 				 </if>
+						WHERE 	EQPMN_SN=#{eqpmnSn}	
+	</update>
+	
+	<!-- 삭제 -->
+	
+	<delete id="eqpmnDelAjax" parameterType="egovframework.wini.service.eqmnM.EqmnMVO">
+		DELETE FROM  KJP_EQPMN 
+			   WHERE EQPMN_SN=#{eqpmnSn}	
+		
+	</delete>
 
 </mapper>

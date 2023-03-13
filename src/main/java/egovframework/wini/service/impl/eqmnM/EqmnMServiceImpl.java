@@ -40,4 +40,34 @@ public class EqmnMServiceImpl implements EqmnMService {
 				return result;
 	}
 
+	@Override
+	public int eqpmnModiDoAjax(EqmnMVO vo) {
+		int result = 0;
+		try {
+			result = eqMMap.eqpmnModiDoAjax(vo);
+			if(result >0) {
+				return result;
+			}
+		} catch (Exception e) {
+		System.out.println(e);
+		return -1;
+		}
+		return result;
+	}
+
+	@Override
+	public int eqpmnDelAjax(EqmnMVO vo) {
+		int result = 0;
+		try {
+			result = eqMMap.eqpmnDelAjax(vo);
+			if(result >0) {
+				return result;
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+		return -1;
+		}
+		return result;
+	}
+
 }
