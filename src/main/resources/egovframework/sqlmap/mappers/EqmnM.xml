@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.wini.service.impl.eqmnM.EqmnMMapper">
+	
+	<!-- 장비검색 [이름/코드/vo빈값 = 전체] -->
+	<select id="callEqpmnMain" parameterType="egovframework.wini.service.eqmnM.EqmnMVO" resultType="egovframework.wini.service.eqmnM.EqmnMVO">
+			/*장비  테이블*/
+			
+			SELECT		EQPMN_SN			/*장비 일련번호(1부터 생성)*/
+						,EQPMN_SE_CODE		/*장비 구분코드*/
+						,EQPMN_NM			/*장비 장비명*/	
+						,ORGNZT_ID			/*소속부서ID*/
+						,BUY_DAY			/*구매일자*/
+						,EQPMN_UNIT_PRICE	/*단가*/
+						,EQPMN_MODEL_NAME	/*모델명*/
+						,EQPMN_MAKR			/*제조사*/
+						,EQPMN_PIN			/*식별번호*/
+						,EQPMN_CN			/*비고*/
+						,FRST_REGIST_DT		/*최초등록일시*/
+						,FRST_REGISTER_SN	/*최초등록자 일련번호*/
+						,UPDT_DT			/*수정일시/
+						,UPDUSR_SN			/*수정자 일련번호*/
+			FROM		KJP_EQPMN 			
+			
+			<where>
+				<if test="eqpmnNm != null and !eqpmnNm.equals('') ">
+	  			   EQPMN_NM LIKE '%' || #{eqpmnNm} || '%' 
+	 			</if>
+				<if test="eqpmnSeCode != null and !eqpmnSeCode.equals('') ">
+	  			   EQPMN_SE_CODE LIKE '%' || #{eqpmnSeCode} || '%' 
+	 			</if>
+	 			<if test="eqpmnSn !=0">
+	  			   AND EQPMN_SN = #{eqpmnSn}
+	 			</if>
+	 			
+			</where>  
+	</select>
+	<!-- 등록 -->
+	<insert id="insertEqpmnMAjax" parameterType="egovframework.wini.service.eqmnM.EqmnMVO">
+			
+				INSERT INTO KJP_EQPMN(
+					 EQPMN_SN 
+					 ,EQPMN_SE_CODE
+					 ,EQPMN_NM
+					 ,ORGNZT_ID
+					 ,BUY_DAY
+					 ,EQPMN_UNIT_PRICE
+					 ,EQPMN_MODEL_NAME
+					 ,EQPMN_MAKR
+					 ,EQPMN_PIN
+					 ,EQPMN_CN
+					 ,FRST_REGIST_DT
+					 ,FRST_REGISTER_SN)
+			values( (SELECT NVL(MAX(EQPMN_SN),0)+1 FROM KJP_EQPMN)
+					,#{eqpmnSeCode}
+					,#{eqpmnNm}
+					,#{orgnztId}
+					,#{buyDay}
+					,#{eqpmnUnitPrice}
+					,#{eqpmnModelName}
+					,#{eqpmnMakr}
+					,#{eqpmnPin}
+					,#{eqpmnCn}
+					,SYSDATE
+					,1
+			)		 
+	
+	</insert>
+
+</mapper>

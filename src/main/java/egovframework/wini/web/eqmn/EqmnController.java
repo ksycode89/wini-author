@@ -38,11 +38,23 @@ public class EqmnController {
 		mo.addAttribute("eqmnList",list);                //모델에 담아서 전송
 		return "eqmn/eqmn";
 	}
-	//ajax로 단일조회)호출
 	
+	@RequestMapping(value="/callListEqmentAjax.do",method=RequestMethod.POST,produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String callListEqmentAjax(EqmnVO vo ) {
+		//찾을 칼럼의 key 단일조회
+		List<EqmnVO> list = eqService.eqmnList(vo); //list의 결과값 (빈값을 넘겨줄시 where절에서 알아서 처리)
+		
+		Gson jList = new Gson();
+		
+		return jList.toJson(list) ;
+	}
+	
+	
+	//ajax로 단일조회)호출
 	@RequestMapping(value="/callOneEqmnAjax.do",method=RequestMethod.POST,produces = "application/text; charset=utf8")
 	@ResponseBody
-	public String callOneEqmnAjax(String eqpmnId,Model mo ) {
+	public String callOneEqmnAjax(String eqpmnId ) {
 		EqmnVO vo = new EqmnVO(); //기본생성자로 인한 객체생성
 		//찾을 칼럼의 key 단일조회
 		vo.setEqpmnId(eqpmnId);
@@ -62,7 +74,7 @@ public class EqmnController {
 	public String ajaxEqmnList(EqmnVO vo) {
 		//매개변수로 넣을 Rvo를 만들어줌
 		//CompVO Rvo = new CompVO(); //기본생성자로 인한 객체 생성
-	
+		System.out.println(vo);
 		//조건이 있으면 vo에 값이 담길것이고 where 절에 조건문이 돌아감.
 		List<EqmnVO> list = eqService.CallEqmnTree();  //list의 결과값 (빈값을 넘겨줄시 where절에서 알아서 처리)
 		Gson jList = new Gson();

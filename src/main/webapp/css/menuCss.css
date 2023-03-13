@@ -49,15 +49,6 @@
 	
 	.menu_nav ul li ul li a:hover { background: #126d9b; }
 	  
-	/* 물품관리 css */    
-	#bodyContainer{
-		display: flex;
-		justify-content: space-around; 
-	}
-	.divitme{
-	flex-basis: 45%;
-		border: solid;
 	
-	}
 	
 	/*메뉴*/

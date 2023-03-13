@@ -17,7 +17,7 @@
         <!-- <Logger name="jdbc.sqltiming" level="INFO" additivity="false">
             <AppenderRef ref="console" />
         </Logger> -->
-        <Logger name="org.springframework" level="INFO" additivity="false">
+        <Logger name="org.springframework" level="warn" additivity="false">
             <AppenderRef ref="console" />
         </Logger>
         
@@ -27,16 +27,16 @@
 			<appender-ref ref="console"/> 
 		</logger>
 		<logger name="jdbc.sqltiming" additivity="false">
-			<level value="warn" />
+			<level value="DEBUG" />
 			<appender-ref ref="console"/> 
 		</logger>
 		<logger name="jdbc.audit" additivity="false"> 
-			<level value="warn"/>  
+			<level value="DEBUG"/>  
 			<appender-ref ref="console"/> 
 		</logger> 
 	
 		<logger name="jdbc.resultset" additivity="false">
-			<level value="info" />
+			<level value="OFF" />
 			<appender-ref ref="console"/> 
 		</logger>
 	

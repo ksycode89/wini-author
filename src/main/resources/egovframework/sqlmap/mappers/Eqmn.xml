@@ -26,6 +26,9 @@
 	 			<if test="upperEqpmnId != null and !upperEqpmnId.equals('') ">
 	  			   AND UPPER_EQPMN_ID = #{upperEqpmnId}
 	 			</if>
+	 			<if test="eqpmnObj != null and !eqpmnObj.equals('') ">
+	  			   AND EQPMN_OBJ	 = #{eqpmnObj}
+	 			</if>
 			</where>  
 	</select>
 	
