@@ -15,4 +15,6 @@ public interface memberService {
 	// 로그인 실행
 	Map<String, Object> userLogin (Map<String, Object> param);
 	
+	// 메뉴 조회
+	List<Map<String,Object>> getMenu ();
 }

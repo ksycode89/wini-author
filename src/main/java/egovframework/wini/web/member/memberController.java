@@ -22,44 +22,35 @@ public class memberController {
 	@Resource(name = "memberService")
 	private memberService memberService;
 	
-	@RequestMapping("goJoinMember.do")
-	public String gologin() {
-		// 로그인 페이지는 header, footer 없음.
-		return "main/joinMember";
-	}
-	
-//	아이디 중복체크
+	//	아이디 중복체크
 	@RequestMapping("duplicateCheck.do")
 	@ResponseBody
 	public int duplicateCheck(@RequestParam Map<String, Object> commandMap) {
-		// 로그인 페이지는 header, footer 없음.
 		int idchk = memberService.duplicateCheck(commandMap);
 		return idchk;
 	}
-	
+	// 회원가입
 	@RequestMapping("userInsert.do")
 	@ResponseBody
 	public int userInsert(@RequestParam Map<String, Object> commandMap) {
-		// 로그인 페이지는 header, footer 없음.
 		int insertResult = memberService.userInsert(commandMap);
 		return insertResult;
 	}
-	
+	// 로그인
 	@RequestMapping("userLogin.do")
 	@ResponseBody
 	public Object userLogin(@RequestParam Map<String, Object> commandMap, HttpSession session) {
 		Map<String, Object> result = memberService.userLogin(commandMap);
 		Map<String, Object> userInfo = (Map<String, Object>) result.get("userInfo");
 		if (result.get("chk").equals("Y")) {
-			session.setAttribute("userId", userInfo.get("userId"));
-			session.setAttribute("userNm", userInfo.get("userNm"));
-			session.setAttribute("rght", userInfo.get("rght"));
+			session.setAttribute("userInfo", userInfo); // 세션 연결
 		}
 		return result.get("chk");
 	}
+	// 로그아웃
 	@RequestMapping("logout.do")
 	public String logout(HttpServletRequest re) {
-		re.getSession().invalidate();
+		re.getSession().invalidate(); // 세션 해제
 		return "redirect: goLogin.do";
 	}
 	

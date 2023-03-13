@@ -4,6 +4,9 @@
 <html>
 <head>
  <title>테스트 페이지</title>
-footer
+
+<div>
+하단메뉴입니다.
+</div> 
 
 </html> 

@@ -19,4 +19,7 @@ public interface memberMapper {
 	//회원정보가져오기
 	Map<String, Object> userInfo (Map<String, Object> param);
 	
+	// 메뉴 조회
+	List<Map<String,Object>> getMenu();
+	
 }

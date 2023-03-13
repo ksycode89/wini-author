@@ -13,5 +13,7 @@
 <page:applyDecorator name="defaultHeader"/>
 <decorator:body/> 
 <page:applyDecorator name="defaultFooter"/>
+<script>
+</script>
 </body>
 </html>

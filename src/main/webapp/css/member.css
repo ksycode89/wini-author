@@ -138,3 +138,19 @@ body {
   display:block;
   width:100%;
 }
+.find-button {
+  width:60%;
+  height:20px;	
+  
+  padding: 12px 12px;
+
+  cursor: pointer;
+  text-align: center;
+
+  color: white;
+  border: 0 none;
+  border-radius: 10%;
+
+  font-size: 13px;
+  font-weight: 500;
+}
