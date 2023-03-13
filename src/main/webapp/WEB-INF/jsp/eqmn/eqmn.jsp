@@ -60,8 +60,8 @@
 					<input id= 'upperEqpmnId' name='upperEqpmnId' readonly="readonly"><br>
 					<div style="display: none" id='dqmnObjDiv'>
 					<label  for="eqpmnObj">[계층N][장비Y]</label>
-					<input  type="radio" id='eqpmnObj' name='eqpmnObj' value="N">N
-					<input  type="radio" id='eqpmnObj' name='eqpmnObj' value="Y">Y
+					<input  type="radio" class='eqpmnObj' id='eqpmnObj' name='eqpmnObj' value="N" checked>N
+					<input  type="radio" class='eqpmnObj' id='eqpmnObj' name='eqpmnObj' value="Y">Y
 					</div>
 				</form>
 					<label  class='getday' for="frstRegistDt">최초등록일시</label>
@@ -314,30 +314,35 @@
 	}
 	//등록확정
 	function doAdd(){
+		//유효성
+		if(getVaild()){
 		//등록실행
-		 $.ajax({
-			  url: './doAddAjax.do' // 요청이 전송될 URL 주소
-			 ,data : $('#eqmn_commn_frm').serialize()
-			 ,type: 'post' // http 요청 방식 (default: ‘GET’)
-			 ,success : function(data){
-				 if(data=='succ'){
-					//검색초기화
-				    $('.eqmnSeaerch').val('');
-				    // input hidden에 초기화
-				    $('#eqpmnIdHd').val('');
-					//input box 초기화
-					reset()
-					 $('.getday').show();
-					//obt숨기기
-					$('#dqmnObjDiv').hide();
-					//테이블비우고 다시 읽어오기
-					 $('.eqmnTree').empty();
-					 callEqmnList();
-				 }else{
-					 alert('이미 존재하는 코드입니다.') 
+			 $.ajax({
+				  url: './doAddAjax.do' // 요청이 전송될 URL 주소
+				 ,data : $('#eqmn_commn_frm').serialize()
+				 ,type: 'post' // http 요청 방식 (default: ‘GET’)
+				 ,success : function(data){
+					 if(data=='succ'){
+						//검색초기화
+					    $('.eqmnSeaerch').val('');
+					    // input hidden에 초기화
+					    $('#eqpmnIdHd').val('');
+						//input box 초기화
+						reset()
+						 $('.getday').show();
+						//obt숨기기
+						$('#dqmnObjDiv').hide();
+						//계층구분지우기
+						$('#eqpmnObj').prop('checked',true)
+						//테이블비우고 다시 읽어오기
+						 $('.eqmnTree').empty();
+						 callEqmnList();
+					 }else{
+						 alert('이미 존재하는 코드입니다.') 
+					 }
 				 }
-			 }
-		 });
+			 });
+		}
 	 
 	}
 	//등록취소
@@ -477,14 +482,39 @@
 		
 	}
 	/* --------------------------------------------------------------------- */
+	//유효성검사 + 빈칸제거
+	 /*  $('#eqpmnId').val('');
+		 $('#eqpmnNm').val('');
+		 $('#upperEqpmnId').val(''); */
+	function getVaild(){
+		if(!$.trim($('#eqpmnId').val())){
+			alert('장비구분을 입력해주세요')
+			return false;
+		}
+		if(!$.trim($('#eqpmnNm').val())){
+			alert('장비코드 이름을 입력해주세요')
+			return false;
+		}
+		if(!$.trim($('#upperEqpmnId').val())){
+			alert('장비 상위 코드를 입력해주세요')
+			return false;
+		}
+		//radio는 같은 아이디를 가져야 함/ 구분을 주기보단 기본값을 줘서 무조건 고르게 할것
+		/* if(!$('.eqpmnObj').prop('checked')){
+			alert('계층구분을  선택 해주세요')
+			return false;
+		} */
+		return true;
+	}
+	/* --------------------------------------------------------------------- */
 	
 	
 	
 	
 	
 	function testA(){
-		 $('.eqmnTree').empty();
-		 console.log(123)
+		getVaild();
+		console.log($('#eqpmnObj').prop('checked'))
 	}
 	function asdf(a){
 		console.log(a)
