@@ -11,4 +11,8 @@ public interface EqmnMMapper {
 	public List<EqmnMVO>callEqpmnMain(EqmnMVO vo);
 	//insert
 	public int insertEqpmnMAjax(EqmnMVO vo);
+	//modi
+	public int eqpmnModiDoAjax(EqmnMVO vo);
+	//modi
+	public int eqpmnDelAjax(EqmnMVO vo);
 }

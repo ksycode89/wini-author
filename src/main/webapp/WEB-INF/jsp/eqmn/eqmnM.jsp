@@ -29,9 +29,9 @@
 			<!-- 검색시작  -->
 				<div class='seachEqpmnM' style="float: right;">
 					<form action="" onclick=false>
-						<label for='seachEqpmnMSerach'>검색</label>					
-						<input   id='seachEqpmnMSerach'>
-						<button>검색</button>
+						<label for='seachEqpmnMSerach'>검색[장비이름]</label>					
+						<input   id='seachEqpmnMSerach' placeholder="장비이름으로 검색해주세요">
+						<button type="button" id='seachEqpmnMSerachDo' onclick="seachMDO();" >검색</button>
 						<button type="button" onclick="addEqpmnForm();" class='eqpmnDoF'>등록</button>
 						<button type="button" onclick="addEqpmnDo();"  class ='eqpmnDoC' style="display: none" >등록확정</button>
 						<button type="button" onclick="addEqpmnCel();" class='eqpmnDoC' style="display: none" >등록취소</button>
@@ -40,8 +40,8 @@
 				<br>
 			<!-- 검색끝  -->
 			<!-- 장비테이블시작  -->
-				<div id='eqpmnDiv'>
-					<table  border="1" id="eqpmnMTable">
+				<div id='eqpmnDiv' style="overflow:auto; width:420px; height:400px;">
+					<table  border="1" id="eqpmnMTable" style="margin-left: 30px;">
 						
 					</table>
 				</div>
@@ -53,10 +53,10 @@
 		<div class='EqpMnMdivitme'>
 			<div id='eqpmnDDiv'>
 				<div style="float: right;">
-						<button type="button" type="button" class='eqpmnModiForm' style="display: none" onclick=";">수정</button>
-						<button type="button" class='' style="display: none" onclick=";">수정확정</button>
-						<button type="button" class='' style="display: none" onclick=";">수정취소</button>
-						<button type="button" class='eqpmnDel' style="display: none" onclick=";">삭제</button>
+						<button type="button" type="button" class='eqpmnModiForm' style="display: none" onclick="eqpmnModiForm();">수정</button>
+						<button type="button" class='eqpmnModiDo' style="display: none" onclick="eqpmnModiDo();">수정확정</button>
+						<button type="button" class='eqpmnModiDo' style="display: none" onclick="eqpmnModiCel();">수정취소</button>
+						<button type="button" class='eqpmnDel' style="display: none" onclick="eqpmnDel();">삭제</button>
 						
 				</div>
 				<br>
@@ -160,19 +160,20 @@
 				 ,success : function(data){
 						//mapping시킬 tr이름 가져옴
 					let trName = ['eqpmnSn','eqpmnSeCode','eqpmnNm','orgnztId']	;
+					let trName2 = ['no','장비구분코드','장비이름','소속부서']	;
 						
 					//데이터//넣을 테이블 // 헤더
-					 mktr(data,'#eqpmnMTable',trName)
+					 mktr(data,'#eqpmnMTable',trName,trName2)
 				 }
 			 });
 			
 		} 
 		//데이터//넣을 테이블 // 헤더
-		function mktr(data,table,trName){
+		function mktr(data,table,trName,trName2){
 		
 			//헤드만들기
 				let trH = $('<tr>');
-			$(trName).each((index,thVal)=>{
+			$(trName2).each((index,thVal)=>{
 				let th = $('<th>');
 				th.text(thVal);//tr값입력
 				//
@@ -188,6 +189,10 @@
 						callEqmnMDetail(key); //디테일 테이블 재 실행
 						$('.eqpmnModiForm').show();
 						$('.eqpmnDel').show();
+						//상세정보 되돌리기 
+						addEqpmnCel();
+						//수정/삭제버튼
+						$('.eqpmnModiDo').hide();
 					})
 			  }
 					//호버색
@@ -256,75 +261,66 @@
 			//버튼활성화
 			$('.eqpmnDoC').show();
 			$('.eqpmnDoF').hide();
-			//td지우기
-			$('#eqpmnMDTable').find('td').remove();
-			//테이블만들기
-			 let trName = ['eqpmnSeCode','eqpmnNm','orgnztId','buyDay','eqpmnUnitPrice','eqpmnModelName','eqpmnMakr','eqpmnPin','eqpmnCn'];
-			 //숨기기
-			 $('#eqpmnSn').hide();
-			 $('#frstRegistDt').hide();
-			 $('#frstRegisterSn').hide();
-			 $('#updtDt').hide();
-			 $('#updusrSn').hide();
-			 //숨기기끝
-			$(trName).each((index,val)=>{
-			if(val=='eqpmnCn'){
-				 let td = $('<td>') //td생성
-				 let textBox = $('<textarea>');
-				 textBox.css('resize','none');
-				 textBox.prop('cols','20');	 
-				 textBox.prop('rows','2');	
-				 textBox.prop('name',val)
-				 textBox.prop('id',val+'put')
-				 td.append(textBox)
-				 $('#eqpmnCn').after(td);
-			 }
-			else{
-			 let td = $('<td>') //td생성
-			 let input =$('<input>')//input생성
-			 input.prop('name',val); //name
-			 input.prop('id',val+'put'); //id
-			 if (val=='buyDay'){
-				 input.prop('type','date')
-			 }
-			 let thC = $(eqpmnMDTable).find('#'+val); //디테일 테이블안 th의 id와 매칭시켜서 맞는 th검색
-			 td.append(input)
-			 $(thC).after(td) //th와 같은 라인에 td 상속
-			 }
-		  })
-		  //홀드시키고 이벤트걸기
-		  $('#eqpmnSeCodeput').prop('readonly',true);
-		  $('#eqpmnSeCodeput').on('click',function(){
-			 $('.modalEqmn').show();
-			  
-		  }) 
-		  $('#eqpmnNmput').prop('readonly',true);
+			//삭제 수정폼 감추기
+			$('.eqpmnModiForm').hide();
+			$('.eqpmnModiDo').hide();
+			$('.eqpmnDel').hide();
+			
+			insertModiComm();
 		}
 		//등록시작
 		function addEqpmnDo(){
-			//버튼활성화
-			$('.eqpmnDoC').hide();
-			$('.eqpmnDoF').show();
+			
 			//실행
+			if(inseartVaild()){
+				$.ajax({
+					  url: './insertEqpmnMAjax.do' // 요청이 전송될 URL 주소
+					 ,data : $('#insertFormEqpmnM').serialize()
+					 ,type: 'post' // http 요청 방식 (default: ‘GET’)
+					 ,success : function(data){
+						 if(data=='succ'){
+							//버튼활성화
+								$('.eqpmnDoC').hide();
+								$('.eqpmnDoF').show();
+							//리셋테이블
+							 addEqpmnCel();
+							 callEqpmnMain();
+							 }else{
+								 alert('이미 존재하는 코드입니다.') 
+							 }
+					 }
+				 });
+			}
+		}
+		//등록 유효성
+		function inseartVaild(){
+			//유효성검사
+			//값을 가져오기때문에 trim이필요없음
+			//장비코드/이름
+			if(!$('#eqpmnSeCodeput').val()){
+				alert('장비를 선택해주세요.');
+				return  false;
+			}
+			//trim 필요
+			//부서
+			if(!$.trim($('#orgnztIdput').val())){
+				alert('부서를 입력해주세요');
+				return false;
+			}
+			//trim 필요
+			//모델명
+			if(!$.trim($('#eqpmnModelNameput').val())){
+				alert('모델명을 입력해주세요');
+				return false;
+			}
+			//trim 필요
+			//식볋번호
+			if(!$.trim($('#eqpmnPinput').val())){
+				alert('식별번호를 입력해주세요');
+				return false;
+			}
 			
-			$.ajax({
-				  url: './insertEqpmnMAjax.do' // 요청이 전송될 URL 주소
-				 ,data : $('#insertFormEqpmnM').serialize()
-				 ,type: 'post' // http 요청 방식 (default: ‘GET’)
-				 ,success : function(data){
-					 console.log(123)
-					 if(data=='succ'){
-						//리셋테이블
-						 addEqpmnCel();
-						 callEqpmnMain();
-						 }else{
-							 alert('이미 존재하는 코드입니다.') 
-						 }
-				 }
-			 });
-			console.log(1234)
-			
-			
+			return true
 		}
 		//등록취소
 		function addEqpmnCel(){
@@ -379,7 +375,8 @@
 					 $('#modalEqpmn').empty();
 					  //헤드
 					 let trName = ['eqpmnId','eqpmnNm','upperEqpmnId'];
-					  mktr(data,'#modalEqpmn',trName);
+					 let trName2 = ['장비코드','장비이름','소속 계층'];
+					  mktr(data,'#modalEqpmn',trName,trName2);
 					  //체크확인용 radio 박스 
 					  $('#modalEqpmn').find('tr').each((index,val)=>{
 						  if(index !=0){
@@ -402,8 +399,202 @@
 				  }
 			}); 
 		}
+		//수정클릭
+		function eqpmnModiForm(){
+			//버튼활성화
+			$('.eqpmnDoC').hide();
+			$('.eqpmnDoF').hide();
+			//삭제 수정폼 감추기
+			$('.eqpmnModiForm').hide();
+			$('.eqpmnModiDo').show();
+			$('.eqpmnDel').hide();
+			//key 가져오기
+			let eqpmnSn=  $('#eqpmnSn').next().text()
+			//폼생성
+			insertModiComm();
+			//input에 정보넣어주기
+			
+			$.ajax({
+				  url: './callEqmnMDetailAjax.do' // 요청이 전송될 URL 주소
+				 ,type: 'post' // http 요청 방식 (default: ‘GET’)
+				 , data : {"eqpmnSn" : eqpmnSn}
+				  ,dataType : "json"
+				 ,success : function(data){
+					 console.log(data)
+					//mapping시킬 tr이름 가져옴
+					$('#eqpmnSeCodeput').val(data[0]['eqpmnSeCode']);
+					$('#eqpmnNmput').val(data[0]['eqpmnNm']);
+					$('#orgnztIdput').val(data[0]['orgnztId']);
+					$('#buyDayput').val(data[0]['buyDay']);
+					$('#eqpmnUnitPriceput').val(data[0]['eqpmnUnitPrice']);
+					$('#eqpmnModelNameput').val(data[0]['eqpmnModelName']);
+					$('#eqpmnMakrput').val(data[0]['eqpmnMakr']);
+					$('#eqpmnPinput').val(data[0]['eqpmnPin']);
+					$('#eqpmnCnput').val(data[0]['eqpmnCn']);
+				 }
+			 });
+			
+		}
 		
-		/* function asdf(a){
+		//수정확정
+		function eqpmnModiDo(){
+			let id = $('#eqpmnSn').next().text();
+			///유효성검사
+			if(modivaild()){
+				 $.ajax({
+					  url: './eqpmnModiDoAjax.do' // 요청이 전송될 URL 주소
+					 ,data : $('#insertFormEqpmnM').serialize()
+					 ,type: 'post' // http 요청 방식 (default: ‘GET’)
+					 ,success : function(data){
+						if(data=='succ'){
+							//버튼활성화
+							$('.eqpmnDoC').hide();
+							$('.eqpmnDoF').show();
+							$('.eqpmnModiDo').hide();
+						//리셋테이블
+						 addEqpmnCel();
+						 callEqpmnMain();
+						 alert(id+'번 장비 수정완료')
+						}else{
+							alert('-1 오류발생 같은 오류가 반복되면 관리자에게 문의해주세요')
+						}			 
+					 }
+				 });
+			}
+			
+		}
+		
+		function modivaild(){
+			//유효성검사
+			//값을 가져오기때문에 trim이필요없음
+			if(!$('#eqpmnSeCodeput').val()){
+				alert('장비를 선택해주세요.');
+				return  false;
+			}
+			//trim 필요
+			if(!$.trim($('#orgnztIdput').val())){
+				alert('부서를 선택해주세요');
+				return false;
+			}
+			return true
+		}
+		
+		//수정삭제
+		function eqpmnModiCel(){
+			
+			addEqpmnCel();
+			//삭제 수정폼 감추기
+			$('.eqpmnModiForm').hide();
+			$('.eqpmnModiDo').hide();
+			$('.eqpmnDel').hide();
+		}
+		function eqpmnDel(){
+			let id = $('#eqpmnSn').next().text();
+			//삭제 ajax
+			 $.ajax({
+				  url: './eqpmnDelAjax.do' // 요청이 전송될 URL 주소
+				 ,data :{"eqpmnSn" : id}
+				 ,type: 'post' // http 요청 방식 (default: ‘GET’)
+				 ,success : function(data){
+					if(data=='succ'){
+						//버튼활성화
+						$('.eqpmnDoC').hide();
+						$('.eqpmnDoF').show();
+						$('.eqpmnModiDo').hide();
+						$('.eqpmnDel').hide();
+					//리셋테이블
+					 addEqpmnCel();
+					 callEqpmnMain();
+					 alert(id+'번 장비 삭제완료')
+					}else{
+						alert('-1 오류발생 같은 오류가 반복되면 관리자에게 문의해주세요')
+					}			 
+				 }
+			 });
+			
+		}
+		
+		//수정/등록폼 고통제거
+		function insertModiComm(){
+			//td지우기//key제외
+			$('#eqpmnMDTable').find('td').not(":first").remove();
+			//keyhidden
+			$('#eqpmnSn').next().hide()
+			//sereailze용 input태그생성
+			let inputId=$('<input>')
+			inputId.val($('#eqpmnSn').next().text());//td의 값넣기
+			$('#eqpmnSn').next().append(inputId);//상속
+			inputId.prop('name','eqpmnSn');//이름주기
+			
+			//테이블만들기
+			 let trName = ['eqpmnSeCode','eqpmnNm','orgnztId','buyDay','eqpmnUnitPrice','eqpmnModelName','eqpmnMakr','eqpmnPin','eqpmnCn'];
+			 //숨기기
+			 $('#eqpmnSn').hide();
+			 $('#frstRegistDt').hide();
+			 $('#frstRegisterSn').hide();
+			 $('#updtDt').hide();
+			 $('#updusrSn').hide();
+			 //숨기기끝
+			$(trName).each((index,val)=>{
+			if(val=='eqpmnCn'){
+				 let td = $('<td>') //td생성
+				 let textBox = $('<textarea>');
+				 textBox.css('resize','none');
+				 textBox.prop('cols','20');	 
+				 textBox.prop('rows','2');	
+				 textBox.prop('name',val)
+				 textBox.prop('id',val+'put')
+				 td.append(textBox)
+				 $('#eqpmnCn').after(td);
+			 }
+			else{
+			 let td = $('<td>') //td생성
+			 let input =$('<input>')//input생성
+			 input.prop('name',val); //name
+			 input.prop('id',val+'put'); //id
+			 if (val=='buyDay'){
+				 input.prop('type','date')
+			 }
+			 //가격을 number하여 기본값0으로 주기
+			 if(val=='eqpmnUnitPrice'){
+				 input.prop('type','number')
+				 input.val(0)
+			 }
+			 let thC = $(eqpmnMDTable).find('#'+val); //디테일 테이블안 th의 id와 매칭시켜서 맞는 th검색
+			 td.append(input)
+			 $(thC).after(td) //th와 같은 라인에 td 상속
+			 }
+		  })
+		  //홀드시키고 이벤트걸기
+		  $('#eqpmnSeCodeput').prop('readonly',true);
+		  $('#eqpmnSeCodeput').on('click',function(){
+			 $('.modalEqmn').show();
+			  
+		  }) 
+		  $('#eqpmnNmput').prop('readonly',true);
+		}
+		
+		function seachMDO(){
+			$('#eqpmnMTable').empty(); 
+			let data2 = {"eqpmnNm":$('#seachEqpmnMSerach').val()}
+			console.log(data2)
+			 $.ajax({
+				  url: './callEqmnMDetailAjax.do' // 요청이 전송될 URL 주소
+				 ,type: 'post' // http 요청 방식 (default: ‘GET’)
+				 ,data : data2 
+				 ,dataType : "json"
+				 ,success : function(data){
+						//mapping시킬 tr이름 가져옴
+					let trName = ['eqpmnSn','eqpmnSeCode','eqpmnNm','orgnztId']	;
+					let trName2 = ['no','장비구분코드','장비이름','소속부서']	;
+						
+					//데이터//넣을 테이블 // 헤더
+					 mktr(data,'#eqpmnMTable',trName,trName2)
+				 }
+			 }); 
+		}
+		
+				/* function asdf(a){
 		 $.ajax({
 			  url: './callOneEqmnAjax.do' // 요청이 전송될 URL 주소
 			 ,data : {"eqpmnId": eqpmnId}

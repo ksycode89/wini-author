@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>사람을 살리는 기술 - 위니텍</title>
 <page:applyDecorator name="common"/>
 </head>
 <body>
