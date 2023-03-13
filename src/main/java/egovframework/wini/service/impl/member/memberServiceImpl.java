@@ -53,4 +53,11 @@ public class memberServiceImpl implements memberService {
 		}
 	}
 
+	@Override
+	public List<Map<String,Object>> getMenu() {
+		// 메뉴 조회
+		List<Map<String,Object>> result = memberMapper.getMenu();
+		return result;
+	}
+
 }

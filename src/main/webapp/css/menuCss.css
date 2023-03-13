@@ -52,3 +52,24 @@
 	
 	
 	/*메뉴*/
+	#loginInfo{
+	align-self: center;
+	}
+	.mainBtn{
+	  margin-right:10px;
+	  text-decoration: none;
+	  color: white;
+	  padding: 5px 10px;
+	  display: inline-block;
+	  position: relative;
+	  border: 1px solid rgba(0,0,0,0.21);
+	  border-radius: 4px;
+	  text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+	  cursor: pointer;
+	}
+	.manuBar_outer{
+	 background-color: #2ba0db; width:100vw; height:52px;
+	}
+	.manuBar_inner{
+	 background-color: #2ba0db; width:60%; height:52px; margin:auto;
+	}

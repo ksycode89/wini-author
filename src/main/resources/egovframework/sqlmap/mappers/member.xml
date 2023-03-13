@@ -43,6 +43,7 @@
 	
 <!-- 로그인 -->
 	<select id="userLogin" parameterType="egovMap" resultType="egovMap">
+	/* 로그인시 ID,PW 확인하는 Query */
 		SELECT  
 				USER_ID 		/*User 아이디 */
 				,USER_PW 		/*User 패스워드 */
@@ -52,6 +53,7 @@
 	
 <!-- 유저 정보 -->
 <select id="userInfo" parameterType="egovMap" resultType="egovMap">
+	/* 세션을 등록하기 위한 유저 정보 가져오는 Query */
 	SELECT
 		USER_ID 				/*User 아이디 */
 		,USER_NM 				/*User 이름 */
@@ -60,4 +62,18 @@
 		KJP_USER
 	WHERE USER_ID=#{userId}
 </select>
+
+<!-- 메뉴 정보 -->
+<select id="getMenu" resultType="egovMap">
+	/* 계층메뉴 조회 Query */
+	SELECT  MENU_ID
+			,UPPER_MENU_ID 
+			,MENU_NM 
+			,MENU_URL
+			,SORT_ORDR
+		FROM KJP_MENU
+	WHERE USE_AT = 'Y'
+	ORDER BY MENU_ID, UPPER_MENU_ID , SORT_ORDR ASC
+</select>
+
 </mapper>

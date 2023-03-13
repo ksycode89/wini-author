@@ -121,7 +121,7 @@
 		  	</table>
 		  	</form>
 		  	<div style="display:flex;">
-		  		<div style="width:12%; background-color: #3CB371;" class='join-button' onclick="reset();">초기화</div>
+		  		<div style="width:12%; background-color: #3CB371;" class='join-button' onclick="res();">초기화</div>
 		  	 	<div style="width:10%; background-color: #DC143C;" class='join-button' onclick="cancel();">취소</div>
 		  		<div style="width:68%;"></div>
 		  	 	<div style="width:10%; background-color: #87CEEB;" class='join-button' onclick="submit();">등록</div>
@@ -133,18 +133,20 @@
 <script>
 	$(function(){
 		$('#user_id_retry').hide();
-		for (var count=1940; count<2023; count++){
+		// 생년월일 옵션 생성
+		for (var count=1940; count<2023; count++){ // 1940년 ~ 2022년
 			var option = '<option value="'+count+'">'+count+'</option>';
 			$('#birth_year').append(option);
 		}
-		for (var count=1; count<=12; count++){
+		for (var count=1; count<=12; count++){ // 1월 ~ 12월
 			var option = '<option value="'+count+'">'+count+'</option>';
 			$('#birth_month').append(option);
 		}
-		for (var count=1; count<=31; count++){
+		for (var count=1; count<=31; count++){ // 1일 ~ 31일
 			var option = '<option value="'+count+'">'+count+'</option>';
 			$('#birth_day').append(option);
 		}
+		// 사용자명 입력창 한글만 입력 정규표현식
 		$("#user_nm").keyup(function (event) {
             regexp = /[a-z0-9]|[ \[\]{}()<>?|`~!@#$%^&*-_+=,.;:\"'\\]/g;
             v = $(this).val();
@@ -153,128 +155,125 @@
                 $(this).val(v.replace(regexp, ''));
             }
         });
-		$("#user_pw").keyup(function (event) {
-			$('#user_pw2').val("");
-			if($('#user_pw').val().length < 4){
-				$("input:checkbox[id='chk_pw']").prop("checked", false);
-				$('#chk_pw_txt').text("*4자리 이상의 비밀번호를 입력하세요.");
-				$('#user_pw2').attr("readonly", true);
-				$('#chk_pw2_txt').text("*비밀번호를 먼저 입력하세요.");
+		// 비밀번호 입력 체크
+		$("#user_pw").keyup(function (event) { // PW1 입력시 상태확인
+			$('#user_pw2').val(""); // PW1을 입력하면 기존에 PW2의 입력값 초기화
+			$("input:checkbox[id='chk_pw2']").prop("checked", false); // PW2 체크 해제
+			if($('#user_pw').val().trim().length < 4){ // PW1가 4자리 이하일 경우, 함수 실행 
+				$("input:checkbox[id='chk_pw']").prop("checked", false); // PW1이 4자리 미만이면 체크X
+				$('#chk_pw_txt').text("*4자리 이상의 비밀번호를 입력하세요."); // 4자리 이상 비밀번호 입력하라는 text 출력
+				$('#user_pw2').attr("readonly", true); // 아직 PW1을 입력하지 않은 상태라면 PW2를 입력 불가 readonly=true
+				$('#chk_pw2_txt').text("*비밀번호를 먼저 입력하세요."); // PW1을 먼저 입력하라는 text를 PW2에 출력
 			}else{
-				console.log("d");
-				$("input:checkbox[id='chk_pw']").prop("checked", true);
-				$('#user_pw2').attr("readonly", false);
-				$('#chk_pw_txt').text("*비밀번호를 입력 완료.");
-				$("input:checkbox[id='chk_pw2']").prop("checked", false);
-				$('#chk_pw2_txt').text("*비밀번호가 일치하는지 확인하세요.");
+				$("input:checkbox[id='chk_pw']").prop("checked", true); // PW1이 4자리 이상이면 체크O
+				$('#chk_pw_txt').text("*비밀번호를 입력 완료."); // PW1 비밀번호 입력 완료라는 text 출력
+				$('#user_pw2').attr("readonly", false); // PW2를 입력할 수 있도록 readonly=false
+				$('#chk_pw2_txt').text("*비밀번호가 일치하는지 확인하세요."); // PW2 TEXT 문구 변경
 			}
         });
-		$("#user_pw2").keyup(function (event) {
+		$("#user_pw2").keyup(function (event) { // PW2 입력시 상태확인
 			if($('#user_pw2').val().trim().length==0){
 				$('#chk_pw2_txt').text("*비밀번호를 먼저 입력하세요.");
-			}else if($('#user_pw').val()==$('#user_pw2').val()){
-				$("input:checkbox[id='chk_pw2']").prop("checked", true);
-				$('#chk_pw2_txt').text("*비밀번호 일치 확인.");
-			}else{
-				$("input:checkbox[id='chk_pw2']").prop("checked", false);
-				$('#chk_pw2_txt').text("*비밀번호가 일치하는지 확인하세요.");
+			}else if($('#user_pw').val()==$('#user_pw2').val()){ // PW1과 PW2의 비밀번호가 일치할 때,
+				$("input:checkbox[id='chk_pw2']").prop("checked", true); // 일치여부 체크 O
+				$('#chk_pw2_txt').text("*비밀번호 일치 확인."); // PW2 TEXT 문구
+			}else{  // PW1과 PW2의 비밀번호가 일치 않을 시,
+				$("input:checkbox[id='chk_pw2']").prop("checked", false); // 일치여부 체크 X
+				$('#chk_pw2_txt').text("*비밀번호가 일치하는지 확인하세요."); // PW2 TEXT 문구
 			}
         });
 	});
+	// 생년월일 월 선택시 일 옵션 생성
 	function changeMonthSelect(){
-		$('#birth_day').empty();
+		$('#birth_day').empty(); // 일 옵션값 초기화
 		var list=[31,28,31,30,31,30,31,31,30,31,30,31];
-		var month = $("#birth_month option:selected").val();
-		for (var count=1; count<=list[month-1]; count++){
+		var month = $("#birth_month option:selected").val(); 
+		for (var count=1; count<=list[month-1]; count++){ // 선택한 달의 index를 판단하여 달에 맞는 일 수를 list에서 호출하여 옵션 값 생성
 			var option = '<option value="'+count+'">'+count+'</option>';
 			$('#birth_day').append(option);
 		}
 	}
+	// 이메일 주소 선택 함수
 	function changeSelect(){
 		var email = $("#email_selectBox option:selected").val();
-		console.log($("#email_selectBox option:selected").val());
 		if (email == "empty"){
-			$("#user_email2").val("");
-			$('#user_email2').attr("readonly", false);
+			$("#user_email2").val(""); // 사용자가 이메일 주소를 입력할 수 있게 이메일 입력창 초기화
+			$('#user_email2').attr("readonly", false); // 이메일 입력창 입력할 수 있게 readonly=false
 		}else{
-			$("#user_email2").val(email);
-			$('#user_email2').attr("readonly", true);
+			$("#user_email2").val(email); // 선택한 이메일 주소 자동으로 이메일 입력창에 입력
+			$('#user_email2').attr("readonly", true); // 이메일 입력창 입력할 수 없게 readonly=true
 		}
 	}
-	
+	// 회원가입창 닫기 버튼
 	function cancel(){
 		var text = "입력한 내용이 사라집니다. 창을 닫으시겠습니까?"
 		if(confirm(text)){
-			window.close();
+			window.close(); // 현재 창 닫기
 		}else{
 			return;
 		}
 	}
-	function reset(){
+	// 회원가입창 초기화 버튼
+	function res(){
 		var text = "입력한 내용이 초기화합니다."
 		if(confirm(text)){
-			location.reload();
+			location.reload(); // 새로고침하여 입력값 초기화
 		}else{
 			return;
 		}
 	}
 
-// 아이디 중복 체크 & 아이디 재등록
+	// 아이디 중복 체크 & 아이디 재등록
 	function duplicateCheck(yn){
-		if (yn=='y'){
+		if (yn=='y'){ // ID 중복체크 버튼 클릭 시 실행
 			$.ajax({
 				type : 'post',
 				url : 'duplicateCheck.do',
 				data : {userId : $("#user_id").val()},
 				success:function(data){
-					console.log(data);
 					if (data==0){
 						alert("사용가능한 아이디입니다.");
-						// 중복체크 선택
-						$("input:checkbox[id='chk_id']").prop("checked", true);
-						// id 수정불가
-						$('#user_id').attr("readonly", true);
-						$('#chk_id_txt').text("중복 체크 완료");
-						$("#user_id_chkBtn").attr("disabled", "disabled");
-						$('#user_id_retry').show();
-						$('#user_id_chkBtn').hide();
+						$("input:checkbox[id='chk_id']").prop("checked", true); // 중복체크 선택 (사용가능한 ID일 경우, 체크)
+						$('#user_id').attr("readonly", true); // 사용가능한 ID일 경우, 입력값 변경 불가! readonly=true
+						$('#chk_id_txt').text("중복 체크 완료"); // ID 중복체크 완료시 TEXT 변경
+// 						$("#user_id_chkBtn").attr("disabled", "disabled"); // ID 중복체크 버튼 비활성화 
+						$('#user_id_retry').show(); // ID 재등록 버튼 보이기
+						$('#user_id_chkBtn').hide(); // ID 중복 체크 버튼 숨기기
 					}else{
 						alert("중복된 아이디입니다.")
-						// id 초기화
-						$('#user_id').val("");
+						$('#user_id').val(""); // 중복된  ID일 경우, 다시 입력할 수 있도록 ID 입력창 초기화
 					}
 				}
 			});
-		}else{
-			$('#user_id').val("");
-			$('#user_id').attr("readonly", false);
-			$("#user_id_chkBtn").removeAttr("disabled");
-			$("input:checkbox[id='chk_id']").prop("checked", false);
-			$('#chk_id_txt').text("*5~20자리의 영문,숫자를 입력하세요.");
-			$('#user_id_retry').hide();
-			$('#user_id_chkBtn').show();
+		}else{ // ID 재등록 버튼 클릭 시 실행 
+			$('#user_id').val(""); // ID 입력창 초기화
+			$('#user_id').attr("readonly", false); // ID 입력창 입력할 수 있게 변경 readonly=false
+// 			$("#user_id_chkBtn").removeAttr("disabled"); // ID 중복체크 버튼 활성화
+			$("input:checkbox[id='chk_id']").prop("checked", false); // ID 중복체크 선택 해제
+			$('#chk_id_txt').text("*5~20자리의 영문,숫자를 입력하세요."); // ID입력을 요구하는 TEXT로 변경
+			$('#user_id_retry').hide(); // ID 재등록 버튼 숨기기
+			$('#user_id_chkBtn').show(); // ID 중복 체크 버튼 보이기
 		}
-		
 	}
-	
+	// 회원가입 실행 함수
 	function submit(){
-		if ($("#user_nm").val().trim() ==0){
+		if ($("#user_nm").val().trim() ==0){ // 사용자명 공백확인
 			alert("사용자명을 입력하세요.");
 			return;
-		}else if($('#chk_id').is(':checked')==false){
+		}else if($('#chk_id').is(':checked')==false){ // ID 중복체크 유무 확인
 			alert("아이디 중복체크를 하세요.");
 			return;
-		}else if($('#chk_pw2').is(':checked')==false){
+		}else if($('#chk_pw2').is(':checked')==false){ // PW 일치여부 확인
 			alert("비밀번호 입력 확인을 하세요.");
 			return;
-		}else if(($('#phone_1').val().length<3) || ($('#phone_2').val().length<3) || ($('#phone_3').val().length<4)){
+		}else if(($('#phone_1').val().length<3) || ($('#phone_2').val().length<3) || ($('#phone_3').val().length<4)){ // 전화번호 입력 여부 확인
 			alert("전화번호를 올바른 형식으로 입력하세요.");
 			return;
-		}else if(($('#user_email').val().trim()==0) || ($('#user_email2').val().trim()==0)){
+		}else if(($('#user_email').val().trim()==0) || ($('#user_email2').val().trim()==0)){ // 이메일 입력 여부 확인
 			alert("이메일을 올바른 형식으로 입력하세요.");
 			return;
 		}
-		if(confirm("등록하시겠습니까?")){
+		if(confirm("등록하시겠습니까?")){ // 회원가입 확인창 
 			$.ajax({
 				type : 'post',
 				url : 'userInsert.do',
@@ -298,9 +297,6 @@
 		}else{
 			return;
 		}
-		
 	}
-
 </script>
-
 </html>

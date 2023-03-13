@@ -9,6 +9,7 @@
  <excludes>
      <pattern>*Login*</pattern>
      <pattern>*Join*</pattern>
+     <pattern>*Find*</pattern>
  </excludes>
  
 
@@ -21,6 +22,7 @@
     <decorator name="default" page="main.jsp">
         <pattern>/*</pattern>
     </decorator>
+    
 </decorators>
 
 
