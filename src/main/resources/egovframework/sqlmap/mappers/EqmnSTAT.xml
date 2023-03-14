@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.wini.service.impl.eqmnSTAT.EqmnSTATmapper">
+
+	<select id="getEqmnList" resultType="egovMap">
+	/* 사용장비 리스트 조회 */
+	/* 장비일련번호, 차량종류, 사용부서, 번호판 */
+		SELECT  EQPMN_SN,
+				EQPMN_NM, 
+				ORGNZT_ID, 
+				EQPMN_PIN
+			FROM KJP_EQPMN
+	</select>
+	<select id="getStat" parameterType="egovMap" resultType="egovMap">
+	SELECT EQPMN_SN, CHCK_NM, CHCK_DAY, CHCK_RESULT 
+	FROM (SELECT EQPMN_SN , '날짜' AS CHCK_NM, CHCK_DAY, NULL AS CHCK_RESULT  
+			FROM KJP_EQPMN_CHCK
+				WHERE EQPMN_SN = #{chckSn}
+				ORDER BY CHCK_DAY)
+	UNION ALL	
+	SELECT EQPMN_SN, CHCK_NM, CHCK_DAY, CHCK_RESULT
+		FROM (SELECT chk.EQPMN_SN, dchk.CHCK_NM, chk.CHCK_DAY, dchk.CHCK_RESULT   
+					FROM (SELECT CHCK_SN,EQPMN_SN,CHCK_DAY  
+									FROM KJP_EQPMN_CHCK 
+										WHERE EQPMN_SN = #{chckSn}
+										ORDER BY CHCK_DAY)chk
+					LEFT OUTER JOIN KJP_EQPMN_D_CHCK dchk
+						ON chk.CHCK_SN = dchk.CHCK_SN
+					ORDER BY dchk.CHCK_NM, dchk.FRST_REGIST_DT)
+	
+	</select>
+
+	<select id="getStatCnt" parameterType="egovMap" resultType="int">
+	SELECT COUNT(1)  
+		FROM KJP_EQPMN_CHCK
+			WHERE EQPMN_SN = #{chckSn}
+	</select>
+
+	<select id="getStatChckResult" parameterType="egovMap" resultType="egovMap">
+	SELECT  a.CHCK_NM
+		,count(CASE WHEN a.CHCK_RESULT = 'Y' THEN 1 END) AS CHCK_RESULT 
+	FROM
+	(SELECT chk.EQPMN_SN, dchk.CHCK_NM, chk.CHCK_DAY, dchk.CHCK_RESULT   
+					FROM (SELECT CHCK_SN,EQPMN_SN,CHCK_DAY  
+									FROM KJP_EQPMN_CHCK 
+										WHERE EQPMN_SN = #{chckSn}
+										ORDER BY CHCK_DAY)chk
+					LEFT OUTER JOIN KJP_EQPMN_D_CHCK dchk
+						ON chk.CHCK_SN = dchk.CHCK_SN
+					ORDER BY dchk.CHCK_NM, dchk.FRST_REGIST_DT)a
+		GROUP BY a.CHCK_NM
+		ORDER BY a.CHCK_NM
+	</select>
+
+</mapper>
