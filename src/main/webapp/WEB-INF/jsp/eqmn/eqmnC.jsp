@@ -16,7 +16,7 @@
 	.forDetail{
 		display: flex;
 		justify-content: space-around; 
-		width: 1000px;
+		width: 1100px;
 		height: 300px;
 		margin-top: 40px;
 		
@@ -33,7 +33,8 @@
 </style>
 <body>
 	<div id='hide_for_id'>
-		<input type="hidden" >
+		<input type="hidden" id='forDeleteId' >
+		<input type="hidden" id='forEqmn' >
 	</div>
 
 	<div class='mainContainerC'>
@@ -74,10 +75,14 @@
 			<div class='datail_div'>
 			<div>
 				<span>점검내역</span>
+				<c:if test="${userInfo.rght eq 'Y'}">
 				<button type="button" onclick="addEqpmnForm();" class='eqpmnDoF'>등록</button>
 				<button type="button" onclick="addEqpmnDo();"  class ='eqpmnDoC' style="display: none" >등록확정</button>
 				<button type="button" onclick="addEqpmnCel();" class='eqpmnDoC' style="display: none" >등록취소</button>
+				<button type="button" class='eqpmnDel' style="display: none" onclick="eqpmnDel();">삭제</button>
+				</c:if>
 			</div> 
+			<div style="overflow:auto; width:480px; height:250px;" >
 				<table border="1" id='eqmn_table_M' >
 					<tr>
 						<th class='chckSnM'>점검번호</th> 
@@ -91,6 +96,7 @@
 						<td colspan="6">등록된 점검이 없습니다.</td>
 					</tr>
 				</table>
+			</div>
 			</div>
 			<div class='datail_div' >
 				<div style="overflow:auto; width:550px; height:250px;" id='detail_table'>
@@ -229,13 +235,25 @@
 						let name =$(this).children('.eqpmnNm').text();
 						$('#eqpmnSn').val(sn);
 						$('#eqpmnNm').val(name);
+						//삭제버튼지우기
+						$('.eqpmnDel').hide()
 					})
 			  }
 				//마스터 테이블일때-> 디테일
 			  if(table=='#eqmn_table_M'){
 				  $(tr).on('click',function(){ //tr에 클릭이벤트걸기
 						let key = $(this).children('.chckSn').text(); //키값가져오기
+						let nm = $(this).children('.eqpmnSn').text(); //키값가져오기
+						//삭제버튼온 등록폼이아닐때만
+						if($('.eqpmnDoC').css('display')=="none"){
+							$('.eqpmnDel').show()
+						}
 						
+						//삭제용 히든 테이블
+						$('#forDeleteId').val(key);
+						$('#forEqmn').val(nm);
+						$('.eqpmnDel').text(key+'번글 삭제')
+						//디테일부르기
 						CheckMasterDAJax(key);
 					})
 			  }
@@ -279,7 +297,7 @@
 							//장비없음 td 숨기기
 							$('#emptyEqpmnM').hide();
 							//헤드
-							let trName = ['chckSn','eqpmnSn','eqpmnNm','checkDay','frstRegistDt','frstRegisterSn'];
+							let trName = ['chckSn','eqpmnSn','eqpmnNm','chckDay','frstRegistDt','frstRegisterSn'];
 							//ㅌㅔ이블 찍기
 							mktr(data,'#eqmn_table_M',trName);
 							//없으면 없다고 뜨기
@@ -318,7 +336,7 @@
 							//장비없음 td 숨기기
 							$('#emptyEqpmnD').hide();
 							//헤드
-							let trName = ['rownum','chckNm','chckResult','chckCn','frstRegistDt','frstRegisterSn'];
+							let trName = ['rownum','chckNm','chckResult','frstRegistDt','frstRegisterSn','chckCn'];
 							//ㅌㅔ이블 찍기
 							mktr(data,'#eqmn_table_D',trName);
 							
@@ -332,6 +350,7 @@
 		
 		//등록폼
 		function addEqpmnForm(){
+			
 			$('.eqpmnDoC').show();
 			$('.eqpmnDoF').hide();
 			
@@ -341,32 +360,62 @@
 			
 			//테이블시작
 			$('#check_table').show();
+			//삭제버튼지우귀
+			$('.eqpmnDel').hide();
 			
 			
 			
 		}
 		//등록시작
 		function addEqpmnDo(){
-			$('.eqpmnDoC').hide();
-			$('.eqpmnDoF').show();
-			
-				
-			
-			let  data1 = {"eqpmnSn" : $('#eqpmnSn').val() ,"chckDay": $('#chckDay').val(),"chckCn" :$('#chckCnH').val()
-							,"end": $('#eng').val(),"tire": $('#tire').val() ,"break": $('#break').val()}
-			
-			console.log(data1)
-			
-			/*  $.ajax({
-				  url: './callOneEqmnAjax.do' // 요청이 전송될 URL 주소
-				 ,data : {"eqpmnId": eqpmnId}
-				 ,type: 'post' // http 요청 방식 (default: ‘GET’)
-				 ,dataType : "json"
-				 ,success : function(data){}
-			 });  */
-			
-			
+			console.log(123)
+			//유효성검사
+			if(vaild()){
+				console.log(123)
+			//두개이상의 vo받기 : 실패 추후 다시 시도
+				let cvo =  [{"eqpmnSn" : $('#eqpmnSn').val() ,"chckDay": $('#chckDay').val()}]
+				let cdvo = 	[{"chckCn" :$('#chckCnH').val()}]
+				 //우선 map형식으로 보내기
+				let  data1 = {
+						    "chckCn" :$('#chckCnH').val()
+						 	,"eqpmnSn" : $('#eqpmnSn').val() 
+							 ,"chckDay": $('#chckDay').val()
+							 ,"end": $('#eng').prop('checked')
+							 ,"tire": $('#tire').prop('checked')
+							 ,"bre": $('#break').prop('checked')}
+				  
+				  $.ajax({
+					  url: './addEqpmnDo.do' // 요청이 전송될 URL 주소
+					 ,data : data1
+					 ,type: 'post' // http 요청 방식 (default: ‘GET’)
+					 ,dataType : "json"
+					 ,success : function(data){
+						//화면들 취소
+							 addEqpmnCel();
+						//마스터 다시부르기
+							 CheckMasterAJax(data)
+						//버튼
+							$('.eqpmnDoC').hide();
+							$('.eqpmnDoF').show();
+							alert(data+'번 장비 점검등록 완료')
+					 }
+				 });  
+			}
 		}
+		
+		function vaild(){
+			if(!$.trim($('#eqpmnSn').val())){
+				alert('장비를 선택해주세요');
+				return false;
+			}
+			if(!$.trim($('#chckDay').val())){
+				alert('점검일을 선택해주세요');
+				return false;
+			}
+			
+			return true;
+		}
+		
 		//등록취소
 		function addEqpmnCel(){
 			$('.eqpmnDoC').hide();
@@ -384,10 +433,30 @@
 				if($(val).prop('type')=='checkbox'){
 					$(val).prop('checked',false)
 				}
-				
 			})
-			
-			
+		}
+		function eqpmnDel(){
+	 		if($('#forDeleteId').val() !=''){
+				$.ajax({
+					  url: './eqpmnCDDelAjax.do' // 요청이 전송될 URL 주소
+					 ,data : {"chckSn": $('#forDeleteId').val()}
+					 ,type: 'post' // http 요청 방식 (default: ‘GET’)
+					 ,dataType : "json"
+					 ,success : function(data){
+						
+							//삭제버튼지우기
+							$('.eqpmnDel').hide()
+							//마스터 다시부르기
+							 CheckMasterAJax($('#forEqmn').val())
+							 $('#forEqmn').val('')
+							//다시로딩
+							//리셋
+							addEqpmnCel()
+							 alert(data+"번 점검 삭제완료")
+					 }
+				 });  
+			}
+				
 		}
 	/*  $.ajax({
 		  url: './callOneEqmnAjax.do' // 요청이 전송될 URL 주소

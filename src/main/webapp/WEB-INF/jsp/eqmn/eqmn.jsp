@@ -26,10 +26,11 @@
 				<div class='eqmn_search'>
 					<input id='eqpmnNmSer' name='eqpmnNm' value="" placeholder="장비구분명" >
 					<button class= 'eqmnSeaerch' >검색</button>
-					<button type="button" class= 'doAddForm'  onclick="goAddForm()">등록</button>
-					<button type="button" class='doAdd'  onclick="doAdd()" style="display: none;">등록확정</button>
-					<button type="button" class='doAdd' onclick="doAddCancel()" style="display: none;">등록취소</button>
-				
+					<c:if test="${userInfo.rght eq 'Y'}">
+						<button type="button" class= 'doAddForm'  onclick="goAddForm()">등록</button>
+						<button type="button" class='doAdd'  onclick="doAdd()" style="display: none;">등록확정</button>
+						<button type="button" class='doAdd' onclick="doAddCancel()" style="display: none;">등록취소</button>
+					</c:if>
 				</div>
 				<!-- 공통코드 검색 div 끝 ------------------------------------------------------>
 				<!-- 계층구조 공통코드 시작  ------------------------------------------------------>
@@ -45,10 +46,12 @@
 			
 		<div class='divitme'>
 			<div style="float: right; display: block;">
+			<c:if test="${userInfo.rght eq 'Y'}">
 				<button id='eqmnModi' style="display: none" onclick="eqpmnModiForm();">수정</button>
 				<button class='doModi' style="display: none" id='eqmnModiDo' style="display: none" onclick="eqpmnModiDo();">수정확정</button>
 				<button class='doModi' style="display: none"id='eqmnModiCel' style="display: none" onclick="eqpmnModiCel();">수정취소</button>
 				<button id='eqmnDel' style="display: none" onclick="eqpmnDelAjax();">삭제</button>
+			</c:if>	
 			</div><br>
 			<div>
 				<form id='eqmn_commn_frm' action="">

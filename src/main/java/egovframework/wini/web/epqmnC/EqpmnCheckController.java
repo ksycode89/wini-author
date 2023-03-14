@@ -1,14 +1,17 @@
 package egovframework.wini.web.epqmnC;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -19,6 +22,7 @@ import egovframework.wini.service.eqmn.EqmnVO;
 import egovframework.wini.service.eqmnC.EqmnCDVO;
 import egovframework.wini.service.eqmnC.EqmnCService;
 import egovframework.wini.service.eqmnC.EqmnCVO;
+import egovframework.wini.service.eqmnC.ListVO;
 import egovframework.wini.service.eqmnM.EqmnMService;
 import egovframework.wini.service.eqmnM.EqmnMVO;
 
@@ -87,6 +91,26 @@ public class EqpmnCheckController {
 			Gson jList = new Gson();
 			
 			return jList.toJson(list) ;
+		}
+		//ajax로 점검 마스터 디테일 등록
+		@RequestMapping(value="/addEqpmnDo.do",method=RequestMethod.POST,produces = "application/text; charset=utf8")
+		@ResponseBody
+		public String addEqpmnDo(@RequestParam Map<String, Object> commandMap ) {
+			System.out.println(commandMap);
+			//결과가 4면 성공 그리고 tEqpmnSn를 반환
+			int result = eqCService.addEqpmnDo(commandMap);
+			
+			return String.valueOf(result) ;
+		}
+		
+		//ajax로 점검 마스터 //디테일 삭제
+		@RequestMapping(value="/eqpmnCDDelAjax.do",method=RequestMethod.POST,produces = "application/text; charset=utf8")
+		@ResponseBody
+		public String eqpmnCDDelAjax(int chckSn ) {
+			//결과가 4면 성공 그리고 tEqpmnSn를 반환
+			int result = eqCService.eqpmnCDDelAjax(chckSn);
+			
+			return String.valueOf(result) ;
 		}
 		
 }

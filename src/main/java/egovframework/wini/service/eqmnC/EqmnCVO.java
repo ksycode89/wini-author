@@ -5,7 +5,7 @@ import java.sql.Date;
 public class EqmnCVO {
 	
 	private int chckSn=0;
-	private String eqpmnSn="";
+	private int eqpmnSn=0;
 	private String chckDay="";
 	private Date frstRegistDt;
 	private int frstRegisterSn=0;
@@ -18,7 +18,7 @@ public class EqmnCVO {
 		super();
 	}
 	//풀생성자
-	public EqmnCVO(int chckSn, String eqpmnSn, String chckDay, Date frstRegistDt, int frstRegisterSn, Date updtDt,
+	public EqmnCVO(int chckSn, int eqpmnSn, String chckDay, Date frstRegistDt, int frstRegisterSn, Date updtDt,
 			int updusrSn, String eqpmnNm) {
 		super();
 		this.chckSn = chckSn;
@@ -46,11 +46,11 @@ public class EqmnCVO {
 	public void setEqpmnNm(String eqpmnNm) {
 		this.eqpmnNm = eqpmnNm;
 	}
-	public String getEqpmnSn() {
+	public int getEqpmnSn() {
 		return eqpmnSn;
 	}
 
-	public void setEqpmnSn(String eqpmnSn) {
+	public void setEqpmnSn(int eqpmnSn) {
 		this.eqpmnSn = eqpmnSn;
 	}
 

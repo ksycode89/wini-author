@@ -54,6 +54,70 @@
 	 			
 			</where>  
 	</select>
+	<!-- 마스터테이블넣기 -->
+	<insert id="insertMaster" parameterType="egovframework.wini.service.eqmnC.EqmnCVO">
+		<selectKey resultType="int" keyProperty="chckSn" order="BEFORE">
+			SELECT NVL(MAX(chck_sn),0)+1 FROM KJP_EQPMN_CHCK
+		</selectKey>
+		
+		INSERT INTO KJP_EQPMN_CHCK 
+					( CHCK_SN
+					,EQPMN_SN
+					,CHCK_DAY
+					,FRST_REGIST_DT
+					,FRST_REGISTER_SN)
+					
+			values(
+					#{chckSn}
+					,#{eqpmnSn}
+					,#{chckDay}
+					,sysdate
+					,1
+			)		
+	</insert>
+	<!--디테일넣기  -->
+	<insert id="insertMasterD" parameterType="egovframework.wini.service.eqmnC.EqmnCDVO">
+		<selectKey resultType="int" keyProperty="chckDSn" order="BEFORE">
+			SELECT NVL(MAX(CHCK_D_SN),0)+1 FROM KJP_EQPMN_D_CHCK 
+		</selectKey>
+		INSERT INTO KJP_EQPMN_D_CHCK  
+				(
+				CHCK_D_SN
+				,CHCK_SN
+				,CHCK_NM
+				,CHCK_RESULT
+				<if test="chckCn != null and !chckCn.equals('')">
+	  			  ,CHCK_CN 
+	 			</if>
+				,FRST_REGIST_DT
+				,FRST_REGISTER_SN
+				)
+					
+			values(
+					#{chckDSn}
+					,#{chckSn}
+					,#{chckNm}
+					,#{chckResult}
+					<if test="chckCn != null and !chckCn.equals('')">
+	  			 	,#{chckCn}
+	 				</if>
+					,sysdate
+					,1
+			)		
+	</insert>
+	
+	<!--삭제  마스터 -->
+	<delete id="eqpmnMDelAjax" parameterType="int">
+		DELETE 
+		FROM KJP_EQPMN_CHCK
+		WHERE CHCK_SN=#{chckSn}
+	</delete>
+	<!--삭제  디테일 -->
+	<delete id="eqpmnCDDelAjax">
+		DELETE 
+		FROM KJP_EQPMN_D_CHCK
+		WHERE CHCK_SN=#{chckSn}
+	</delete>
 
 
 </mapper>
