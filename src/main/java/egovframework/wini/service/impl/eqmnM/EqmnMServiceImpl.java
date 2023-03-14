@@ -21,7 +21,12 @@ public class EqmnMServiceImpl implements EqmnMService {
 		
 		return eqMMap.callEqpmnMain(vo);
 	}
-	
+	//점검용 리스트 테이블
+	@Override
+	public List<EqmnMVO> doSearchAjaxC(EqmnMVO vo) {
+			
+		return eqMMap.doSearchAjaxC(vo);
+	}
 	//등록//-1이면 rollback 0이면 업로드 실패 0건 그외며 몇건 실행되었는지 -2면 자식요소 존재
 	@Override
 	public int insertEqpmnMAjax(EqmnMVO vo) {
@@ -69,5 +74,10 @@ public class EqmnMServiceImpl implements EqmnMService {
 		}
 		return result;
 	}
+
+
+	
+	
+	
 
 }
