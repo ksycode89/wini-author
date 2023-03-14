@@ -31,18 +31,34 @@
     		url : "getMenu.do",
     		success:function(data){
     			var html = '<ul>';
-				// 1계층 for문 
-    			for (var i=0; i<data.length; i++){
-    				if (data[i].sortOrdr == 0){
-    					html += '<li><a href = "'+data[i].menuUrl+'">'+data[i].menuNm+'</a><ul>'
-    					// 2계층 for문 
-    	    			for (var j=i; j<data.length; j++){
-    	    				if (data[j].upperMenuId == data[i].menuId){
-    	    					html += '<li><a href = "'+data[j].menuUrl+'">'+data[j].menuNm+'</a></li>';
-    	    				}
-    	    			}html += '</ul></li>';
-    				}
+    			if("${userInfo.userSn}"==1){ // 관리자일 경우 메뉴
+    				// 1계층 for문 
+        			for (var i=0; i<data.length; i++){
+        				if (data[i].sortOrdr == 0){
+        					html += '<li><a href = "'+data[i].menuUrl+'">'+data[i].menuNm+'</a><ul>'
+        					// 2계층 for문 
+        	    			for (var j=i; j<data.length; j++){
+        	    				if (data[j].upperMenuId == data[i].menuId){
+        	    					html += '<li><a href = "'+data[j].menuUrl+'">'+data[j].menuNm+'</a></li>';
+        	    				}
+        	    			}html += '</ul></li>';
+        				}
+        			}
+    			}else{ // 관리자가 아닐 경우 메뉴
+    				// 1계층 for문 
+        			for (var i=0; i<data.length; i++){
+        				if (data[i].sortOrdr == 0 && data[i].menuAt == "N"){
+        					html += '<li><a href = "'+data[i].menuUrl+'">'+data[i].menuNm+'</a><ul>'
+        					// 2계층 for문 
+        	    			for (var j=i; j<data.length; j++){
+        	    				if (data[j].upperMenuId == data[i].menuId && data[i].menuAt == "N"){
+        	    					html += '<li><a href = "'+data[j].menuUrl+'">'+data[j].menuNm+'</a></li>';
+        	    				}
+        	    			}html += '</ul></li>';
+        				}
+        			}
     			}
+				
 				html += '</ul>';
 				$(".menu_nav").append(html);
     		}
