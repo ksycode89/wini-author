@@ -27,7 +27,9 @@
 			,USER_GNDR 				/*User 성별 */
 			,MOBLPHON_NO 			/*User 전화번호 */
 			,EMAIL_ADRES 			/*User 이메일주소 */
-			,FRST_REGISTER_SN) 		/*최초 등록자 일련번호(회원가입 시, 본인 User 일련번호) */
+			,FRST_REGISTER_SN 		/*최초 등록자 일련번호(회원가입 시, 본인 User 일련번호) */
+			,RGHT
+			)
 		VALUES(
 				(SELECT NVL(MAX(USER_SN) , 0) + 1 FROM KJP_USER)
 				,#{userId}
@@ -38,6 +40,7 @@
 				,#{userPhon}
 				,#{userEmail}
 				,(SELECT NVL(MAX(USER_SN) , 0) + 1 FROM KJP_USER)
+				,'N'
 				)
 	</insert>
 	
@@ -55,7 +58,8 @@
 <select id="userInfo" parameterType="egovMap" resultType="egovMap">
 	/* 세션을 등록하기 위한 유저 정보 가져오는 Query */
 	SELECT
-		USER_ID 				/*User 아이디 */
+		USER_SN 				/*User 일련번호 */
+		,USER_ID 				/*User 아이디 */
 		,USER_NM 				/*User 이름 */
 		,RGHT 					/*User 권한 */
 	FROM
@@ -71,6 +75,7 @@
 			,MENU_NM 
 			,MENU_URL
 			,SORT_ORDR
+			,MENU_AT
 		FROM KJP_MENU
 	WHERE USE_AT = 'Y'
 	ORDER BY MENU_ID, UPPER_MENU_ID , SORT_ORDR ASC

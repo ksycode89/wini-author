@@ -146,15 +146,6 @@
 			var option = '<option value="'+count+'">'+count+'</option>';
 			$('#birth_day').append(option);
 		}
-		// 사용자명 입력창 한글만 입력 정규표현식
-		$("#user_nm").keyup(function (event) {
-            regexp = /[a-z0-9]|[ \[\]{}()<>?|`~!@#$%^&*-_+=,.;:\"'\\]/g;
-            v = $(this).val();
-            if (regexp.test(v)) {
-                alert("한글만 입력가능 합니다.");
-                $(this).val(v.replace(regexp, ''));
-            }
-        });
 		// 비밀번호 입력 체크
 		$("#user_pw").keyup(function (event) { // PW1 입력시 상태확인
 			$('#user_pw2').val(""); // PW1을 입력하면 기존에 PW2의 입력값 초기화
@@ -225,6 +216,13 @@
 
 	// 아이디 중복 체크 & 아이디 재등록
 	function duplicateCheck(yn){
+		var tt = /^(?=.*[a-zA-Z])(?=.*[0-9])[0-9a-zA-Z]{5,20}$/;
+		var id = $("#user_id").val();
+		if(!tt.test(id)){
+			alert('5~20자리의 숫자,영문 혼용으로 입력해주세요.');
+			return;
+		}
+
 		if (yn=='y'){ // ID 중복체크 버튼 클릭 시 실행
 			$.ajax({
 				type : 'post',
@@ -236,7 +234,6 @@
 						$("input:checkbox[id='chk_id']").prop("checked", true); // 중복체크 선택 (사용가능한 ID일 경우, 체크)
 						$('#user_id').attr("readonly", true); // 사용가능한 ID일 경우, 입력값 변경 불가! readonly=true
 						$('#chk_id_txt').text("중복 체크 완료"); // ID 중복체크 완료시 TEXT 변경
-// 						$("#user_id_chkBtn").attr("disabled", "disabled"); // ID 중복체크 버튼 비활성화 
 						$('#user_id_retry').show(); // ID 재등록 버튼 보이기
 						$('#user_id_chkBtn').hide(); // ID 중복 체크 버튼 숨기기
 					}else{
@@ -248,7 +245,6 @@
 		}else{ // ID 재등록 버튼 클릭 시 실행 
 			$('#user_id').val(""); // ID 입력창 초기화
 			$('#user_id').attr("readonly", false); // ID 입력창 입력할 수 있게 변경 readonly=false
-// 			$("#user_id_chkBtn").removeAttr("disabled"); // ID 중복체크 버튼 활성화
 			$("input:checkbox[id='chk_id']").prop("checked", false); // ID 중복체크 선택 해제
 			$('#chk_id_txt').text("*5~20자리의 영문,숫자를 입력하세요."); // ID입력을 요구하는 TEXT로 변경
 			$('#user_id_retry').hide(); // ID 재등록 버튼 숨기기
@@ -257,8 +253,8 @@
 	}
 	// 회원가입 실행 함수
 	function submit(){
-		if ($("#user_nm").val().trim() ==0){ // 사용자명 공백확인
-			alert("사용자명을 입력하세요.");
+		if ($("#user_nm").val().trim() ==0 || !/^[가-힣]{2,5}$/.test($("#user_nm").val().trim()) ){ // 사용자명 공백 및 한글입력여부 확인
+			alert("사용자명을 올바르게 입력하세요. 한글만 입력가능합니다.");
 			return;
 		}else if($('#chk_id').is(':checked')==false){ // ID 중복체크 유무 확인
 			alert("아이디 중복체크를 하세요.");
