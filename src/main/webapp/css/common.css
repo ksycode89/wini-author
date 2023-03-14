@@ -18,26 +18,66 @@
 .search ul li *{vertical-align:top;}
 .search .btn_search{display:block;position:absolute;right:20px;bottom:9px;width:80px;height:30px;font-size:12px;font-weight:bold;color:#fff;line-height:30px;background:#577dd0;border:0px none;border-radius:5px;}
 
+.pageArea{margin-bottom:20px;font-size:0;text-align:center;}
+.pageArea > a{display:inline-block;margin:0 2px;padding:0 3px;min-width:27px;height:27px;line-height:27px;font-size:13px;text-align:center;color:#888888;border:1px solid #d9d9d9;box-sizing:border-box;}
+.pageArea > a.active{background-color:#28518f;border:1px solid #28518f;color:#fff;}
+.pageArea > a.first{background:url(/FisdOBS/home/images/obs/btn_page_first.png) no-repeat center center;text-indent:-9999px;}
+.pageArea > a.prev{background:url(/FisdOBS/home/images/obs/btn_page_prev.png) no-repeat center center;text-indent:-9999px;}
+.pageArea > a.next{background:url(/FisdOBS/home/images/obs/btn_page_next.png) no-repeat center center;text-indent:-9999px;}
+.pageArea > a.last{background:url(/FisdOBS/home/images/obs/btn_page_last.png) no-repeat center center;text-indent:-9999px;}
 
-.contentPage {padding:10px 30px;}
-.contentTitle{display:block;border-bottom:2px solid #a9a9a9;margin-bottom:20px;}
-.contentTitle h3{display:block;height:50px;padding-left:20px;line-height:50px;}
 
-.search{position:relative;margin-bottom:20px;padding:0 100px 0 20px;line-height:45px;border:1px #c2c2c2 solid;}
-.search:after{display:block;content:'';clear:both;}
-.search ul{display:block;position:relative;border-bottom:1px #c1c1c1 dotted;clear:both;}
-.search ul:before{display:block;content:'';position:absolute;bottom:-1px;left:0;right:-80px;border-top:1px #c1c1c1 dotted;}
-.search ul:after{display:block;content:'';clear:both;}
-.search ul:last-child,
-.search ul.last{border-bottom:0px none;}
-.search ul:last-child:before,
-.search ul.last:before{display:none;}
-.search ul li{display:block;position:relative;float:left;padding:9px 20px 9px 80px;min-height:30px;line-height:30px;box-sizing:border-box;}
-.search ul li .label{display:block;position:absolute;top:0;left:0;padding:9px 0 9px 10px;min-height:30px;line-height:30px;}
-.search ul.cols2 li{width:50%;}
-.search ul.cols3 li{width:33.3333%;}
-.search ul li *{vertical-align:top;}
-.search .btn_search{display:block;position:absolute;right:20px;bottom:9px;width:80px;height:30px;font-size:12px;font-weight:bold;color:#fff;line-height:30px;background:#577dd0;border:0px none;border-radius:5px;}
+.tableBox{margin-bottom:20px;border-top:2px #28518f solid;overflow:hidden;}
+.tableBox.scroll{overflow-y:auto;border:1px #d7d7d7 solid;border-top:2px #28518f solid;}
+.tableBox.scrollX{overflow-x:auto;border-right:1px #d7d7d7 solid;}
+.tableBox table{width:100%;font-size:12px;border:0px none;border-left:1px #dfe1e1 solid;}
+.tableBox table table{table-layout:auto;}
+.tableBox table .tableBox{margin-bottom:0;}
+.tableBox table th,
+.tableBox table td{padding:5px;height:25px;border-bottom:1px #dfe1e1 solid;border-right:1px #dfe1e1 solid;word-break:break-all;}
+.tableBox.scrollX table th,
+.tableBox.scrollX table td{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.tableBox table.list input[type='text'],
+.tableBox table.list input[type='password'],
+.tableBox table.list input[type='number'],
+.tableBox table.list select,
+.tableBox table.list .btn_inline{height:25px;line-height:23px;}
+.tableBox table.list{text-align:center;}
+.tableBox table.list > thead{background:#f7f7f5;}
+.tableBox table.list > thead > tr > th,
+.tableBox table.list > tbody > tr > th{font-weight:bold;color:#27528f;background:#f3f4f6;border-bottom:1px #c2c5cb solid;}
+.tableBox table.list.hover > tbody > tr,
+.tableBox table.list.active > tbody > tr{cursor:pointer;}
+.tableBox table.list.hover > tbody > tr:hover{background:#f1f5ff !important;}
+.tableBox table.form > tbody > tr > th{padding:6px 10px 6px 18px;font-weight:bold;color:#27528f;text-align:left;background:#f3f4f6;}
+.tableBox table.form > tbody > tr > td{padding:6px 10px;text-align:left;}
+.tableBox table.list > thead > tr.bgGray > th,
+.tableBox table.list > tbody > tr.bgGray > td,
+.tableBox table.list > tbody > tr > th.bgGray{background:#fcfcfc;}
+.tableBox table.list.hover.status > tbody > tr > th{height:auto;}
+.tableBox table.list.hover.status > tbody > tr > td{padding:0;height:5px;}
+.tableBox table.list.hover.status > tbody > tr > td.color1{background:#d6f2ff;}
+.tableBox table.list.hover.status > tbody > tr > td.color2{background:#cef5a4;}
+.tableBox table .required{display:inline-block;padding-right:3px;color:#ea002e;}
+.tableBox table .tModify{color:#ea002e;text-decoration:line-through;}
+.tableBox table .cLabel{display:block;position:relative;padding-right:20px;}
+.tableBox table .cLabel label{display:block;}
+.tableBox table .cLabel input{position:absolute;top:50%;right:5px;margin-top:-6px;}
+.tableBox table th.va-t{padding-top:10px;}
+.tableBox table td .scrollY{display:block;overflow-y:auto;}
+.tableBox table .thSelect{position:relative;}
+.tableBox table .thSelect span{position:absolute;right:5px;top:5px;}
+.tableBox table .trTimeWrap{padding:0;vertical-align:top;background:#fcfcfc !important;}
+.tableBox table .trTimeTitle{display:block;position:relative;padding:5px;height:25px;line-height:25px;border-bottom:1px #c2c5cb solid;background:#f3f4f6 !important;}
+.tableBox table .trTimeTitle .btn_trAdd{position:absolute;right:5px;top:9px;}
+.tableBox table .trTimeLine{display:block;position:relative;padding:3px 0;padding-right:22px;}
+.tableBox table .trTimeLine input{margin:0 2px;}
+.tableBox table .trTimeLine .btn_trDel{position:absolute;right:5px;top:7px;}
+.tableBox .tableHead{background:#f7f7f5}
+.tableBox .tableHead tbody{display:none;}
+.tableBox .tableBody{overflow-y:auto;border-bottom:1px #ebebeb solid;}
+.tableBox .tableBody thead{display:none;}
 
+.btn_m on{display:block;position:absolute;right:20px;bottom:9px;width:80px;height:30px;font-size:12px;font-weight:bold;color:#fff;line-height:30px;background:#577dd0;border:0px none;border-radius:5px;}
 
 	

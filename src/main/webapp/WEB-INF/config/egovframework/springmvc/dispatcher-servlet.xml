@@ -12,9 +12,10 @@
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
     </context:component-scan>
+    
     <!--command map 설정  -->
-<!-- 	<context:component-scan base-package="egovframework.wini.comm"></context:component-scan>
-   
+	<!-- <context:component-scan base-package="egovframework.wini.comm"></context:component-scan>
+   	
    	<mvc:annotation-driven>
 		<mvc:argument-resolvers>
 			<bean class="egovframework.wini.comm.resolver.CustomMapArgumentResolver"></bean>		
@@ -29,11 +30,8 @@
             </list>
         </property>
     </bean>
-   <!--  <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/> -->
-   <!--  -->
+   	<!--  <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/> -->
     
-    
-   
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
         <property name="interceptors">
             <list>
@@ -51,36 +49,54 @@
     <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1"
 	    p:viewClass="org.springframework.web.servlet.view.JstlView"
 	    p:prefix="/WEB-INF/jsp/" p:suffix=".jsp"/>
+	
+	
+	<!-- For Pagination Tag -->
+    <bean class="egovframework.wini.web.common.ImagePaginationRenderer" id="imageRenderer"/>
 
-
-<!-- 에러페이지 제작 -->
-   <!--  <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-        <property name="defaultErrorView" value="cmmn/egovError"/>
-        <property name="exceptionMappings">
-            <props>
-                <prop key="org.springframework.dao.DataAccessException">cmmn/dataAccessFailure</prop>
-                <prop key="org.springframework.transaction.TransactionException">cmmn/transactionFailure</prop>
-                <prop key="egovframework.rte.fdl.cmmn.exception.EgovBizException">cmmn/egovError</prop>
-                <prop key="org.springframework.security.AccessDeniedException">cmmn/egovError</prop>
-            </props>
-        </property>
-    </bean> -->
-	<!-- <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/> -->
-<!-- ViewResolver  -->
-	<!-- MappingJacksonJsonView 설정 -->
-
-
-    <!-- For Pagination Tag -->
-    <!-- <bean id="imageRenderer" class="egovframework.example.cmmn.web.EgovImgPaginationRenderer"/> -->
-
-    <!-- <bean id="paginationManager" class="egovframework.rte.ptl.mvc.tags.ui.pagination.DefaultPaginationManager">
+    <bean class="egovframework.rte.ptl.mvc.tags.ui.pagination.DefaultPaginationManager" id="paginationManager">
         <property name="rendererType">
             <map>
                 <entry key="image" value-ref="imageRenderer"/>
             </map>
         </property>
+    </bean>
+    
+    
+    <!-- 여기 밑 -->
+    <!-- <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver" p:order="0">
+        <property name="contentNegotiationManager" ref="cnManager" />
+    </bean>
+	
+	<mvc:annotation-driven content-negotiation-manager="cnManager">
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                         <value>text/html;charset=UTF-8</value>
+                         <value>application/json;charset=UTF-8</value>
+                         <value>text/plain;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    
+	<bean id="cnManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="defaultContentType" value="application/json;charset=UTF-8" />
+		<property name="favorParameter" value="true"/>		URL 파라미터 사용 
+        <property name="parameterName" value="format"/>		defalt format(변경가능)
+        <property name="favorPathExtension" value="true"/>	URL 확장자 사용
+        <property name="ignoreAcceptHeader" value="false"/>	accept Header 프로퍼티 이용
+        <property name="mediaTypes">						
+			<map>											
+				<entry key="html" value="text/html;charset=UTF-8" />
+				<entry key="json" value="text/html;charset=UTF-8" />	
+				<entry key="xml" value="application/xml;charset=UTF-8" />
+				<entry key="xlsx" value="application/vnd.ms-excel" />
+			</map>
+		</property>
     </bean> -->
-	<!-- /For Pagination Tag -->
 	
 	
 

@@ -1,7 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="true"%>
 <%@page import="egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
     
 <%
     /**
@@ -35,32 +35,18 @@
 	            </div>
 					
 					<!-- 검색 -->
-					<!-- <form name="frmS" id="frmS" method="post" enctype="multipart/form-data" onsubmit="fn_search(); return false;"> -->
-					<form name="frmS" id="frmS" method="post" enctype="multipart/form-data">
+					<form name="frmS" id="frmS" method="post" enctype="form-data" onsubmit="fn_search(); return false;">
+					
+						<input type="hidden" id="page" name="page" value="<c:out value="${parmMap.page }"/>"/>
+					
 						<div class="search">
-							<ul>
-								<li class="w100p">
-									<b class="label">
-										<label>부서</label>
-									</b>
-									<select id="srch_orgnzt_id1" name="srch_orgnzt_id1" class="w20p" title="부서 1단계">
-										<option value="">선택</option>
-									</select> 
-									<select id="srch_orgnzt_id2" name="srch_orgnzt_id2" class="w20p" title="부서 2단계">
-										<option value="">선택</option>
-									</select>
-									<select id="srch_orgnzt_id3" name="srch_orgnzt_id3" class="w20p" title="부서 3단계">
-										<option value="">선택</option>
-									</select>
-								</li>
-							</ul>
 							
 							<ul class="cols2 last">
 								<li>
 									<b class="label">
 										<label>이름</label>
 									</b>
-									<input type="text" id="srch_user_nm" name="srch_user_nm" maxlength="10" style="ime-mode: active;" title="이름" />
+									<input type="text" id="srch_user_nm" name="srch_user_nm" maxlength="10" value="<c:out value="${parmMap.srch_user_nm }"/>" style="ime-mode: active;" title="이름" />
 								</li>
 								<li>
 									<b class="label">
@@ -69,7 +55,7 @@
 									<select id="srch_user_gndr" name="srch_user_gndr" style="min-width: 100px;" title="성별">
 										<option value="">선택</option>
 										<option value="M">남자</option>
-										<option value="F">여자</option>
+										<option value="W">여자</option>
 									</select>
 								</li>
 							</ul>
@@ -80,17 +66,13 @@
 					</form>
 					
 					<!-- 검색 결과 리스트 -->
-					<%-- <div id="contentList">
+					<div id="contentList">
 						<div class="tableBox" style="min-height: 250px;">
 							<table class="list hover active">
-								<caption>사용자정보목록</caption>
-
 								<colgroup>
 									<col style="width: 70px">
 									<col style="width: 150px">
 									<col style="width: 130px">
-									<col>
-									<col style="width: 100px">
 									<col style="width: 100px">
 								</colgroup>
 
@@ -99,33 +81,24 @@
 										<th scope="col">No</th>
 										<th scope="col">사용자ID</th>
 										<th scope="col">사용자명</th>
-										<th scope="col">소속부서</th>
-										<th scope="col">계급</th>
-										<th scope="col">근무상태</th>
+										<th scope="col">성별</th>
 									</tr>
 								</thead>
 
 								<tbody>
 
-									<c:forEach var="result" items="${resultList}"
-										varStatus="status">
-										<tr
-											onclick="selectWrkrDetail('<c:out value="${result.wrkrSn}"/>')"
-											style="cursor: pointer;">
-											<td><c:out
-													value="${((parmMap.page - 1) * parmMap.rowNum) + (status.count)}" /></td>
-											<td><c:out value="${result.wrkrId}" /></td>
-											<td><c:out value="${result.wrkrNm}" /></td>
-											<td style="text-align: left;"><c:out
-													value="${result.psitnOrgnztNm}" /></td>
-											<td><c:out value="${result.clssCodeNm}" /></td>
-											<td><c:out value="${result.workSttusCodeNm}" /></td>
+									<c:forEach var="result" items="${resultList}" varStatus="status">
+										<tr onclick="selectUserDetail('<c:out value="${result.userSn}"/>')" style="cursor: pointer;">
+											<td><c:out value="${((parmMap.page - 1) * parmMap.rowNum) + (status.count)}" /></td>
+											<td><c:out value="${result.userId}" /></td>
+											<td><c:out value="${result.userNm}" /></td>
+											<td><c:out value="${result.userGndr}" /></td>
 										</tr>
 									</c:forEach>
 
 									<c:if test="${resultCnt == 0}">
 										<tr>
-											<td colspan="6">등록된 사용자가 없습니다</td>
+											<td colspan="4">등록된 사용자가 없습니다</td>
 										</tr>
 									</c:if>
 
@@ -133,28 +106,26 @@
 							</table>
 						</div>
 						<%
-                                       PaginationInfo paginationInfo = (PaginationInfo) request.getAttribute("paginationInfo");
-                                       if ( paginationInfo != null && (paginationInfo.toString().indexOf("<") >=0 || paginationInfo.toString().indexOf(">") >=0 ) ) {
-                                           return;
-                                       }
-                                   %>
+                           PaginationInfo paginationInfo = (PaginationInfo) request.getAttribute("paginationInfo");
+                           if ( paginationInfo != null && (paginationInfo.toString().indexOf("<") >=0 || paginationInfo.toString().indexOf(">") >=0 ) ) {
+                           	return;
+                           }
+                        %>
                                    
 						<div class="pageArea">
 							<ui:pagination paginationInfo="<%=paginationInfo %>" type="image" jsFunction="fn_select_List" />
 						</div>
 
-					</div> --%>
+					</div>
 					
 					<!-- 상세 정보 -->
-					<%-- <form name="frmD" id="frmD" method="post"
-						enctype="multipart/form-data">
-
-						<input type="hidden" id="wrkr_sn" name="wrkr_sn" /> <input
-							type="hidden" id="postng_orgnzt_id" name="postng_orgnzt_id" />
-
+					<form name="frmD" id="frmD" method="post" enctype="form-data">
+					
+						<input type="hidden" id="user_sn" name="user_sn" />
+						
 						<div class="tableBox">
 							<table class="form">
-								<caption>상세내역</caption>
+								<caption></caption>
 								<colgroup>
 									<col style="width: 80px">
 									<col style="width: 120px">
@@ -165,87 +136,56 @@
 								</colgroup>
 
 								<tr>
-									<th><label for="wrkr_id">사용자ID</label></th>
-									<td><label id="wrkr_id"></label></td>
-									<th><label for="wrkr_nm">사용자명</label></th>
-									<td><label id="wrkr_nm"></label></td>
+									<th><label for="user_id">사용자ID</label></th>
+									<td><label id="user_id"></label></td>
+									<th><label for="user_nm">사용자명</label></th>
+									<td><label id="user_nm"></label></td>
 									<th><label for="">비밀번호</label></th>
-									<td><input type="button" class="btn_s" id="b_pwClear"
-										name="b_pwClear" value="비밀번호 초기화" onclick="app_req('S');" />
-									</td>
+									<td><input type="button" class="btn_s" id="b_PwClear" name="b_PwClear" value="비밀번호 초기화" onclick="doIud('S');" /></td>
 								</tr>
 
 								<tr>
-									<th><label for="psitn_orgnzt_nm">소속부서</label></th>
-									<td colspan="3"><label id="psitn_orgnzt_nm"></label></td>
-									<th><label for="clss_nm">계급</label></th>
-									<td><label id="clss_nm"></label></td>
+									<th><label for="dt_brt">생년월일</label></th>
+									<td><label id="dt_brt"></label></td>
+
+									<th><label for="user_gndr">성별</label></th>
+										<td colspan="3">
+											<select id="user_gndr" name="user_gndr" style="min-width: 100px;" title="성별">
+												<option value="">선택</option>
+												<option value="M">남자</option>
+												<option value="W">여자</option>
+											</select>
+										</td>
 								</tr>
 
 								<tr>
-									<th><label for="postng_orgnzt_id1">배치부서<span>*</span></label></th>
-									<td colspan="3"><select id="postng_orgnzt_id1"
-										name="postng_orgnzt_id1" class="w20p" title="배치부서 1단계">
-											<option value="">선택</option>
-									</select> <select id="postng_orgnzt_id2" name="postng_orgnzt_id2"
-										class="w20p" title="배치부서 2단계">
-											<option value="">선택</option>
-									</select> <select id="postng_orgnzt_id3" name="postng_orgnzt_id3"
-										class="w20p" title="배치부서 3단계">
-											<option value="">선택</option>
-									</select> <select id="postng_orgnzt_id4" name="postng_orgnzt_id4"
-										class="w20p" title="배치부서 4단계">
-											<option value="">선택</option>
-									</select></td>
-									<th><label for="work_sttus_nm">근무상태</label></th>
-									<td><label id="work_sttus_nm"></label></td>
-								</tr>
-
-								<tr>
-									<th><label for="plice_nm">의경여부</label></th>
-									<td><label id="plice_nm"></label></td>
-
-									<th><label for="">근무자경과구분</label></th>
-									<td colspan="3"><select id="wrkr_elapse_se_code"
-										name="wrkr_elapse_se_code" style="min-width: 100px;"
-										title="근무자경과구분">
-											<option value="">선택</option>
-									</select></td>
-								</tr>
-
-								<tr>
-									<th><label for="offm_telno">사무실전화</label></th>
-									<td><label id="offm_telno"></label></td>
-
-									<th><label for="house_telno">주택전화</label></th>
-									<td><label id="house_telno"></label></td>
-
-									<th><label for="moblphon_no">이동전화</label></th>
+									<th><label for="moblphon_no">전화번호</label></th>
 									<td><label id="moblphon_no"></label></td>
-								</tr>
 
-								<tr>
-									<th><label for="age">연령</label></th>
-									<td><label id="age"></label></td>
+									<th><label for="email_adres">이메일</label></th>
+									<td><label id="email_adres"></label></td>
 
-									<th><label for="sexdstn_nm">성별</label></th>
-									<td colspan="3"><label id="sexdstn_nm"></label></td>
+									<th><label for="rght">권한</label></th>
+										<td>
+											<select id="rght" name="rght" style="min-width: 100px;" title="권한">
+												<option value="">선택</option>
+												<option value="Y">있음</option>
+												<option value="N">없음</option>
+											</select>
+										</td>
 								</tr>
 
 							</table>
 
 						</div>
-
+						
+						<!-- 버튼 -->
 						<div style="text-align: right; margin-top: 5px;">
-							<a href="javaScript:void(0);" id="b_clear" class="btn_m"
-								onclick="doClear();">초기화</a>
-							<c:if test="${progrmAuthMap.updtAt eq 'Y' }">
-								<a href="javaScript:void(0);" id="b_Update" class="btn_m on"
-									onclick="app_req('U');">수정</a>
-							</c:if>
+							<a href="javaScript:void(0);" id="b_Clear" class="btn_m" onclick="doClear();">초기화</a>
+							<a href="javaScript:void(0);" id="b_Update" class="btn_m on" onclick="doIud('U');">수정</a>
 						</div>
 
-					</form> --%>
+					</form>
 
 			</div>
 		</div>
@@ -255,15 +195,37 @@
 	<script type="text/javascript">
 	
     $(function() {
-
-        
+    	doClear();
     });
+    
+    // 초기화
+    function doClear() {
+        
+    	$("#user_sn").val("");
+        $("#user_id").html("");
+        $("#user_nm").html("");
+        $("#dt_brt").html("");
+        $("#user_gndr").val("");
+        $("#moblphon_no").html("");
+        $("#email_adres").html("");
+        $("#rght").val("");
+        
+        setButton();
+    }
+    
+    // 버튼 세팅
+    function setButton(btnType) {
+        $('#b_Update').css("display", "none");
+        $('#b_PwClear').css("display", "none");
+
+        if (btnType == 'U') {
+            $('#b_Update').css("display", "");
+            $('#b_PwClear').css("display", "");
+        }
+    }
 	
     // 검색버튼 클릭
     function fn_search() {
-        // 소속부서 값 셋팅
-        //$("#srch_orgnzt_id").val(CodeUtil.getOrgnztId("srch_orgnzt_id1", "srch_orgnzt_id2", "srch_orgnzt_id3"));
-        
         fn_select_List(1);
     }
     
@@ -271,7 +233,166 @@
     function fn_select_List(pageNo) {
         document.frmS.page.value = pageNo;
         document.frmS.action = "./srchUserMgmt.do";
-        document.frmS.submit();  
+        document.frmS.submit();
+    }
+    
+    // 상세조회
+    function selectUserDetail(userSn) {
+        if(userSn == "") {
+            alert("사용자정보가 없습니다.");
+            return false;
+        }
+        
+        var ajax_set = {
+                url:"./userMgmtDetail.do",
+                param:"user_sn=" + userSn,
+                return_fn:function(jdata) {
+                    selectUserDetail_result(jdata);
+                }
+        }
+        
+        fn_getDetailAjax(ajax_set);
+    }
+    
+ 	// 상세조회 호출
+    function fn_getDetailAjax(ajax_set) {
+        
+        $.ajax({
+            type: "POST",
+            url: ajax_set.url,
+            data: ajax_set.param,
+            processData: false,
+            dataType: 'json',
+            error: function(){
+                alert('조회중 오류가 발생하였습니다.');
+            },
+            success: ajax_set.return_fn
+        });
+    }
+    
+    // 상세조회 결과
+    function selectUserDetail_result(jdata) {
+        if(jdata == null) {
+            alert("상세조회를 실패했습니다.");
+            return;
+        }
+        
+        if(jdata.rows.length > 0) {
+            doClear();
+            
+            var item = jdata.rows[0];
+			
+            $("#user_sn").val(item.userSn);
+            $("#user_id").html(item.userId);
+            $("#user_nm").html(item.userNm);
+            $("#dt_brt").html(item.dtBrt);
+            $("#user_gndr").val(item.userGndr);
+            $("#moblphon_no").html(item.moblphonNo);
+            $("#email_adres").html(item.emailAdres);
+            $("#rght").val(item.rght);
+            
+            setButton('U');
+        }
+    }
+    
+    // 데이터 유효성 체크
+    function fn_checkNotNull(iud) {
+        
+        if(iud == "S"){ 
+        	return true; 
+        }
+        
+        if($.trim($("#user_gndr").val()) == "") {
+            alert("성별을 선택해주세요.");
+            $("#user_gndr").focus();
+            return false;
+        }
+        
+        if($.trim($("#rght").val()) == "") {
+            alert("권한을 선택해주세요.");
+            $("#rght").focus();
+            return false;
+        }
+        
+        return true;
+        
+    }
+    
+    // 등록, 수정, 삭제
+    function doIud(iud) {
+        var c_firm = " 하시겠습니까?";
+        
+        if(iud == "U") {
+            c_firm = "수정" + c_firm;
+        } else if(iud == "S") {
+            c_firm = "비밀번호를 초기화 " + c_firm;
+        }
+        
+        if(fn_checkNotNull(iud)) {
+            var ajax_set = {
+                    form_name:"#frmD",
+                    url:"./userMgmtIUD.do?iud="+iud,
+                    return_fn:function(jdata){
+                    	doIud_result(jdata, iud);
+                    }
+            }
+            
+            fn_submitIUDAjax(ajax_set, c_firm);
+        }
+    }
+    
+ 	// 등록, 수정, 삭제 등 트랜젝션 발생 시 사용
+    function fn_submitIUDAjax(ajax_set, c_firm) { 
+        if (c_firm != null && c_firm != "") {
+            //fn_submit_ingView(true);
+            if (!confirm(c_firm)) {
+                //fn_submit_ingView(false);
+                return;
+            }
+        }
+        $(ajax_set.form_name).ajaxSubmit({ 
+            type:"POST",
+            dataType:'json',
+            url:ajax_set.url, 
+            contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+            async:false,
+            beforeSubmit : fn_beforeSubmit,
+            complete: function() {
+                //fn_submit_ingView(false);
+            },
+            error: function(){            
+                alert('처리중 오류가 발생하였습니다.');
+                //fn_submit_ingView(false);
+            },
+            success:ajax_set.return_fn
+        });
+    }
+ 	
+  //저장 등 do_submitIUD 발생시 진행 중 표시 화면
+    function fn_submit_ingView(flag){
+        if (flag) {
+            var h = $("body").height();
+            $("#wini_submit_ing").css({height:h});
+            $("#wini_submit_ing").show();
+            $("#wini_window_mask_cont").show();
+        } else {
+            $("#wini_submit_ing").hide();
+            $("#wini_window_mask_cont").hide();
+        }
+        
+    }
+ 	
+    // 등록,수정,삭제 결과
+    function doIud_result(jdata, iud) {
+        if(jdata.errCd != null && jdata.errCd == "-1") {
+            alert(jdata.errMsg);
+        } else {
+            if(iud == "U") {
+                alert("수정 되었습니다.");
+            } else if(iud == "S") {
+                alert("초기화 되었습니다.");
+            }
+        }
     }
     
 	</script>
