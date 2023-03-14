@@ -518,6 +518,10 @@
 		function insertModiComm(){
 			//td지우기//key제외
 			$('#eqpmnMDTable').find('td').not(":first").remove();
+			//아무것도 안누르고 실행시
+			if($('#eqpmnSn').next().text()=='검색 내역이 없습니다.'){
+				$('#eqpmnSn').next().text(0)
+			}
 			//keyhidden
 			$('#eqpmnSn').next().hide()
 			//sereailze용 input태그생성

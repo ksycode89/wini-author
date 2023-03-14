@@ -10,16 +10,12 @@
 						,EQPMN_SE_CODE		/*장비 구분코드*/
 						,EQPMN_NM			/*장비 장비명*/	
 						,ORGNZT_ID			/*소속부서ID*/
-						,to_char(BUY_DAY,'YYYY-MM-DD') as BUY_DAY			/*구매일자*/
+						,BUY_DAY			/*구매일자*/
 						,EQPMN_UNIT_PRICE	/*단가*/
 						,EQPMN_MODEL_NAME	/*모델명*/
 						,EQPMN_MAKR			/*제조사*/
 						,EQPMN_PIN			/*식별번호*/
 						,EQPMN_CN			/*비고*/
-						,FRST_REGIST_DT		/*최초등록일시*/
-						,FRST_REGISTER_SN	/*최초등록자 일련번호*/
-						,UPDT_DT			/*수정일시/
-						,UPDUSR_SN			/*수정자 일련번호*/
 			FROM		KJP_EQPMN 			
 			
 			<where>
@@ -66,7 +62,7 @@
 					,#{eqpmnNm}
 					,#{orgnztId}
 					 <if test="buyDay != null and !buyDay.equals('') ">
-	  			  	 ,to_char(#{buyDay},'YYYY-MM-DD')
+	  			  	 ,#{buyDay}
 	 				 </if>
 					 <if test="eqpmnUnitPrice">
 	  			  	,#{eqpmnUnitPrice}

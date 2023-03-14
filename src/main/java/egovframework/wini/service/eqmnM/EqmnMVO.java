@@ -7,7 +7,7 @@ public class EqmnMVO {
 	private String eqpmnSeCode="";
 	private String eqpmnNm="";
 	private String orgnztId="";
-	private String buyDay;
+	private String buyDay ="";
 	private int eqpmnUnitPrice=0;
 	private String eqpmnModelName="";
 	private String eqpmnMakr="";
