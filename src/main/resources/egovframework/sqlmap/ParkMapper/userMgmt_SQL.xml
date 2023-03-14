@@ -1,8 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="userMgmtDAO">
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="userMgmtDAO">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
 	
+    <!-- 사용자 목록 조회 -->
+    <select id="userMgmtDAO.selectUserMgmtList" resultClass="egovMap">
+         SELECT k.*
+           FROM ( SELECT b.*, ROWNUM rnum
+                  FROM ( SELECT 	a.user_sn
+                                  , a.user_id
+                                  , a.user_nm
+                                  , a.dt_brt
+                                  , a.user_gndr
+                                  , a.moblphon_no
+                                  , a.email_adres
+                                  , a.rght
+                         FROM kjp_user a
+                         WHERE 1=1
+                         <isNotEmpty property="srch_user_nm">
+            				AND (a.user_nm LIKE '%'||#srch_user_nm#||'%')
+        				 </isNotEmpty>
+        				 <isNotEmpty property="srch_user_gndr">
+            				AND a.user_gndr = #srch_user_gndr#
+        				 </isNotEmpty>
+        				 ORDER BY a.user_sn
+                       ) b
+                ) k
+         <![CDATA[
+         WHERE k.rnum > (#page# - 1) * #rowNum#
+         AND k.rnum <= #page# * #rowNum#
+         ]]>
+    </select>
+    
+    <!-- 사용자 목록 총 건수 -->
+    <select id="userMgmtDAO.selectUserMgmtListCnt" resultClass="int">
+         SELECT COUNT(*)
+         FROM ( SELECT a.user_sn
+                       , a.user_id
+                       , a.user_nm
+                       , a.dt_brt
+                       , a.user_gndr
+                       , a.moblphon_no
+                       , a.email_adres
+                       , a.rght
+                FROM kjp_user a
+                WHERE 1=1
+                <isNotEmpty property="srch_user_nm">
+   					AND (a.user_nm LIKE '%'||#srch_user_nm#||'%')
+			 	</isNotEmpty>
+			 	<isNotEmpty property="srch_user_gndr">
+   					AND a.user_gndr = #srch_user_gndr#
+			 	</isNotEmpty>
+                ORDER BY a.user_sn
+              ) b
+    </select>
+    
+    <!-- 사용자 상세 조회 -->
+    <select id="userMgmtDAO.selectUserMgmtDetail" resultClass="egovMap">
+         SELECT user_sn
+                , user_id
+                , user_nm
+                , dt_brt
+                , user_gndr
+                , moblphon_no
+                , email_adres
+                , rght
+           FROM kjp_user
+         WHERE user_sn = #user_sn#
+    </select>
+    
+    <!-- 비밀번호 초기화 -->
+    <update id="userMgmtDAO.clearUserPw">
+        UPDATE kjp_user
+               SET user_pw = 1
+                   , updt_dt = SYSDATE
+         WHERE user_sn = #user_sn#
+    </update>
 
-
-
-</mapper>
+</sqlMap>

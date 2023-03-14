@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import egovframework.wini.service.common.CommonService;
+import egovframework.wini.web.common.jqgridJason;
 
 @Service("defaultService")
 public class CommonServiceImpl extends EgovAbstractServiceImpl implements
@@ -68,6 +69,59 @@ public class CommonServiceImpl extends EgovAbstractServiceImpl implements
         map.put("paginationInfo", paginationInfo);
 
         return map;
+
+    }
+    
+    @Override
+    public jqgridJason list(String queryId, Map<String, Object> param) throws Exception {
+
+        jqgridJasonDAO jqdao = new jqgridJasonDAO();
+
+        jqgridJason resultData = new jqgridJason();
+        
+        if(param != null) {
+            resultData = jqdao.makeJqgridJason(defaultDAO.list(queryId, param));
+        } else {
+            resultData.setErrMsg("에러발생 : param is null");
+        }
+
+        return resultData;
+    }
+    
+    @Override
+    public int mult_save(List<String> queryID, List<String> queryIUD, jqgridJason param) throws Exception {
+        // TODO Auto-generated method stub
+
+        List<Map> save_data = param.getRows();
+
+        // log.debug("save rows  ======"+save_data.size());
+
+        if (queryID.size() > 0) {
+
+            for (int i = 0; i < queryID.size(); i++) {
+                String qId = queryID.get(i);
+                String idu = queryIUD.get(i);
+                Map<String, Object> dataMap = save_data.get(i);
+
+                egovLogger.debug("queryID  ======" + qId);
+                egovLogger.debug("idu      ======" + idu);
+                egovLogger.debug("data     ======" + dataMap.toString());
+
+                if (idu != null && idu.equals("I")) {
+                    defaultDAO.insert(qId, dataMap);
+                } else if (idu != null && idu.equals("U")) {
+                    defaultDAO.update(qId, dataMap);
+                } else if (idu != null && idu.equals("D")) {
+                    defaultDAO.delete(qId, dataMap);
+                } else {
+                    return -1;
+                }
+            }
+
+            return 1;
+        } else {
+            return 0;
+        }
 
     }
 }

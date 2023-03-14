@@ -19,5 +19,23 @@ public class CommonDefaultDAO extends EgovComAbstractDAO {
         // TODO Auto-generated method stub
         return super.select(queryId, parameterObject);
     }
+    
+    @Override
+    public Object insert(String queryId, Object parameterObject) {
+        // TODO Auto-generated method stub
+        return super.insert(queryId, parameterObject);
+    }
+    
+    @Override
+    public int update(String queryId, Object parameterObject) {
+        // TODO Auto-generated method stub
+        return super.update(queryId, parameterObject);
+    }
+    
+    @Override
+    public int delete(String queryId, Object parameterObject) {
+        // TODO Auto-generated method stub
+        return super.delete(queryId, parameterObject);
+    }
 
 }

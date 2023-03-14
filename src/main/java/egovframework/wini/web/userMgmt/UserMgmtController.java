@@ -1,41 +1,132 @@
 package egovframework.wini.web.userMgmt;
 
+import java.sql.SQLException;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.io.PrintWriter;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONObject;
+
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import egovframework.wini.service.common.CommonService;
-
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.ui.ModelMap;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.annotation.Resource;
+import egovframework.wini.service.common.EgovProperties;
+import egovframework.wini.web.common.jqgridJason;
 
 @Controller
-@EnableWebMvc
 public class UserMgmtController {
+	
+	private final Log log = LogFactory.getLog(this.getClass());
 	
     @Resource(name = "defaultService")
     private CommonService commonService;
 	
-	@GetMapping("userMgmt.do")
-	public String userMgmt() {
+    /** 사용자 목록 조회  **/
+	@RequestMapping("srchUserMgmt.do")
+	public String srchUserMgmt(@RequestParam Map<String, Object> commandMap, ModelMap model, HttpServletRequest request) throws Exception {
 		
-		return "mgmt/userMgmt";
-	}
-	
-	@GetMapping("srchUserMgmt.do")
-	public String wrkrMng(@RequestParam Map<String, Object> commandMap, ModelMap model, HttpServletRequest request) throws Exception {
+		System.out.println(">>=======================" + commandMap.get("page"));
 		
-		Map<String, Object> codeMap = commonService.list_map("userMgmtDAO.selectWrkrMngList", "userMgmtDAO.selectWrkrMngListCnt", commandMap);
+		Map<String, Object> codeMap = commonService.list_map("userMgmtDAO.selectUserMgmtList", "userMgmtDAO.selectUserMgmtListCnt", commandMap);
 		
         model.addAttribute("resultList", codeMap.get("resultList"));
         model.addAttribute("resultCnt", codeMap.get("resultCnt"));
         model.addAttribute("paginationInfo", codeMap.get("paginationInfo"));
+        model.addAttribute("parmMap", commandMap);
 		
 		return "mgmt/userMgmt";
 	}
+	
+    /** 사용자 상세 조회  **/
+    @RequestMapping("userMgmtDetail.do")
+    public @ResponseBody jqgridJason userMgmtDetail(@RequestParam Map<String, Object> commandMap ,ModelMap model) throws Exception {
+        
+        jqgridJason resultData = new jqgridJason();
+        
+        try {
+    
+            resultData = commonService.list("userMgmtDAO.selectUserMgmtDetail", commandMap);
+       
+        } catch (SQLException e) {
+            log.error("에러발생"+ e.getMessage());
+        } catch (Exception e) {
+            log.error("에러발생"+ e.getMessage());
+        }
+        
+        /** SPARROW : NULL_RETURN 조치 **/
+        if(resultData == null){
+            resultData = new jqgridJason();
+        }
+        return resultData;
+    }
+    
+    /** 사용자 등록, 수정, 삭제  **/
+    @RequestMapping("userMgmtIUD.do")
+    public void userMgmtIUD(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String, Object> commandMap, ModelMap model) throws Exception {
+
+            jqgridJason resultData = new jqgridJason();
+            
+            try {
+                
+                List<String> queryId   = new ArrayList<String>();  // QueryID List
+                List<String> queryIUD  = new ArrayList<String>();  // IUD List -> I: 등록, U:수정, D: 삭제
+                List<Map>    save_data = new ArrayList<Map>();     // 파라미터 데이터
+                
+                Map<String, Object> map1 = commandMap;  
+                
+                if (commandMap.get("iud") != null && commandMap.get("iud").equals("U")) { // 수정         
+					/*
+					 * queryId.add("WrkrMngDAO.updateWrkrMng"); queryIUD.add("U");
+					 * save_data.add(map1);
+					 * 
+					 * Map<String, Object> logMap = new HashMap<String, Object>();
+					 * logMap.put("menu_id", "OBS9902"); // 메뉴ID logMap.put("menu_log_se", "13204");
+					 * // 13201(조회), 13202(상세조회), 13203(등록), 13204(수정), 13205(삭제)
+					 * logMap.put("log_tgt_sn", commandMap.get("wrkr_sn")); // 조회일때는 빈값 나머지는 해당 일련번호
+					 * 넣어서 commonService.insertMenuLog(logMap);
+					 */
+                    
+                } else if (commandMap.get("iud") != null && commandMap.get("iud").equals("S")) { // 비밀번호 초기화         
+                    queryId.add("userMgmtDAO.clearUserPw");        
+                    queryIUD.add("U");     
+                    save_data.add(map1);                
+                }
+                
+                resultData.setRows(save_data);            
+                int result = commonService.mult_save(queryId, queryIUD, resultData);
+                
+                resultData.setErrCd(""+result);
+                resultData.setErrMsg("정상등록");
+            } catch (SQLException e) {
+                resultData.setErrCd("-1");
+                resultData.setErrMsg(EgovProperties.getProperty("Globals.tmpErrorMsg"));
+                log.error("에러발생"+ e.getMessage());
+            } catch (Exception e) {
+                resultData.setErrCd("-1");
+                resultData.setErrMsg(EgovProperties.getProperty("Globals.tmpErrorMsg"));
+                log.error("에러발생"+ e.getMessage());
+            }
+            
+            response.setContentType("text/plain;charset=utf-8");
+            JSONObject jsonGrid = JSONObject.fromObject(resultData);
+            PrintWriter printWriter = response.getWriter();
+            printWriter.println(jsonGrid);
+            
+            printWriter.flush();
+            printWriter.close();
+            
+    }
 }
 
 
