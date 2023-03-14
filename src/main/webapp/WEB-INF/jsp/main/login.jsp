@@ -18,9 +18,9 @@
 	  <form id="goLogin-form" name="goLogin-form" method="post">
 		  <div class="login-form">
 		    <h3>UserID:</h3>
-		    <input id="user_id" type="text" placeholder="아이디를 입력하세요."/><br>
+		    <input id="user_id" type="text" placeholder="아이디를 입력하세요." onkeyup="if(window.event.keyCode==13){goLogin()}"/><br>
 		    <h3>Password:</h3>
-		    <input id="user_pw" type="password" placeholder="패스워드를 입력하세요."/>
+		    <input id="user_pw" type="password" placeholder="패스워드를 입력하세요." onkeyup="if(window.event.keyCode==13){goLogin()}"/>
 		    <br>
 		    <input id="remember_chk" type="checkbox" value="remember"/>아이디 저장
 		    <br>
@@ -39,24 +39,31 @@
 	$(function() {
 		rememberChk();
 	});
+	// 아이디 기억하기 체크여부확인
     function rememberChk(){
         var cookieId = getCookie("rememberId");
-        if(cookieId !=""){
+        console.log(cookieId);
+        if(cookieId !="" && cookieId != undefined){
             $("input:checkbox[id='remember_chk']").prop("checked", true);
             $('#user_id').val(cookieId);
         }
     }
+    // 쿠키 생성하기
     function setCookie(name, value) {
         var date = new Date();
         date.setTime(date.getTime() + 86400e3);
         document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + ';expires=' + date.toUTCString() + ';path=/';
     }
+    // 쿠키 가져오기
     function getCookie(name){
     	if(document.cookie.length>0){
     		var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-    		console.log("va",value);
+    		return value[2];
     	}
-    	
+    }
+  	//쿠키 삭제하기
+    function deleteCookie(name) {
+  		document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT; path=/;';
     }
 	// 회원가입 popup창 띄우기
 	function joinMember(){
@@ -92,6 +99,8 @@
 					// cookie
 					if($('#remember_chk').is(':checked')==true){
 						setCookie("rememberId", $('#user_id').val());
+					}else{
+						deleteCookie("rememberId");
 					}
 					location.href="${pageContext.request.contextPath}"; // 로그인 성공시 main페이지 호출
 				}else{
