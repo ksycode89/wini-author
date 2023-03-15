@@ -38,6 +38,7 @@
 					<form name="frmS" id="frmS" method="post" enctype="form-data" onsubmit="fn_search(); return false;">
 					
 						<input type="hidden" id="page" name="page" value="<c:out value="${parmMap.page }"/>"/>
+						<input type="hidden" id="sessionUserSn" name="sessionUserSn" value="<c:out value="${userInfo.userSn}"/>"/>
 					
 						<div class="search">
 							
@@ -149,13 +150,7 @@
 									<td><label id="dt_brt"></label></td>
 
 									<th><label for="user_gndr">성별</label></th>
-										<td colspan="3">
-											<select id="user_gndr" name="user_gndr" style="min-width: 100px;" title="성별">
-												<option value="">선택</option>
-												<option value="M">남자</option>
-												<option value="W">여자</option>
-											</select>
-										</td>
+									<td colspan="3"><label id="user_gndr"></label></td>
 								</tr>
 
 								<tr>
@@ -181,8 +176,9 @@
 						
 						<!-- 버튼 -->
 						<div style="text-align: right; margin-top: 5px;">
-							<a href="javaScript:void(0);" id="b_Clear" class="btn_m" onclick="doClear();">초기화</a>
-							<a href="javaScript:void(0);" id="b_Update" class="btn_m on" onclick="doIud('U');">수정</a>
+						
+							<a href="javaScript:void(0);" id="b_Clear" class="mainBtn" style="background-color: #577dd0;" onclick="doClear();">초기화</a>
+							<a href="javaScript:void(0);" id="b_Update" class="mainBtn" style="background-color: #577dd0;" onclick="doIud('U');">수정</a>
 						</div>
 
 					</form>
@@ -205,7 +201,7 @@
         $("#user_id").html("");
         $("#user_nm").html("");
         $("#dt_brt").html("");
-        $("#user_gndr").val("");
+        $("#user_gndr").html("");
         $("#moblphon_no").html("");
         $("#email_adres").html("");
         $("#rght").val("");
@@ -286,7 +282,7 @@
             $("#user_id").html(item.userId);
             $("#user_nm").html(item.userNm);
             $("#dt_brt").html(item.dtBrt);
-            $("#user_gndr").val(item.userGndr);
+            $("#user_gndr").html(item.userGndr);
             $("#moblphon_no").html(item.moblphonNo);
             $("#email_adres").html(item.emailAdres);
             $("#rght").val(item.rght);
@@ -300,12 +296,6 @@
         
         if(iud == "S"){ 
         	return true; 
-        }
-        
-        if($.trim($("#user_gndr").val()) == "") {
-            alert("성별을 선택해주세요.");
-            $("#user_gndr").focus();
-            return false;
         }
         
         if($.trim($("#rght").val()) == "") {
@@ -331,7 +321,7 @@
         if(fn_checkNotNull(iud)) {
             var ajax_set = {
                     form_name:"#frmD",
-                    url:"./userMgmtIUD.do?iud="+iud,
+                    url:"./userMgmtIUD.do?iud="+iud + "&session_user_sn=" + $("#sessionUserSn").val(),
                     return_fn:function(jdata){
                     	doIud_result(jdata, iud);
                     }
@@ -342,11 +332,9 @@
     }
     
  	// 등록, 수정, 삭제 등 트랜젝션 발생 시 사용
-    function fn_submitIUDAjax(ajax_set, c_firm) { 
+    function fn_submitIUDAjax(ajax_set, c_firm) {
         if (c_firm != null && c_firm != "") {
-            //fn_submit_ingView(true);
             if (!confirm(c_firm)) {
-                //fn_submit_ingView(false);
                 return;
             }
         }
@@ -356,30 +344,13 @@
             url:ajax_set.url, 
             contentType : "application/x-www-form-urlencoded;charset=UTF-8",
             async:false,
-            beforeSubmit : fn_beforeSubmit,
             complete: function() {
-                //fn_submit_ingView(false);
             },
             error: function(){            
                 alert('처리중 오류가 발생하였습니다.');
-                //fn_submit_ingView(false);
             },
             success:ajax_set.return_fn
         });
-    }
- 	
-  //저장 등 do_submitIUD 발생시 진행 중 표시 화면
-    function fn_submit_ingView(flag){
-        if (flag) {
-            var h = $("body").height();
-            $("#wini_submit_ing").css({height:h});
-            $("#wini_submit_ing").show();
-            $("#wini_window_mask_cont").show();
-        } else {
-            $("#wini_submit_ing").hide();
-            $("#wini_window_mask_cont").hide();
-        }
-        
     }
  	
     // 등록,수정,삭제 결과

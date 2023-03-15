@@ -1,28 +1,28 @@
 package egovframework.wini.web.userMgmt;
 
-import java.sql.SQLException;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import egovframework.wini.service.common.CommonService;
 import egovframework.wini.service.common.EgovProperties;
 import egovframework.wini.web.common.jqgridJason;
+import net.sf.json.JSONObject;
 
 @Controller
 public class UserMgmtController {
@@ -35,8 +35,6 @@ public class UserMgmtController {
     /** 사용자 목록 조회  **/
 	@RequestMapping("srchUserMgmt.do")
 	public String srchUserMgmt(@RequestParam Map<String, Object> commandMap, ModelMap model, HttpServletRequest request) throws Exception {
-		
-		System.out.println(">>=======================" + commandMap.get("page"));
 		
 		Map<String, Object> codeMap = commonService.list_map("userMgmtDAO.selectUserMgmtList", "userMgmtDAO.selectUserMgmtListCnt", commandMap);
 		
@@ -85,19 +83,18 @@ public class UserMgmtController {
                 
                 Map<String, Object> map1 = commandMap;  
                 
-                if (commandMap.get("iud") != null && commandMap.get("iud").equals("U")) { // 수정         
-					/*
-					 * queryId.add("WrkrMngDAO.updateWrkrMng"); queryIUD.add("U");
-					 * save_data.add(map1);
-					 * 
-					 * Map<String, Object> logMap = new HashMap<String, Object>();
-					 * logMap.put("menu_id", "OBS9902"); // 메뉴ID logMap.put("menu_log_se", "13204");
-					 * // 13201(조회), 13202(상세조회), 13203(등록), 13204(수정), 13205(삭제)
-					 * logMap.put("log_tgt_sn", commandMap.get("wrkr_sn")); // 조회일때는 빈값 나머지는 해당 일련번호
-					 * 넣어서 commonService.insertMenuLog(logMap);
-					 */
+                if (commandMap.get("iud") != null && commandMap.get("iud").equals("U")) { // 수정        
+                	
+                	queryId.add("userMgmtDAO.updateUserMgmt");        
+                    queryIUD.add("U");     
+                    save_data.add(map1);  
                     
-                } else if (commandMap.get("iud") != null && commandMap.get("iud").equals("S")) { // 비밀번호 초기화         
+                } else if (commandMap.get("iud") != null && commandMap.get("iud").equals("S")) { // 비밀번호 초기화
+                	
+                	//비밀번호를 1로 초기화
+                	String clearPw = BCrypt.hashpw("1", BCrypt.gensalt());
+                	commandMap.put("user_pw", clearPw);
+                	
                     queryId.add("userMgmtDAO.clearUserPw");        
                     queryIUD.add("U");     
                     save_data.add(map1);                

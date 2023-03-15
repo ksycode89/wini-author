@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="menuMgmtDAO">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+    <!-- 메뉴 목록 트리 조회 -->
+    <select id="menuMgmtDAO.selectMenuMgmtTreeList" resultClass="egovMap">
+		SELECT 
+         		TO_CHAR(level) AS menu_step
+                , menu_id
+                , menu_at
+                , menu_nm || DECODE(use_at, 'N', ' (X)', '') AS menu_nm
+        FROM kjp_menu
+		WHERE 1=1
+        START WITH upper_menu_id IS NULL
+        CONNECT BY upper_menu_id = PRIOR menu_id
+        ORDER SIBLINGS BY sort_ordr
+    </select>
+    
+    <!-- 메뉴 상세조회 -->
+    <select id="menuMgmtDAO.selectMenuMgmtDetail" resultClass="egovMap">
+         SELECT a.menu_id
+                , a.menu_nm
+                , a.upper_menu_id
+                , ( SELECT menu_nm FROM kjp_menu WHERE menu_id = a.upper_menu_id) AS upper_menu_nm
+                , a.menu_url
+                , a.sort_ordr
+                , a.menu_at
+                , a.menu_rght
+                , a.use_at
+                , a.menu_dc
+                , a.menu_rght
+                , ( SELECT MAX(level)
+                      FROM kjp_menu
+                    WHERE 1=1
+                      START WITH menu_id = a.menu_id
+                      CONNECT BY upper_menu_id = PRIOR menu_id ) AS menu_step
+                , TO_CHAR(a.updt_dt, 'YYYY-MM-DD HH24:MI:SS') AS updt_dt
+                , ( SELECT user_nm FROM kjp_user WHERE user_sn = a.updusr_sn) AS updusr_nm
+           FROM kjp_menu a
+         WHERE a.menu_id = #menu_id#
+    </select>
+    
+    <!-- 메뉴 등록 -->
+    <insert id="menuMgmtDAO.insertMenuMgmt">
+        INSERT INTO kjp_menu (
+                                         menu_id
+                                       , menu_nm
+                                       , upper_menu_id
+                                       , menu_url
+                                       , sort_ordr
+                                       , menu_at
+                                       , menu_rght
+                                       , use_at
+                                       , menu_dc
+                                       , updt_dt
+                                       , updusr_sn
+                                       , frst_regist_dt
+                                       , frst_register_sn
+	                         ) VALUES (
+                                         #menu_id#
+                                       , #menu_nm#
+                                       , #upper_menu_id#
+                                       , #menu_url#
+                                       , #sort_ordr#
+                                       , #menu_at#
+                                       , #menu_rght#
+                                       , #use_at#
+                                       , #menu_dc#
+                                       , SYSDATE
+                                       , #session_user_sn#
+                                       , SYSDATE
+                                       , #session_user_sn#
+	                         )
+    </insert>
+    
+    <!-- 메뉴 수정 -->
+    <update id="menuMgmtDAO.updateMenuMgmt">
+        UPDATE kjp_menu
+               SET menu_nm = #menu_nm#
+                    , menu_url = #menu_url#
+                    , sort_ordr = #sort_ordr#
+                    , use_at = #use_at#
+                    , menu_at = #menu_at#
+                    , menu_rght = #menu_rght#
+                    , menu_dc = #menu_dc#
+                    , updt_dt = SYSDATE
+                    , updusr_sn = #session_user_sn#
+         WHERE menu_id = #menu_id#
+    </update>
+
+</sqlMap>
