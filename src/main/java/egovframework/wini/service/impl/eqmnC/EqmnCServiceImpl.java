@@ -1,11 +1,16 @@
 package egovframework.wini.service.impl.eqmnC;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionContext;
 
 import org.springframework.stereotype.Service;
 
@@ -73,11 +78,15 @@ public class EqmnCServiceImpl implements EqmnCService {
 	}
 
 	@Override
-	public int addEqpmnDo(Map<String, Object> commandMap) {
+	public int addEqpmnDo(Map<String, Object> commandMap,int userSn) {
+		//HttpSession session = request.getSession();
+		
 		//총합이 4여야함.
 		int result =0;
 		EqmnCVO cvo = new EqmnCVO();
-		EqmnCDVO cdvo;
+		cvo.setFrstRegisterSn(userSn);
+		EqmnCDVO cdvo = new EqmnCDVO();
+		cdvo.setFrstRegisterSn(userSn);
 		String name[]= {"엔진","타이어","브레이크"};
 		
 		//마스터 입력값

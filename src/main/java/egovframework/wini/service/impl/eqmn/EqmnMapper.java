@@ -16,6 +16,8 @@ public interface EqmnMapper {
 	List<EqmnVO> CallEqmnTree();
 	//등록
 	int doAddAjax(EqmnVO vo);
+	//최상위 등록
+	int doAddRAjax(EqmnVO vo);
 	//수정
 	int eqpmnModiDo(EqmnVO vo);
 	//삭제

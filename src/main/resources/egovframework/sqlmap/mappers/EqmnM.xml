@@ -16,6 +16,12 @@
 						,EQPMN_MAKR			/*제조사*/
 						,EQPMN_PIN			/*식별번호*/
 						,EQPMN_CN			/*비고*/
+						,FRST_REGISTER_SN	/*최초등록자*/
+						,FRST_REGIST_DT		/*등록일*/
+						,UPDUSR_SN			/*수정자*/
+						,UPDT_DT			/*수정일*/
+						
+						
 			FROM		KJP_EQPMN 			
 			
 			<where>
@@ -103,7 +109,7 @@
 	  			  	,#{eqpmnCn}
 	 				 </if>
 					,SYSDATE
-					,1
+					,#{frstRegisterSn}
 			)		 
 	</insert>
 	
@@ -115,8 +121,8 @@
 								 ,EQPMN_NM=#{eqpmnNm}						/*장비 장비명*/	
 								 ,ORGNZT_ID	=#{orgnztId}					/*소속부서ID*/
 								 ,EQPMN_PIN=#{eqpmnPin}						/*식별번호*/
-				 				 ,UPDT_DT=sysdate							/*수정일시/
-								 ,UPDUSR_SN	=1								/*수정자 일련번호*/
+				 				 ,UPDT_DT=sysdate							/*수정일시*/
+								 ,UPDUSR_SN	=#{updusrSn}								/*수정자 일련번호*/
 								 <if test="buyDay != null and !buyDay.equals('') ">
 				  			  	 ,BUY_DAY=#{buyDay} 	/*구매일자*/
 				 				 </if>

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -95,12 +97,21 @@ public class EqpmnCheckController {
 		//ajax로 점검 마스터 디테일 등록
 		@RequestMapping(value="/addEqpmnDo.do",method=RequestMethod.POST,produces = "application/text; charset=utf8")
 		@ResponseBody
-		public String addEqpmnDo(@RequestParam Map<String, Object> commandMap ) {
-			System.out.println(commandMap);
+		public String addEqpmnDo(@RequestParam Map<String, Object> commandMap,HttpServletRequest request) {
+			//세션기능가진  인터페이스
+			HttpSession session = request.getSession();
+			//세션 map으로 캐스팅
+			@SuppressWarnings("unchecked")
+			Map<String, Object> session2 = (Map<String, Object>) session.getAttribute("userInfo");
+			//세션에서 가져온 유저일렬번호 오브젝트를 string 
+			String id = String.valueOf(session2.get("userSn"));
+			//string -> int 로 
+			int userSn= Integer.parseInt(id);
 			//결과가 4면 성공 그리고 tEqpmnSn를 반환
-			int result = eqCService.addEqpmnDo(commandMap);
+			int result = eqCService.addEqpmnDo(commandMap,userSn);
 			
 			return String.valueOf(result) ;
+			//return "1";
 		}
 		
 		//ajax로 점검 마스터 //디테일 삭제
