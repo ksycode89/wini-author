@@ -10,9 +10,6 @@
 </head>
 <body>
 
-
-
-
 	<div class='hiddenInput'>
 		<input type="hidden" id='eqpmnIdHd' name='eqpmnIdHd' ><br>
 		<!--계층체크용  -->
@@ -23,10 +20,11 @@
 		<div class='divitme'>
 			<form id='eqmn_search_frm' action="">
 				<!-- 공통코드 검색 div ------------------------------------------------------>
-				<div class='eqmn_search'>
-					<input id='eqpmnNmSer' name='eqpmnNm' value="" placeholder="장비구분명" >
-					<button class= 'eqmnSeaerch' >검색</button>
+				<div class='eqmn_search' >
+					<!-- <input id='eqpmnNmSer' name='eqpmnNm' value="" placeholder="장비구분명" >
+					<button class= 'eqmnSeaerch' >검색</button> -->
 					<c:if test="${userInfo.rght eq 'Y'}">
+						<button type="button" class= 'doAddForm2'  onclick="goAddForm2()">root등록</button>
 						<button type="button" class= 'doAddForm'  onclick="goAddForm()">등록</button>
 						<button type="button" class='doAdd'  onclick="doAdd()" style="display: none;">등록확정</button>
 						<button type="button" class='doAdd' onclick="doAddCancel()" style="display: none;">등록취소</button>
@@ -80,14 +78,6 @@
 		</div>
 		<!-- 공통코드 상세내역 끝 ------------------------------------------------------>
 	</div>
-	<form action="" id= "detailData">
-		<div>
-			<input name='a' value="aa">
-			<input name='b' value="bb">
-			<input name='c' value="cc">
-		</div>
-	</form>
-	<button onclick="testA();">aa</button>
 	
 	<script type="text/javascript">
 	
