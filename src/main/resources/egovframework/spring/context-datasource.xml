@@ -6,21 +6,21 @@
 	
 	<!-- 테스트 실행용 --> 
 
-	<!--  
-	  <bean id="local.dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+	 
+	  <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
 		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
 		<property name="username" value="student"/>
 		<property name="password" value="student00"/>
-	</bean> -->
+	</bean> 
 
       
-   <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+   <!-- <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"/>
         <property name="url" value="jdbc:log4jdbc:oracle:thin:@192.168.0.250:1521:orcl" />
         <property name="username" value="student"/>
         <property name="password" value="student00"/>
-   </bean>
+   </bean> -->
         
    <bean id="egov.dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"/>

@@ -47,6 +47,7 @@ public class EqmnMServiceImpl implements EqmnMService {
 
 	@Override
 	public int eqpmnModiDoAjax(EqmnMVO vo) {
+		System.out.println("update"+ vo);
 		int result = 0;
 		try {
 			result = eqMMap.eqpmnModiDoAjax(vo);

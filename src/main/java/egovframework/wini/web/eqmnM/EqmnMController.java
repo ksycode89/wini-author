@@ -1,8 +1,11 @@
 package egovframework.wini.web.eqmnM;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,8 +62,18 @@ public class EqmnMController {
 	//장비테이블입력
 	@RequestMapping(value="/insertEqpmnMAjax.do",method=RequestMethod.POST)
 	@ResponseBody
-	public String insertEqpmnMAjax(EqmnMVO vo) {
-		System.out.println(vo);
+	public String insertEqpmnMAjax(EqmnMVO vo , HttpServletRequest request) {
+		//세션기능가진  인터페이스
+		HttpSession session = request.getSession();
+		//세션 map으로 캐스팅
+		@SuppressWarnings("unchecked")
+		Map<String, Object> session2 = (Map<String, Object>) session.getAttribute("userInfo");
+		//세션에서 가져온 유저일렬번호 오브젝트를 string 
+		String id = String.valueOf(session2.get("userSn"));
+		//string -> int 로 
+		int userSn= Integer.parseInt(id);
+		vo.setFrstRegisterSn(userSn);
+		
 		int result = eqMService.insertEqpmnMAjax(vo); //list의 결과값 (빈값을 넘겨줄시 where절에서 알아서 처리)
 		System.out.println("result : "+result);
 		if(result ==1) {
@@ -72,8 +85,19 @@ public class EqmnMController {
 	//장비테이블 수정
 	@RequestMapping(value="/eqpmnModiDoAjax.do",method=RequestMethod.POST)
 	@ResponseBody
-	public String eqpmnModiDoAjax(EqmnMVO vo) {
-		System.out.println(vo);
+	public String eqpmnModiDoAjax(EqmnMVO vo, HttpServletRequest request) {
+		//세션기능가진  인터페이스
+		HttpSession session = request.getSession();
+		//세션 map으로 캐스팅
+		@SuppressWarnings("unchecked")
+		Map<String, Object> session2 = (Map<String, Object>) session.getAttribute("userInfo");
+		//세션에서 가져온 유저일렬번호 오브젝트를 string 
+		String id = String.valueOf(session2.get("userSn"));
+		//string -> int 로 
+		int userSn= Integer.parseInt(id);
+		//vo넣기
+		vo.setUpdusrSn(userSn);
+		
 		int result = eqMService.eqpmnModiDoAjax(vo); //list의 결과값 (빈값을 넘겨줄시 where절에서 알아서 처리)
 		System.out.println("result : "+result);
 		if(result >0) {

@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -86,8 +88,19 @@ public class EqmnController {
 	//한글 반환시 produces = "application/text; charset=utf8"로 인코딩 방식을 정해줘서 반환시켜줌
 	@RequestMapping(value="/doAddAjax.do",method=RequestMethod.POST,produces = "application/text; charset=utf8")
 	@ResponseBody
-	public String doAddAjax(EqmnVO vo) {
-		System.out.println(vo);
+	public String doAddAjax(EqmnVO vo,HttpServletRequest request) {
+		//세션기능가진  인터페이스
+				HttpSession session = request.getSession();
+				//세션 map으로 캐스팅
+				@SuppressWarnings("unchecked")
+				Map<String, Object> session2 = (Map<String, Object>) session.getAttribute("userInfo");
+				//세션에서 가져온 유저일렬번호 오브젝트를 string 
+				String id = String.valueOf(session2.get("userSn"));
+				//string -> int 로 
+				int userSn= Integer.parseInt(id);
+				
+				//vo에넣기
+				vo.setFrstRegisterSn(userSn);
 		//등록
 		 int result = eqService.doAddAjax(vo);
 		 if(result ==1) {
@@ -96,13 +109,49 @@ public class EqmnController {
 		
 		return "fail" ;
 	}
+	//최상위 계층 등록 //1정상 -1예외 -2중복
+	//한글 반환시 produces = "application/text; charset=utf8"로 인코딩 방식을 정해줘서 반환시켜줌
+	@RequestMapping(value="/doAddRAjax.do",method=RequestMethod.POST,produces = "application/text; charset=utf8")
+	@ResponseBody
+	public String doAddRAjax(EqmnVO vo,HttpServletRequest request) {
+		//세션기능가진  인터페이스
+		HttpSession session = request.getSession();
+		//세션 map으로 캐스팅
+		@SuppressWarnings("unchecked")
+		Map<String, Object> session2 = (Map<String, Object>) session.getAttribute("userInfo");
+		//세션에서 가져온 유저일렬번호 오브젝트를 string 
+		String id = String.valueOf(session2.get("userSn"));
+		//string -> int 로 
+		int userSn= Integer.parseInt(id);
+		vo.setFrstRegisterSn(userSn);
+		//vo에넣기
+		//등록
+		int result = eqService.doAddRAjax(vo);
+		if(result ==1) {
+			return "succ";
+		}else if (result == -2) {
+			return "exist";
+		}
+		
+		return "fail" ;
+	}
 	
 	//수정
 	//한글 반환시 produces = "application/text; charset=utf8"로 인코딩 방식을 정해줘서 반환시켜줌
 	@RequestMapping(value="/eqpmnModiDo.do",method=RequestMethod.POST,produces = "application/text; charset=utf8")
 	@ResponseBody
-	public String eqpmnModiDo(EqmnVO vo) {
-		System.out.println(vo);
+	public String eqpmnModiDo(EqmnVO vo, HttpServletRequest request) {
+		//세션기능가진  인터페이스
+		HttpSession session = request.getSession();
+		//세션 map으로 캐스팅
+		@SuppressWarnings("unchecked")
+		Map<String, Object> session2 = (Map<String, Object>) session.getAttribute("userInfo");
+		//세션에서 가져온 유저일렬번호 오브젝트를 string 
+		String id = String.valueOf(session2.get("userSn"));
+		//string -> int 로 
+		int userSn= Integer.parseInt(id);
+		vo.setUpdusrSn(userSn);
+		//vo에넣기
 		//수정 : 1이상이면 성공 -1이면 에러(rollback) 0이면 업데이트느 되었으나 0건 
 		int result = eqService.eqpmnModiDo(vo);
 		if(result >0) {
@@ -115,9 +164,9 @@ public class EqmnController {
 	}
 	//삭제
 	//한글 반환시 produces = "application/text; charset=utf8"로 인코딩 방식을 정해줘서 반환시켜줌
-	@RequestMapping(value="/eqpmnDelAjax.do",method=RequestMethod.POST,produces = "application/text; charset=utf8")
+	@RequestMapping(value="/eqpmnDelAjax1.do",method=RequestMethod.POST,produces = "application/text; charset=utf8")
 	@ResponseBody
-	public String eqpmnDelAjax(EqmnVO vo) {
+	public String eqpmnDelAjax1(EqmnVO vo) {
 		System.out.println(vo);
 		//수정 : 1이상이면 성공 -1이면 에러(rollback) 0이면 업데이트느 되었으나 0건 
 		int result = eqService.eqpmnDelAjax(vo);

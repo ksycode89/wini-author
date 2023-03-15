@@ -20,9 +20,7 @@ public class EqmnServiceImpl implements EqmnService{
 	//매개변수로 리스트 뽑기
 	@Override
 	public List<EqmnVO> eqmnList(EqmnVO vo) {
-		System.out.println("임플안");
 		List<EqmnVO> list = eqMap.eqmnList(vo);
-		System.err.println(list);
 		return list;
 	}
 	//계층관리
@@ -73,7 +71,7 @@ public class EqmnServiceImpl implements EqmnService{
 	@Override
 	public int eqpmnDelAjax(EqmnVO vo) {
 		//구분을 위한 객체
-		int result = 0;
+		int result = 1;
 			//삭제확인용 vo
 			String delId = vo.getEqpmnId();
 			EqmnVO checkVo= new EqmnVO();
@@ -94,6 +92,34 @@ public class EqmnServiceImpl implements EqmnService{
 			System.out.println(e);
 			return -1;
 		}
+		return result;
+	}
+	
+	//1정상 -1예외 -2중복
+	@Override
+	public int doAddRAjax(EqmnVO vo) {
+		int result =0;
+		try {
+			String id= vo.getEqpmnId();
+			String resultId = id;
+			//상위테이블+지정한문자열 = 등록될 코드
+			vo.setEqpmnId(resultId);
+			//중복체크
+			EqmnVO vo2 = new EqmnVO();
+			vo2.setEqpmnId(resultId);
+			List<EqmnVO> list = eqMap.eqmnList(vo2);	
+			//만들어진 id로 검색했을때 정보가 나오면 이미 존재하는 아이디 즉 null이 true면 생성가능
+			if(list.isEmpty()) {
+				 eqMap.doAddRAjax(vo);
+				 result=1;
+			}else {
+				result = -2;
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+			result = -1;
+		}
+		
 		return result;
 	}
 	

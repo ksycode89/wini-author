@@ -7,9 +7,9 @@ public class EqmnVO {
 	private String eqpmnNm ="";
 	private String upperEqpmnId ="";
 	private Date frstRegistDt;
-	private String frstRegisterSn ="";
+	private int frstRegisterSn =0;
 	private Date updtDt;
-	private String updusrSn ="";
+	private int updusrSn =0;
 	private String level ="";
 	private String eqpmnObj ="";
 	
@@ -19,8 +19,8 @@ public class EqmnVO {
 	}
 	//풀 생성자
 
-	public EqmnVO(String eqpmnId, String eqpmnNm, String upperEqpmnId, Date frstRegistDt, String frstRegisterSn,
-			Date updtDt, String updusrSn, String level,String eqpmnObj) {
+	public EqmnVO(String eqpmnId, String eqpmnNm, String upperEqpmnId, Date frstRegistDt, int frstRegisterSn,
+			Date updtDt, int updusrSn, String level,String eqpmnObj) {
 		super();
 		this.eqpmnId = eqpmnId;
 		this.eqpmnNm = eqpmnNm;
@@ -65,11 +65,11 @@ public class EqmnVO {
 		this.frstRegistDt = frstRegistDt;
 	}
 
-	public String getFrstRegisterSn() {
+	public int getFrstRegisterSn() {
 		return frstRegisterSn;
 	}
 
-	public void setFrstRegisterSn(String frstRegisterSn) {
+	public void setFrstRegisterSn(int frstRegisterSn) {
 		this.frstRegisterSn = frstRegisterSn;
 	}
 
@@ -81,11 +81,11 @@ public class EqmnVO {
 		this.updtDt = updtDt;
 	}
 
-	public String getUpdusrSn() {
+	public int getUpdusrSn() {
 		return updusrSn;
 	}
 
-	public void setUpdusrSn(String updusrSn) {
+	public void setUpdusrSn(int updusrSn) {
 		this.updusrSn = updusrSn;
 	}
 	

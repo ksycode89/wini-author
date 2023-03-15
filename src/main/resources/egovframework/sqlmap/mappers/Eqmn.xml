@@ -55,8 +55,29 @@
 						,#{eqpmnNm}
 						,#{upperEqpmnId}
 						,sysdate
-						,1
+						,#{frstRegisterSn}
 						,#{eqpmnObj}
+					)	
+			
+			
+	</insert>
+	<!--최상위 등록 -->
+	<insert id="doAddRAjax" parameterType="egovframework.wini.service.eqmn.EqmnVO">
+			INSERT INTO KJP_EQPMN_CODE(
+						 EQPMN_ID           /*장비구분ID */
+						,EQPMN_NM         /*장비구분명*/
+						,UPPER_EQPMN_ID    /*상위장비구분ID*/
+						,FRST_REGIST_DT    /*최초등록일시*/
+						,FRST_REGISTER_SN  /*최초등록자 일련번호*/
+						,EQPMN_OBJ)
+						
+					VALUES(
+						 #{eqpmnId}
+						,#{eqpmnNm}
+						,NULL
+						,sysdate
+						,#{frstRegisterSn}
+						,'N'
 					)	
 			
 			
@@ -65,8 +86,9 @@
 	<!-- 수정 -->
 	<update id="eqpmnModiDo"  parameterType="egovframework.wini.service.eqmn.EqmnVO">
 			UPDATE KJP_EQPMN_CODE SET 
+									UPDUSR_SN = #{updusrSn}
 								<if test="eqpmnId != null and !eqpmnId.equals('')">
-									 EQPMN_ID = #{eqpmnId}        /*장비구분ID */
+									 ,EQPMN_ID = #{eqpmnId}        /*장비구분ID */
 								</if>
 								<if test="eqpmnNm != null and !eqpmnNm.equals('')">
 									,EQPMN_NM = #{eqpmnNm}       /*장비구분명*/
@@ -74,6 +96,7 @@
 								<if test="upperEqpmnId != null and !upperEqpmnId.equals('')">
 									,UPPER_EQPMN_ID = #{upperEqpmnId}   /*상위장비구분ID*/
 								</if>
+									
 								WHERE eqpmn_id = #{eqpmnId}		
 											
 	</update>

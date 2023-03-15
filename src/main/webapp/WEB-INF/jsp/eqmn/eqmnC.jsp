@@ -86,7 +86,7 @@
 				<table border="1" id='eqmn_table_M' >
 					<tr>
 						<th class='chckSnM'>점검번호</th> 
-						<th class='eqpmnSnM'>장비전호</th> 
+						<th class='eqpmnSnM'>장비번호</th> 
 						<th class='eqpmnSnM'>장비이름</th> 
 						<th class='checkDayM'>점검일</th> 
 						<th class=frstRegistDt>등록일</th> 

@@ -24,7 +24,9 @@
 					<!-- <input id='eqpmnNmSer' name='eqpmnNm' value="" placeholder="장비구분명" >
 					<button class= 'eqmnSeaerch' >검색</button> -->
 					<c:if test="${userInfo.rght eq 'Y'}">
-						<button type="button" class= 'doAddForm2'  onclick="goAddForm2()">root등록</button>
+						<button type="button" class= 'doAddFormR'  onclick="goAddFormR()">root등록</button>
+						<button type="button" class='doAddR'  onclick="doAddR()" style="display: none;">등록확정</button>
+						<button type="button" class='doAddR' onclick="doAddCancel()" style="display: none;">등록취소</button>
 						<button type="button" class= 'doAddForm'  onclick="goAddForm()">등록</button>
 						<button type="button" class='doAdd'  onclick="doAdd()" style="display: none;">등록확정</button>
 						<button type="button" class='doAdd' onclick="doAddCancel()" style="display: none;">등록취소</button>
@@ -58,11 +60,11 @@
 					<label for="eqpmnNm">장비코드이름</label>
 					<input id= 'eqpmnNm' name='eqpmnNm' readonly="readonly"><br>
 					<label for="upperEqpmnId">상위장비구분ID</label>
-					<input id= 'upperEqpmnId' name='upperEqpmnId' readonly="readonly"><br>
+					<input id= 'upperEqpmnId' name='upperEqpmnId' readonly="readonly" ><br>
 					<div style="display: none" id='dqmnObjDiv'>
 					<label  for="eqpmnObj">[계층N][장비Y]</label>
-					<input  type="radio" class='eqpmnObj' id='eqpmnObj' name='eqpmnObj' value="N" checked>N
-					<input  type="radio" class='eqpmnObj' id='eqpmnObj' name='eqpmnObj' value="Y">Y
+					<input  type="radio" class='eqpmnObj' id='eqpmnObj' name='eqpmnObj' value="Y" checked>Y
+					<input  type="radio" class='eqpmnObj' id='eqpmnObj' name='eqpmnObj' value="N" >N
 					</div>
 				</form>
 					<label  class='getday' for="frstRegistDt">최초등록일시</label>
@@ -101,7 +103,6 @@
 	//테이블 짜주는 메서드
 	function mktrTree(data,table){
 		//delmainT();
-		
 		//mapping시킬 tr이름 가져옴
 		$(data).each((index,val)=>{
 				
@@ -231,8 +232,6 @@
 		
 		//최상위 data	
 		})
-		
-		
 	}
 
 	//ul클릭이벤트 단일정보출력
@@ -245,7 +244,7 @@
 			 ,type: 'post' // http 요청 방식 (default: ‘GET’)
 			 ,dataType : "json"
 			 ,success : function(data){
-				console.log(data)
+				 doAddCancel()
 				 //상황용 input hidden에 등록
 				 $('#eqpmnIdHd').val($(data)[0]['eqpmnId'])
 				 $('#eqmnObjHd').val($(data)[0]['eqpmnObj'])
@@ -264,6 +263,8 @@
 				 $('#eqmnDel').show();
 				 //등록버튼 숨기기
 				 $('.doAdd').hide();
+				 //등록버튼 숨기기
+				 $('.doAddR').hide();
 				 //등록폼가기 on
 				 $('.doAddForm').show();
 				 //수정폼 닫기
@@ -297,6 +298,8 @@
 			 inputReadonly();
 			 //날자인풋지우기
 			 $('.getday').hide()
+			 //root등록 
+			 $('.doAddFormR').hide();
 			}else{
 				alert('최하위 계층 코드입니다.')
 			}
@@ -307,8 +310,9 @@
 	}
 	//등록확정
 	function doAdd(){
+		let di="menu";
 		//유효성
-		if(getVaild()){
+		if(getVaild(di)){
 		//등록실행
 			 $.ajax({
 				  url: './doAddAjax.do' // 요청이 전송될 URL 주소
@@ -330,6 +334,8 @@
 						//테이블비우고 다시 읽어오기
 						 $('.eqmnTree').empty();
 						 callEqmnList();
+						 //root등록
+						 $('.doAddFormR').show();
 					 }else{
 						 alert('이미 존재하는 코드입니다.') 
 					 }
@@ -347,12 +353,91 @@
 		//등록버튼 on off
 		$('.doAdd').toggle();
 		$('.doAddForm').toggle();
+		//root등록 off
+		$('.doAddR').hide();
+		//
 		//수정삭제버튼 on off
 		 $('#eqmnModi').hide();
 		 $('#eqmnDel').hide();
 		 //
 		 $('.getday').show();
+		 //root등록
+		 $('.doAddFormR').show();
+		 //
+		 //검색초기화
+	    $('.eqmnSeaerch').val('');
+	    // input hidden에 초기화
+	    $('#eqpmnIdHd').val('');
+		//input box 초기화
+		reset()
+		 $('.getday').show();
+		//obt숨기기
+		$('#dqmnObjDiv').hide();
+		//input read
+		 $('#eqpmnId').prop('readonly',true);
+		 $('#eqpmnNm').prop('readonly',true);
+		
 	}
+	//root등록폼
+	function goAddFormR(){
+		
+		//input box 초기화+hidden
+		resetInput();
+		//input box
+		inputReadonly();
+		//
+		$('.doAddForm').hide();
+		//수정 삭제 버튼 숨기기
+		 $('#eqmnModi').hide();
+		 $('#eqmnDel').hide();
+		 //날자인풋지우기
+		 $('.getday').hide();
+		 $('#upperEqpmnId').prop('placeholder','최상위계층입니다.')
+		 
+		 //root등록업
+		 $('.doAddR').show();
+		 //root버튼 하이드
+		 $('.doAddFormR').hide();
+		 //alert
+		 alert('최상위 계층등록입니다.')
+		
+	}
+	//root등록
+	function doAddR(){
+		let di = 'root';
+		//유효성
+		if(getVaild(di)){
+		//등록실행
+			 $.ajax({
+				  url: './doAddRAjax.do' // 요청이 전송될 URL 주소
+				 ,data : $('#eqmn_commn_frm').serialize()
+				 ,type: 'post' // http 요청 방식 (default: ‘GET’)
+				 ,success : function(data){
+					 console.log(data)
+		/* 			 if(data=='succ'){
+						//검색초기화
+					    $('.eqmnSeaerch').val('');
+					    // input hidden에 초기화
+					    $('#eqpmnIdHd').val('');
+						//input box 초기화
+						reset()
+						 $('.getday').show();
+						//obt숨기기
+						$('#dqmnObjDiv').hide();
+						//계층구분지우기
+						$('#eqpmnObj').prop('checked',true)
+						//테이블비우고 다시 읽어오기
+						 $('.eqmnTree').empty();
+						 callEqmnList();
+					 }else{
+						 alert('이미 존재하는 코드입니다.') 
+					 }
+					 */
+				 } 
+			 });
+		}
+	}
+	
 	//input box 초기화+hidden
 	function resetInput(){
 		 //input박스에 등록 : 
@@ -422,7 +507,7 @@
 				 ,data : {"eqpmnId": eqpmnId,"eqpmnNm":eqpmnNm}
 				 ,type: 'post' // http 요청 방식 (default: ‘GET’)
 				 ,success : function(data){
-					 console.log(data);
+					 resetInput()
 					 $('.eqmnTree').empty();
 					 callEqmnList();
 					 $('.doModi').hide()
@@ -451,13 +536,15 @@
 			let eqpmnId = $('#eqpmnId').val();//장비구분id
 		
 			//아작스//세션완료휴 가져가기 수정자
+			console.log('123'+eqpmnId);
 			 $.ajax({
-				  url: './eqpmnDelAjax.do' // 요청이 전송될 URL 주소
+				  url: './eqpmnDelAjax1.do' // 요청이 전송될 URL 주소
 				 ,data : {"eqpmnId": eqpmnId}
 				 ,type: 'post' // http 요청 방식 (default: ‘GET’)
 				 ,success : function(data){
 					 console.log(data);
 					 if(data == 'succ'){
+						 doAddCancel();
 					//테이블비우고 다시 읽어오기
 					 $('.eqmnTree').empty();
 					 callEqmnList();
@@ -479,7 +566,7 @@
 	 /*  $('#eqpmnId').val('');
 		 $('#eqpmnNm').val('');
 		 $('#upperEqpmnId').val(''); */
-	function getVaild(){
+	function getVaild(di){
 		if(!$.trim($('#eqpmnId').val())){
 			alert('장비구분을 입력해주세요')
 			return false;
@@ -488,9 +575,12 @@
 			alert('장비코드 이름을 입력해주세요')
 			return false;
 		}
-		if(!$.trim($('#upperEqpmnId').val())){
-			alert('장비 상위 코드를 입력해주세요')
-			return false;
+		//di에 값이 들어오면 
+		if(di != 'root'){
+			if(!$.trim($('#upperEqpmnId').val())){
+				alert('장비 상위 코드를 입력해주세요')
+				return false;
+			}
 		}
 		//radio는 같은 아이디를 가져야 함/ 구분을 주기보단 기본값을 줘서 무조건 고르게 할것
 		/* if(!$('.eqpmnObj').prop('checked')){

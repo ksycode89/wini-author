@@ -246,6 +246,7 @@
 				 , data : {"eqpmnSn":key}
 				  ,dataType : "json"
 				 ,success : function(data){
+					 console.log(data)
 						//mapping시킬 tr이름 가져옴
 					 let trName = ['eqpmnSn','eqpmnSeCode','eqpmnNm','orgnztId','buyDay','eqpmnUnitPrice','eqpmnModelName','eqpmnMakr','eqpmnPin','eqpmnCn','frstRegistDt'
 				 			,'frstRegisterSn','updtDt','updusrSn'];
