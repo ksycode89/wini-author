@@ -64,7 +64,6 @@
         				}
         			}
     			}
-				
 				html += '</ul>';
 				$(".menu_nav").append(html);
     		}

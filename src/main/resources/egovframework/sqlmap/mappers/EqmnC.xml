@@ -1,8 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="egovframework.wini.service.impl.eqmnC.EqmnCMapper">
+	
+	<!-- 검색 selecton용 조인쿼리 -->
+	<select id="saerchForJoin" resultType="egovMap">
+		SELECT   a.EQPMN_ID
+				,a.EQPMN_NM
+				,a.UPPER_EQPMN_ID 
+				,b.EQPMN_NM as upper_name 
+		  FROM (SELECT *  FROM KJP_EQPMN_CODE WHERE eqpmn_obj='Y') a 
+		  		JOIN KJP_EQPMN_CODE b 
+			 ON a.UPPER_EQPMN_ID =b.EQPMN_ID
+	</select>
+	
+	<!-- 검색 selecton용 조인쿼리 -->
+	<select id="CheckMasterAJax" resultType="egovframework.wini.service.eqmnC.EqmnCVO">
+				SELECT	a.CHCK_SN ,   				 /*점검key*/
+						a.EQPMN_SN,					/*장비key*/
+						b.EQPMN_NM,					/*장비 이름*/
+						a.CHCK_DAY,					/*점검일*/
+						a.FRST_REGIST_DT,			/*최초등록일*/
+						a.FRST_REGISTER_SN,			/*최초등록자*/
+						a.UPDT_DT,					/*수정일*/
+						a.UPDUSR_SN					/*수정등록자*/
+				FROM	KJP_EQPMN_CHCK a JOIN KJP_EQPMN b
+				ON 		a.EQPMN_SN = b.EQPMN_SN 			
+				<where>
+	 			<if test="eqpmnSn !=0">
+	  			   AND a.EQPMN_SN = #{eqpmnSn}
+	 			</if>
+	 			
+			</where>  
+	</select>
 
-
+		<!-- 검색 selecton용 디테일 마스터 -->
+	<select id="CheckMasterDAJax" resultType="egovframework.wini.service.eqmnC.EqmnCDVO">
+				/*KJP_EQPMN_D_CHCK 점검 마스터 디테일*/
+						SELECT	    CHCK_D_SN,  		/*점검key*/
+									CHCK_SN,			/*점검마스터 key*/
+									CHCK_NM,			/*점검이름*/
+									CHCK_RESULT,		/*점검결과*/
+									CHCK_CN,			/*비고*/
+									FRST_REGIST_DT,		/*최초등록일*/
+									FRST_REGISTER_SN,	/*최초등록자*/
+									UPDT_DT,			/*수정일*/
+									UPDUSR_SN,			/*수정등록자*/
+									rownum
+								FROM	KJP_EQPMN_D_CHCK 
+				<where>
+	 			<if test="chckSn !=0">
+	  			   AND CHCK_SN = #{chckSn}
+	 			</if>
+	 			
+			</where>  
+	</select>
+	<!-- 마스터테이블넣기 -->
+	<insert id="insertMaster" parameterType="egovframework.wini.service.eqmnC.EqmnCVO">
+		<selectKey resultType="int" keyProperty="chckSn" order="BEFORE">
+			SELECT NVL(MAX(chck_sn),0)+1 FROM KJP_EQPMN_CHCK
+		</selectKey>
+		
+		INSERT INTO KJP_EQPMN_CHCK 
+					( CHCK_SN
+					,EQPMN_SN
+					,CHCK_DAY
+					,FRST_REGIST_DT
+					,FRST_REGISTER_SN)
+					
+			values(
+					#{chckSn}
+					,#{eqpmnSn}
+					,#{chckDay}
+					,sysdate
+					,1
+			)		
+	</insert>
+	<!--디테일넣기  -->
+	<insert id="insertMasterD" parameterType="egovframework.wini.service.eqmnC.EqmnCDVO">
+		<selectKey resultType="int" keyProperty="chckDSn" order="BEFORE">
+			SELECT NVL(MAX(CHCK_D_SN),0)+1 FROM KJP_EQPMN_D_CHCK 
+		</selectKey>
+		INSERT INTO KJP_EQPMN_D_CHCK  
+				(
+				CHCK_D_SN
+				,CHCK_SN
+				,CHCK_NM
+				,CHCK_RESULT
+				<if test="chckCn != null and !chckCn.equals('')">
+	  			  ,CHCK_CN 
+	 			</if>
+				,FRST_REGIST_DT
+				,FRST_REGISTER_SN
+				)
+					
+			values(
+					#{chckDSn}
+					,#{chckSn}
+					,#{chckNm}
+					,#{chckResult}
+					<if test="chckCn != null and !chckCn.equals('')">
+	  			 	,#{chckCn}
+	 				</if>
+					,sysdate
+					,1
+			)		
+	</insert>
+	
+	<!--삭제  마스터 -->
+	<delete id="eqpmnMDelAjax" parameterType="int">
+		DELETE 
+		FROM KJP_EQPMN_CHCK
+		WHERE CHCK_SN=#{chckSn}
+	</delete>
+	<!--삭제  디테일 -->
+	<delete id="eqpmnCDDelAjax">
+		DELETE 
+		FROM KJP_EQPMN_D_CHCK
+		WHERE CHCK_SN=#{chckSn}
+	</delete>
 
 
 </mapper>

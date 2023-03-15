@@ -32,9 +32,11 @@
 						<label for='seachEqpmnMSerach'>검색[장비이름]</label>					
 						<input   id='seachEqpmnMSerach' placeholder="장비이름으로 검색해주세요">
 						<button type="button" id='seachEqpmnMSerachDo' onclick="seachMDO();" >검색</button>
+						<c:if test="${userInfo.rght eq 'Y'}">
 						<button type="button" onclick="addEqpmnForm();" class='eqpmnDoF'>등록</button>
 						<button type="button" onclick="addEqpmnDo();"  class ='eqpmnDoC' style="display: none" >등록확정</button>
 						<button type="button" onclick="addEqpmnCel();" class='eqpmnDoC' style="display: none" >등록취소</button>
+						</c:if>
 					</form>
 				</div>
 				<br>
@@ -53,11 +55,12 @@
 		<div class='EqpMnMdivitme'>
 			<div id='eqpmnDDiv'>
 				<div style="float: right;">
+				<c:if test="${userInfo.rght eq 'Y'}">
 						<button type="button" type="button" class='eqpmnModiForm' style="display: none" onclick="eqpmnModiForm();">수정</button>
 						<button type="button" class='eqpmnModiDo' style="display: none" onclick="eqpmnModiDo();">수정확정</button>
 						<button type="button" class='eqpmnModiDo' style="display: none" onclick="eqpmnModiCel();">수정취소</button>
 						<button type="button" class='eqpmnDel' style="display: none" onclick="eqpmnDel();">삭제</button>
-						
+				</c:if>		
 				</div>
 				<br>
 				<form id='insertFormEqpmnM' action="">

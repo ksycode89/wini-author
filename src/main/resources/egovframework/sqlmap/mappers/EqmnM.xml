@@ -31,6 +31,31 @@
 	 			
 			</where>  
 	</select>
+	<!-- 장비검색 코드로검색-->
+	<select id="doSearchAjaxC" parameterType="egovframework.wini.service.eqmnM.EqmnMVO" resultType="egovframework.wini.service.eqmnM.EqmnMVO">
+			/*장비  테이블*/
+			
+			SELECT		 EQPMN_SN			/*장비 일련번호(1부터 생성)*/
+						,EQPMN_SE_CODE		/*장비 구분코드*/
+						,EQPMN_NM			/*장비 장비명*/	
+						,ORGNZT_ID			/*소속부서ID*/
+						,BUY_DAY			/*구매일자*/
+						,EQPMN_UNIT_PRICE	/*단가*/
+						,EQPMN_MODEL_NAME	/*모델명*/
+						,EQPMN_MAKR			/*제조사*/
+						,EQPMN_PIN			/*식별번호*/
+						,EQPMN_CN			/*비고*/
+			FROM		KJP_EQPMN 			
+			
+			<where>
+				
+				<if test="eqpmnSeCode != null and !eqpmnSeCode.equals('') ">
+	  			   EQPMN_SE_CODE = #{eqpmnSeCode} 
+	 			</if>
+	 			
+	 			
+			</where>  
+	</select>
 	<!-- 등록 -->
 	<insert id="insertEqpmnMAjax" parameterType="egovframework.wini.service.eqmnM.EqmnMVO">
 				/*장비  테이블 입력*/
