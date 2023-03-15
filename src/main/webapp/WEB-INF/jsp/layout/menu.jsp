@@ -23,6 +23,12 @@
 	</div>
 </div>
 <script type="text/javascript" src="<c:out value="${pageContext.request.contextPath}/js/common/jquery1.9/jquery-1.9.1.js"/>"></script>
+<script type="text/javascript" src="<c:out value="${pageContext.request.contextPath}/js/common/jquery1.9/jquery.form.js"/>"></script>
+
+
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/ui/themes/metro/easyui.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/ui/themes/icon.css"/>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/ui/jquery.easyui.min.js"></script>
 <script>
 	$(function(){
 		// menu list 조회
@@ -34,7 +40,7 @@
     			if("${userInfo.userSn}"==1){ // 관리자일 경우 메뉴
     				// 1계층 for문 
         			for (var i=0; i<data.length; i++){
-        				if (data[i].sortOrdr == 0){
+        				if (data[i].upperMenuId == "MENU"){
         					html += '<li><a href = "'+data[i].menuUrl+'">'+data[i].menuNm+'</a><ul>'
         					// 2계층 for문 
         	    			for (var j=i; j<data.length; j++){
@@ -47,11 +53,11 @@
     			}else{ // 관리자가 아닐 경우 메뉴
     				// 1계층 for문 
         			for (var i=0; i<data.length; i++){
-        				if (data[i].sortOrdr == 0 && data[i].menuAt == "N"){
+        				if (data[i].upperMenuId == "MENU" && data[i].menuRght == "N"){
         					html += '<li><a href = "'+data[i].menuUrl+'">'+data[i].menuNm+'</a><ul>'
         					// 2계층 for문 
         	    			for (var j=i; j<data.length; j++){
-        	    				if (data[j].upperMenuId == data[i].menuId && data[i].menuAt == "N"){
+        	    				if (data[j].upperMenuId == data[i].menuId && data[i].menuRght == "N"){
         	    					html += '<li><a href = "'+data[j].menuUrl+'">'+data[j].menuNm+'</a></li>';
         	    				}
         	    			}html += '</ul></li>';

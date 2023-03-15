@@ -12,7 +12,11 @@
                                   , a.user_id
                                   , a.user_nm
                                   , a.dt_brt
-                                  , a.user_gndr
+                                  , CASE 
+                						WHEN a.user_gndr = 'M' THEN '남자'
+                						WHEN a.user_gndr = 'W' THEN '여자'
+                						ELSE '선택안함'
+                  					END AS user_gndr
                                   , a.moblphon_no
                                   , a.email_adres
                                   , a.rght
@@ -62,7 +66,11 @@
                 , user_id
                 , user_nm
                 , dt_brt
-                , user_gndr
+                , CASE 
+                	WHEN user_gndr = 'M' THEN '남자'
+                	WHEN user_gndr = 'W' THEN '여자'
+                	ELSE '선택안함'
+                  END AS user_gndr
                 , moblphon_no
                 , email_adres
                 , rght
@@ -73,8 +81,18 @@
     <!-- 비밀번호 초기화 -->
     <update id="userMgmtDAO.clearUserPw">
         UPDATE kjp_user
-               SET user_pw = 1
+               SET user_pw = #user_pw#
                    , updt_dt = SYSDATE
+                   , updusr_sn = #session_user_sn#
+         WHERE user_sn = #user_sn#
+    </update>
+    
+    <!-- 사용자 권한 수정 -->
+    <update id="userMgmtDAO.updateUserMgmt">
+        UPDATE kjp_user
+               SET rght = #rght#
+                   , updt_dt = SYSDATE
+                   , updusr_sn = #session_user_sn#
          WHERE user_sn = #user_sn#
     </update>
 
