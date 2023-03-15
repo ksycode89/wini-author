@@ -2,15 +2,53 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="egovframework.wini.service.impl.eqmnSTAT.EqmnSTATmapper">
 
+<!-- 	<select id="getEqmnList" resultType="egovMap"> -->
+<!-- 	/* 사용장비 리스트 조회 */ -->
+<!-- 	/* 장비일련번호, 차량종류, 사용부서, 번호판 */ -->
+<!-- 		SELECT  EQPMN_SN, -->
+<!-- 				EQPMN_NM,  -->
+<!-- 				ORGNZT_ID,  -->
+<!-- 				EQPMN_PIN -->
+<!-- 			FROM KJP_EQPMN -->
+<!-- 	</select> -->
+
 	<select id="getEqmnList" resultType="egovMap">
-	/* 사용장비 리스트 조회 */
-	/* 장비일련번호, 차량종류, 사용부서, 번호판 */
-		SELECT  EQPMN_SN,
-				EQPMN_NM, 
-				ORGNZT_ID, 
-				EQPMN_PIN
-			FROM KJP_EQPMN
+	/* 등록장비 리스트 조회 */
+	/* 장비ID, 장비이름*/
+	SELECT  EQPMN_ID
+			,EQPMN_NM 
+		FROM KJP_EQPMN_CODE
+		WHERE UPPER_EQPMN_ID is null
 	</select>
+	
+	<select id="getEqmnList2" parameterType="egovMap" resultType="egovMap">
+	/* 등록장비 리스트 조회2 */
+	/* 장비ID, 장비이름 */
+	SELECT  (SELECT EQPMN_NM FROM KJP_EQPMN_CODE WHERE EQPMN_ID = #{eqpmnId}) AS ID
+		,kec.EQPMN_ID
+		,kec.EQPMN_NM
+		FROM KJP_EQPMN_CODE kec
+			LEFT OUTER JOIN KJP_EQPMN ke
+				ON kec.EQPMN_ID = ke.EQPMN_SE_CODE 
+		WHERE UPPER_EQPMN_ID = #{eqpmnId}
+				GROUP BY kec.EQPMN_ID, kec.EQPMN_NM
+	</select>
+	
+	<select id="getEqmnList3" parameterType="egovMap" resultType="egovMap">
+	/* 등록장비 리스트 조회2 */
+	/* 장비ID, 장비이름 */
+	SELECT  EQPMN_SE_CODE
+			,EQPMN_SN 
+	 		,EQPMN_NM 
+	 		,ORGNZT_ID
+	 		,EQPMN_PIN
+	 		,BUY_DAY
+		FROM KJP_EQPMN
+			WHERE EQPMN_SE_CODE = #{eqpmnId}
+	</select>
+	
+	
+	
 	<select id="getStat" parameterType="egovMap" resultType="egovMap">
 	SELECT EQPMN_SN, CHCK_NM, CHCK_DAY, CHCK_RESULT 
 	FROM (SELECT EQPMN_SN , '날짜' AS CHCK_NM, CHCK_DAY, NULL AS CHCK_RESULT  
@@ -51,5 +89,7 @@
 		GROUP BY a.CHCK_NM
 		ORDER BY a.CHCK_NM
 	</select>
+
+
 
 </mapper>

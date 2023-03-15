@@ -16,10 +16,18 @@ public class EqmnSTATServiceImpl implements EqmnSTATService{
 	private EqmnSTATmapper eqmnStatMapper;
 
 	@Override
-	public List<Map<String, Object>> getEqmnList() {
-		List<Map<String, Object>> result = eqmnStatMapper.getEqmnList();
+	public List<Map<String, Object>> getEqmnList(Map<String, Object> param) {
+		List<Map<String, Object>> result = null;
+		if (param.get("chk").equals("1")) {
+			result = eqmnStatMapper.getEqmnList();
+		}else if(param.get("chk").equals("2")) {
+			result = eqmnStatMapper.getEqmnList2(param);
+		}else if(param.get("chk").equals("3")) {
+			result = eqmnStatMapper.getEqmnList3(param);
+		}
 		return result;
 	}
+	
 
 	@Override
 	public Map<String, Object> getStat(Map<String, Object> param) {

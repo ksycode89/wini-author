@@ -30,10 +30,17 @@ public class EqmnSTATController {
 	// 리스트 조회
 	@RequestMapping("getEqmentList.do")
 	@ResponseBody
-	public List<Map<String,Object>> duplicateCheck() {
-		List<Map<String,Object>> result = eqmnStatService.getEqmnList();
+	public List<Map<String,Object>> getEqmentList(@RequestParam Map<String, Object> commandMap) {
+		List<Map<String,Object>> result = eqmnStatService.getEqmnList(commandMap);
 		return result;
 	}
+//	// 리스트 조회
+//	@RequestMapping("getEqmentList2.do")
+//	@ResponseBody
+//	public List<Map<String,Object>> getEqmentList2(@RequestParam Map<String, Object> commandMap) {
+//		List<Map<String,Object>> result = eqmnStatService.getEqmnList(2);
+//		return result;
+//	}
 	
 	// 통계 조회
 	@RequestMapping("getStat.do")
